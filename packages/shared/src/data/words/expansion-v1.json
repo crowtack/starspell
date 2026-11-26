@@ -1,0 +1,1602 @@
+[
+  {
+    "id": "en-acorn",
+    "word": "acorn",
+    "tier": 1,
+    "definition": "A smooth oval nut resting in a cupped cap beneath an oak.",
+    "reviewed": false,
+    "spellingDifficultyScore": 0
+  },
+  {
+    "id": "en-amber",
+    "word": "amber",
+    "tier": 1,
+    "definition": "Warm golden resin fossilized from ancient evergreen sap.",
+    "reviewed": false,
+    "spellingDifficultyScore": 0
+  },
+  {
+    "id": "en-aspen",
+    "word": "aspen",
+    "tier": 1,
+    "definition": "A slender mountain tree whose pale leaves quiver in light wind.",
+    "reviewed": false,
+    "spellingDifficultyScore": 0
+  },
+  {
+    "id": "en-basin",
+    "word": "basin",
+    "tier": 1,
+    "definition": "A wide hollow bowl of land where snowmelt gathers.",
+    "reviewed": false,
+    "spellingDifficultyScore": 0
+  },
+  {
+    "id": "en-birch",
+    "word": "birch",
+    "tier": 1,
+    "definition": "A graceful woodland tree known for its papery white bark.",
+    "reviewed": false,
+    "spellingDifficultyScore": 7
+  },
+  {
+    "id": "en-bluff",
+    "word": "bluff",
+    "tier": 1,
+    "definition": "A steep rocky bank rising sharply above a winding river.",
+    "reviewed": false,
+    "spellingDifficultyScore": 6
+  },
+  {
+    "id": "en-brook",
+    "word": "brook",
+    "tier": 1,
+    "definition": "A small lively creek chattering over mossy stones.",
+    "reviewed": false,
+    "spellingDifficultyScore": 17
+  },
+  {
+    "id": "en-cairn",
+    "word": "cairn",
+    "tier": 1,
+    "definition": "A neat stack of stones built to mark an alpine path.",
+    "reviewed": false,
+    "spellingDifficultyScore": 4
+  },
+  {
+    "id": "en-chasm",
+    "word": "chasm",
+    "tier": 1,
+    "definition": "A deep yawning split between two walls of dark rock.",
+    "reviewed": false,
+    "spellingDifficultyScore": 7
+  },
+  {
+    "id": "en-clover",
+    "word": "clover",
+    "tier": 1,
+    "definition": "A low green field plant topped with sweet rounded blossoms.",
+    "reviewed": false,
+    "spellingDifficultyScore": 12
+  },
+  {
+    "id": "en-comet",
+    "word": "comet",
+    "tier": 1,
+    "definition": "An icy traveler trailing a bright tail across the night sky.",
+    "reviewed": false,
+    "spellingDifficultyScore": 0
+  },
+  {
+    "id": "en-coral",
+    "word": "coral",
+    "tier": 1,
+    "definition": "A warm pink-orange hue glowing along evening clouds.",
+    "reviewed": false,
+    "spellingDifficultyScore": 0
+  },
+  {
+    "id": "en-creek",
+    "word": "creek",
+    "tier": 1,
+    "definition": "A narrow shallow waterway winding through a quiet woods.",
+    "reviewed": false,
+    "spellingDifficultyScore": 17
+  },
+  {
+    "id": "en-crest",
+    "word": "crest",
+    "tier": 1,
+    "definition": "The narrow uppermost edge of a mountain or rolling wave.",
+    "reviewed": false,
+    "spellingDifficultyScore": 0
+  },
+  {
+    "id": "en-daisy",
+    "word": "daisy",
+    "tier": 1,
+    "definition": "A bright white-petaled bloom with a sunny golden center.",
+    "reviewed": false,
+    "spellingDifficultyScore": 11
+  },
+  {
+    "id": "en-delta",
+    "word": "delta",
+    "tier": 1,
+    "definition": "A fan of rich silt where a river meets open water.",
+    "reviewed": false,
+    "spellingDifficultyScore": 0
+  },
+  {
+    "id": "en-earth",
+    "word": "earth",
+    "tier": 1,
+    "definition": "Rich dark soil supporting roots, ferns, and wildflowers.",
+    "reviewed": false,
+    "spellingDifficultyScore": 4
+  },
+  {
+    "id": "en-finch",
+    "word": "finch",
+    "tier": 1,
+    "definition": "A small nimble songbird flitting among juniper branches.",
+    "reviewed": false,
+    "spellingDifficultyScore": 7
+  },
+  {
+    "id": "en-flame",
+    "word": "flame",
+    "tier": 1,
+    "definition": "A dancing tongue of bright fire rising from dry kindling.",
+    "reviewed": false,
+    "spellingDifficultyScore": 0
+  },
+  {
+    "id": "en-flare",
+    "word": "flare",
+    "tier": 1,
+    "definition": "A sudden burst of warm light against a darkening sky.",
+    "reviewed": false,
+    "spellingDifficultyScore": 0
+  },
+  {
+    "id": "en-frost",
+    "word": "frost",
+    "tier": 1,
+    "definition": "A crisp lacy coat of ice crystals on morning grass.",
+    "reviewed": false,
+    "spellingDifficultyScore": 0
+  },
+  {
+    "id": "en-glade",
+    "word": "glade",
+    "tier": 1,
+    "definition": "A sunlit open clearing tucked inside a quiet forest.",
+    "reviewed": false,
+    "spellingDifficultyScore": 0
+  },
+  {
+    "id": "en-gleam",
+    "word": "gleam",
+    "tier": 1,
+    "definition": "A soft steady shine reflecting off still evening water.",
+    "reviewed": false,
+    "spellingDifficultyScore": 4
+  },
+  {
+    "id": "en-gorge",
+    "word": "gorge",
+    "tier": 1,
+    "definition": "A deep narrow passage cut through stone by rushing water.",
+    "reviewed": false,
+    "spellingDifficultyScore": 0
+  },
+  {
+    "id": "en-grove",
+    "word": "grove",
+    "tier": 1,
+    "definition": "A small cluster of tall trees standing close together.",
+    "reviewed": false,
+    "spellingDifficultyScore": 7
+  },
+  {
+    "id": "en-haven",
+    "word": "haven",
+    "tier": 1,
+    "definition": "A calm sheltered resting place safe from mountain gusts.",
+    "reviewed": false,
+    "spellingDifficultyScore": 7
+  },
+  {
+    "id": "en-heath",
+    "word": "heath",
+    "tier": 1,
+    "definition": "An open windswept moorland dotted with low hardy shrubs.",
+    "reviewed": false,
+    "spellingDifficultyScore": 4
+  },
+  {
+    "id": "en-heron",
+    "word": "heron",
+    "tier": 1,
+    "definition": "A tall long-legged wading bird poised beside calm shallows.",
+    "reviewed": false,
+    "spellingDifficultyScore": 0
+  },
+  {
+    "id": "en-ledge",
+    "word": "ledge",
+    "tier": 1,
+    "definition": "A flat narrow shelf of stone jutting from a sheer wall.",
+    "reviewed": false,
+    "spellingDifficultyScore": 0
+  },
+  {
+    "id": "en-lichen",
+    "word": "lichen",
+    "tier": 1,
+    "definition": "A crusty pale-green growth clinging to weathered boulders.",
+    "reviewed": false,
+    "spellingDifficultyScore": 12
+  },
+  {
+    "id": "en-maple",
+    "word": "maple",
+    "tier": 1,
+    "definition": "A broad-leafed tree that turns fiery crimson in autumn.",
+    "reviewed": false,
+    "spellingDifficultyScore": 0
+  },
+  {
+    "id": "en-marsh",
+    "word": "marsh",
+    "tier": 1,
+    "definition": "A soft wetland thick with tall reeds and singing frogs.",
+    "reviewed": false,
+    "spellingDifficultyScore": 0
+  },
+  {
+    "id": "en-mossy",
+    "word": "mossy",
+    "tier": 1,
+    "definition": "Covered in a plush velvety carpet of damp green growth.",
+    "reviewed": false,
+    "spellingDifficultyScore": 13
+  },
+  {
+    "id": "en-oasis",
+    "word": "oasis",
+    "tier": 1,
+    "definition": "A fertile green spring sheltering life amid dry stone.",
+    "reviewed": false,
+    "spellingDifficultyScore": 4
+  },
+  {
+    "id": "en-orbit",
+    "word": "orbit",
+    "tier": 1,
+    "definition": "The curved path a moon traces endlessly around its planet.",
+    "reviewed": false,
+    "spellingDifficultyScore": 0
+  },
+  {
+    "id": "en-petal",
+    "word": "petal",
+    "tier": 1,
+    "definition": "A delicate colored leaf forming the crown of a blossom.",
+    "reviewed": false,
+    "spellingDifficultyScore": 0
+  },
+  {
+    "id": "en-raven",
+    "word": "raven",
+    "tier": 1,
+    "definition": "A glossy black bird soaring effortlessly on canyon updrafts.",
+    "reviewed": false,
+    "spellingDifficultyScore": 7
+  },
+  {
+    "id": "en-shale",
+    "word": "shale",
+    "tier": 1,
+    "definition": "A layered sedimentary rock that splits into thin flat plates.",
+    "reviewed": false,
+    "spellingDifficultyScore": 0
+  },
+  {
+    "id": "en-spruce",
+    "word": "spruce",
+    "tier": 1,
+    "definition": "A conical evergreen with short needles and hanging cones.",
+    "reviewed": false,
+    "spellingDifficultyScore": 5
+  },
+  {
+    "id": "en-stone",
+    "word": "stone",
+    "tier": 1,
+    "definition": "A solid mineral fragment smoothed by weather and time.",
+    "reviewed": false,
+    "spellingDifficultyScore": 0
+  },
+  {
+    "id": "en-abalone",
+    "word": "abalone",
+    "tier": 2,
+    "definition": "An iridescent shell lined with swirling pearl colors.",
+    "reviewed": false,
+    "spellingDifficultyScore": 9
+  },
+  {
+    "id": "en-alder",
+    "word": "alder",
+    "tier": 2,
+    "definition": "A moisture-loving riverbank tree with serrated leaves.",
+    "reviewed": false,
+    "spellingDifficultyScore": 0
+  },
+  {
+    "id": "en-alpine",
+    "word": "alpine",
+    "tier": 2,
+    "definition": "Belonging to high snow-dusted peaks above the tree line.",
+    "reviewed": false,
+    "spellingDifficultyScore": 5
+  },
+  {
+    "id": "en-anthill",
+    "word": "anthill",
+    "tier": 2,
+    "definition": "A neat cone of fine sand raised beside a sunny footpath.",
+    "reviewed": false,
+    "spellingDifficultyScore": 15
+  },
+  {
+    "id": "en-arroyo",
+    "word": "arroyo",
+    "tier": 2,
+    "definition": "A dry steep-walled gully carved by seasonal desert rain.",
+    "reviewed": false,
+    "spellingDifficultyScore": 18
+  },
+  {
+    "id": "en-badlands",
+    "word": "badlands",
+    "tier": 2,
+    "definition": "Barren wind-sculpted ridges striped with colorful clay.",
+    "reviewed": false,
+    "spellingDifficultyScore": 14
+  },
+  {
+    "id": "en-boulder",
+    "word": "boulder",
+    "tier": 2,
+    "definition": "A massive rounded rock resting heavily on a mountain slope.",
+    "reviewed": false,
+    "spellingDifficultyScore": 13
+  },
+  {
+    "id": "en-bramble",
+    "word": "bramble",
+    "tier": 2,
+    "definition": "A tangled prickly shrub bearing dark wild berries.",
+    "reviewed": false,
+    "spellingDifficultyScore": 9
+  },
+  {
+    "id": "en-campground",
+    "word": "campground",
+    "tier": 2,
+    "definition": "A flat pine-shaded clearing set aside for pitched tents.",
+    "reviewed": false,
+    "spellingDifficultyScore": 27
+  },
+  {
+    "id": "en-cardinal",
+    "word": "cardinal",
+    "tier": 2,
+    "definition": "A bright scarlet songbird perched atop a winter pine.",
+    "reviewed": false,
+    "spellingDifficultyScore": 14
+  },
+  {
+    "id": "en-catwalk",
+    "word": "catwalk",
+    "tier": 2,
+    "definition": "A narrow elevated walkway spanning a steep cliff face.",
+    "reviewed": false,
+    "spellingDifficultyScore": 16
+  },
+  {
+    "id": "en-clearcut",
+    "word": "clearcut",
+    "tier": 2,
+    "definition": "An open patch of hillside where timber was harvested.",
+    "reviewed": false,
+    "spellingDifficultyScore": 18
+  },
+  {
+    "id": "en-cobble",
+    "word": "cobble",
+    "tier": 2,
+    "definition": "A rounded stream stone worn smooth by tumbling currents.",
+    "reviewed": false,
+    "spellingDifficultyScore": 11
+  },
+  {
+    "id": "en-cypress",
+    "word": "cypress",
+    "tier": 2,
+    "definition": "A slender evergreen standing tall against coastal winds.",
+    "reviewed": false,
+    "spellingDifficultyScore": 22
+  },
+  {
+    "id": "en-daybreak",
+    "word": "daybreak",
+    "tier": 2,
+    "definition": "The first pale gold light warming the eastern horizon.",
+    "reviewed": false,
+    "spellingDifficultyScore": 32
+  },
+  {
+    "id": "en-driftwood",
+    "word": "driftwood",
+    "tier": 2,
+    "definition": "Sun-bleached timber washed ashore along a quiet bend.",
+    "reviewed": false,
+    "spellingDifficultyScore": 28
+  },
+  {
+    "id": "en-estuary",
+    "word": "estuary",
+    "tier": 2,
+    "definition": "A tidal river mouth where fresh snowmelt meets the sea.",
+    "reviewed": false,
+    "spellingDifficultyScore": 20
+  },
+  {
+    "id": "en-falcon",
+    "word": "falcon",
+    "tier": 2,
+    "definition": "A swift keen-eyed raptor diving across open canyon skies.",
+    "reviewed": false,
+    "spellingDifficultyScore": 5
+  },
+  {
+    "id": "en-firewood",
+    "word": "firewood",
+    "tier": 2,
+    "definition": "Split seasoned logs stacked neatly beside a stone hearth.",
+    "reviewed": false,
+    "spellingDifficultyScore": 24
+  },
+  {
+    "id": "en-foxglove",
+    "word": "foxglove",
+    "tier": 2,
+    "definition": "A tall woodland spike hung with purple bell-shaped blooms.",
+    "reviewed": false,
+    "spellingDifficultyScore": 28
+  },
+  {
+    "id": "en-headwind",
+    "word": "headwind",
+    "tier": 2,
+    "definition": "A steady breeze blowing directly against a hiker's path.",
+    "reviewed": false,
+    "spellingDifficultyScore": 18
+  },
+  {
+    "id": "en-hemlock",
+    "word": "hemlock",
+    "tier": 2,
+    "definition": "A feathery evergreen thriving in cool shaded ravines.",
+    "reviewed": false,
+    "spellingDifficultyScore": 16
+  },
+  {
+    "id": "en-highland",
+    "word": "highland",
+    "tier": 2,
+    "definition": "Elevated rolling country rising far above the valley floor.",
+    "reviewed": false,
+    "spellingDifficultyScore": 21
+  },
+  {
+    "id": "en-hillside",
+    "word": "hillside",
+    "tier": 2,
+    "definition": "The sloping flank of a ridge covered in grass and sage.",
+    "reviewed": false,
+    "spellingDifficultyScore": 20
+  },
+  {
+    "id": "en-ironwood",
+    "word": "ironwood",
+    "tier": 2,
+    "definition": "A dense desert tree with famously hard dark timber.",
+    "reviewed": false,
+    "spellingDifficultyScore": 24
+  },
+  {
+    "id": "en-juniper",
+    "word": "juniper",
+    "tier": 2,
+    "definition": "A twisted aromatic evergreen bearing dusty blue berries.",
+    "reviewed": false,
+    "spellingDifficultyScore": 16
+  },
+  {
+    "id": "en-kestrel",
+    "word": "kestrel",
+    "tier": 2,
+    "definition": "A small hovering falcon scanning meadows for movement.",
+    "reviewed": false,
+    "spellingDifficultyScore": 16
+  },
+  {
+    "id": "en-lagoon",
+    "word": "lagoon",
+    "tier": 2,
+    "definition": "A calm shallow pool sheltered from rough open water.",
+    "reviewed": false,
+    "spellingDifficultyScore": 15
+  },
+  {
+    "id": "en-larkspur",
+    "word": "larkspur",
+    "tier": 2,
+    "definition": "A tall wildflower spiked with vibrant violet-blue blossoms.",
+    "reviewed": false,
+    "spellingDifficultyScore": 21
+  },
+  {
+    "id": "en-limestone",
+    "word": "limestone",
+    "tier": 2,
+    "definition": "Pale sedimentary rock slowly sculpted into caves by water.",
+    "reviewed": false,
+    "spellingDifficultyScore": 18
+  },
+  {
+    "id": "en-moonrise",
+    "word": "moonrise",
+    "tier": 2,
+    "definition": "The quiet moment a silver orb lifts above dark peaks.",
+    "reviewed": false,
+    "spellingDifficultyScore": 24
+  },
+  {
+    "id": "en-nightfall",
+    "word": "nightfall",
+    "tier": 2,
+    "definition": "The gentle arrival of evening darkness across the valley.",
+    "reviewed": false,
+    "spellingDifficultyScore": 31
+  },
+  {
+    "id": "en-raindrop",
+    "word": "raindrop",
+    "tier": 2,
+    "definition": "A single glistening bead falling from a passing storm.",
+    "reviewed": false,
+    "spellingDifficultyScore": 18
+  },
+  {
+    "id": "en-redwood",
+    "word": "redwood",
+    "tier": 2,
+    "definition": "An ancient towering giant clothed in thick cinnamon bark.",
+    "reviewed": false,
+    "spellingDifficultyScore": 19
+  },
+  {
+    "id": "en-riverbed",
+    "word": "riverbed",
+    "tier": 2,
+    "definition": "The rocky gravel channel worn beneath a flowing current.",
+    "reviewed": false,
+    "spellingDifficultyScore": 21
+  },
+  {
+    "id": "en-sagebrush",
+    "word": "sagebrush",
+    "tier": 2,
+    "definition": "A silvery aromatic desert shrub carpeting dry plateaus.",
+    "reviewed": false,
+    "spellingDifficultyScore": 18
+  },
+  {
+    "id": "en-sandbar",
+    "word": "sandbar",
+    "tier": 2,
+    "definition": "A pale ridge of sediment exposed along a shallow bend.",
+    "reviewed": false,
+    "spellingDifficultyScore": 9
+  },
+  {
+    "id": "en-sunbeam",
+    "word": "sunbeam",
+    "tier": 2,
+    "definition": "A warm shaft of golden light piercing parting clouds.",
+    "reviewed": false,
+    "spellingDifficultyScore": 13
+  },
+  {
+    "id": "en-tamarack",
+    "word": "tamarack",
+    "tier": 2,
+    "definition": "A northern larch whose needles turn gold before dropping.",
+    "reviewed": false,
+    "spellingDifficultyScore": 21
+  },
+  {
+    "id": "en-waterfall",
+    "word": "waterfall",
+    "tier": 2,
+    "definition": "A roaring curtain of snowmelt plunging over high rock.",
+    "reviewed": false,
+    "spellingDifficultyScore": 24
+  },
+  {
+    "id": "en-altitude",
+    "word": "altitude",
+    "tier": 3,
+    "definition": "Vertical height of a mountain pass measured above sea level.",
+    "reviewed": false,
+    "spellingDifficultyScore": 14
+  },
+  {
+    "id": "en-amaranth",
+    "word": "amaranth",
+    "tier": 3,
+    "definition": "A hardy crimson-plumed plant prized in myth as unfading.",
+    "reviewed": false,
+    "spellingDifficultyScore": 14
+  },
+  {
+    "id": "en-aperture",
+    "word": "aperture",
+    "tier": 3,
+    "definition": "A narrow opening in a cliff or telescope letting light pass.",
+    "reviewed": false,
+    "spellingDifficultyScore": 14
+  },
+  {
+    "id": "en-apogee",
+    "word": "apogee",
+    "tier": 3,
+    "definition": "The farthest point in an orbit from the body below.",
+    "reviewed": false,
+    "spellingDifficultyScore": 15
+  },
+  {
+    "id": "en-aquifer",
+    "word": "aquifer",
+    "tier": 3,
+    "definition": "An underground layer of porous stone holding clear water.",
+    "reviewed": false,
+    "spellingDifficultyScore": 27
+  },
+  {
+    "id": "en-aurora",
+    "word": "aurora",
+    "tier": 3,
+    "definition": "Shimmering ribbons of colored light dancing across polar skies.",
+    "reviewed": false,
+    "spellingDifficultyScore": 9
+  },
+  {
+    "id": "en-avalanche",
+    "word": "avalanche",
+    "tier": 3,
+    "definition": "A thundering slide of packed snow racing down a steep chute.",
+    "reviewed": false,
+    "spellingDifficultyScore": 32
+  },
+  {
+    "id": "en-azimuth",
+    "word": "azimuth",
+    "tier": 3,
+    "definition": "A compass bearing measured clockwise from true north.",
+    "reviewed": false,
+    "spellingDifficultyScore": 16
+  },
+  {
+    "id": "en-basalt",
+    "word": "basalt",
+    "tier": 3,
+    "definition": "Dark fine-grained volcanic rock forming hexagonal columns.",
+    "reviewed": false,
+    "spellingDifficultyScore": 5
+  },
+  {
+    "id": "en-borealis",
+    "word": "borealis",
+    "tier": 3,
+    "definition": "Pertaining to northern night skies lit by solar particles.",
+    "reviewed": false,
+    "spellingDifficultyScore": 18
+  },
+  {
+    "id": "en-caldera",
+    "word": "caldera",
+    "tier": 3,
+    "definition": "A vast bowl-like crater formed by a collapsed volcano.",
+    "reviewed": false,
+    "spellingDifficultyScore": 9
+  },
+  {
+    "id": "en-carapace",
+    "word": "carapace",
+    "tier": 3,
+    "definition": "A hard protective upper shell carried by a desert tortoise.",
+    "reviewed": false,
+    "spellingDifficultyScore": 14
+  },
+  {
+    "id": "en-cartography",
+    "word": "cartography",
+    "tier": 3,
+    "definition": "The meticulous art and science of drawing terrain maps.",
+    "reviewed": false,
+    "spellingDifficultyScore": 41
+  },
+  {
+    "id": "en-cataract",
+    "word": "cataract",
+    "tier": 3,
+    "definition": "A steep rushing cascade plunging over jagged river ledges.",
+    "reviewed": false,
+    "spellingDifficultyScore": 14
+  },
+  {
+    "id": "en-chaparral",
+    "word": "chaparral",
+    "tier": 3,
+    "definition": "Dense tangled scrubland adapted to hot dry summers.",
+    "reviewed": false,
+    "spellingDifficultyScore": 31
+  },
+  {
+    "id": "en-cirrus",
+    "word": "cirrus",
+    "tier": 3,
+    "definition": "Wispy high-altitude ice clouds brushed across blue sky.",
+    "reviewed": false,
+    "spellingDifficultyScore": 11
+  },
+  {
+    "id": "en-conifer",
+    "word": "conifer",
+    "tier": 3,
+    "definition": "A cone-bearing tree that keeps its needles through winter.",
+    "reviewed": false,
+    "spellingDifficultyScore": 9
+  },
+  {
+    "id": "en-contour",
+    "word": "contour",
+    "tier": 3,
+    "definition": "A curved line tracing equal elevation on a trail map.",
+    "reviewed": false,
+    "spellingDifficultyScore": 13
+  },
+  {
+    "id": "en-crevasse",
+    "word": "crevasse",
+    "tier": 3,
+    "definition": "A deep narrow fissure splitting a slowly moving glacier.",
+    "reviewed": false,
+    "spellingDifficultyScore": 27
+  },
+  {
+    "id": "en-cumulus",
+    "word": "cumulus",
+    "tier": 3,
+    "definition": "Puffy flat-bottomed clouds towering in warm afternoon air.",
+    "reviewed": false,
+    "spellingDifficultyScore": 9
+  },
+  {
+    "id": "en-deciduous",
+    "word": "deciduous",
+    "tier": 3,
+    "definition": "Shedding broad leaves each autumn before winter frost.",
+    "reviewed": false,
+    "spellingDifficultyScore": 22
+  },
+  {
+    "id": "en-eclipse",
+    "word": "eclipse",
+    "tier": 3,
+    "definition": "The solemn alignment when one celestial body shadows another.",
+    "reviewed": false,
+    "spellingDifficultyScore": 16
+  },
+  {
+    "id": "en-escarpment",
+    "word": "escarpment",
+    "tier": 3,
+    "definition": "A long steep cliff dividing two flat plateau levels.",
+    "reviewed": false,
+    "spellingDifficultyScore": 30
+  },
+  {
+    "id": "en-feldspar",
+    "word": "feldspar",
+    "tier": 3,
+    "definition": "A pale crystalline mineral abundant in granite peaks.",
+    "reviewed": false,
+    "spellingDifficultyScore": 14
+  },
+  {
+    "id": "en-firmament",
+    "word": "firmament",
+    "tier": 3,
+    "definition": "The vast starry vault of heaven arching over the canyon.",
+    "reviewed": false,
+    "spellingDifficultyScore": 18
+  },
+  {
+    "id": "en-fumarole",
+    "word": "fumarole",
+    "tier": 3,
+    "definition": "A rocky volcanic vent releasing wisps of warm steam.",
+    "reviewed": false,
+    "spellingDifficultyScore": 14
+  },
+  {
+    "id": "en-geodesic",
+    "word": "geodesic",
+    "tier": 3,
+    "definition": "Following the shortest curved path across a spherical dome.",
+    "reviewed": false,
+    "spellingDifficultyScore": 18
+  },
+  {
+    "id": "en-meridian",
+    "word": "meridian",
+    "tier": 3,
+    "definition": "An imaginary arc running pole to pole across the sky.",
+    "reviewed": false,
+    "spellingDifficultyScore": 18
+  },
+  {
+    "id": "en-monsoon",
+    "word": "monsoon",
+    "tier": 3,
+    "definition": "A seasonal shift of winds bringing sudden desert storms.",
+    "reviewed": false,
+    "spellingDifficultyScore": 19
+  },
+  {
+    "id": "en-moraine",
+    "word": "moraine",
+    "tier": 3,
+    "definition": "A ridge of rubble left behind by a retreating ice sheet.",
+    "reviewed": false,
+    "spellingDifficultyScore": 13
+  },
+  {
+    "id": "en-nebula",
+    "word": "nebula",
+    "tier": 3,
+    "definition": "A glowing interstellar cloud of cosmic dust and gas.",
+    "reviewed": false,
+    "spellingDifficultyScore": 5
+  },
+  {
+    "id": "en-parallactic",
+    "word": "parallactic",
+    "tier": 3,
+    "definition": "Relating to the apparent shift of stars from two viewpoints.",
+    "reviewed": false,
+    "spellingDifficultyScore": 33
+  },
+  {
+    "id": "en-perigee",
+    "word": "perigee",
+    "tier": 3,
+    "definition": "The closest point in an orbit to the body below.",
+    "reviewed": false,
+    "spellingDifficultyScore": 19
+  },
+  {
+    "id": "en-petroglyph",
+    "word": "petroglyph",
+    "tier": 3,
+    "definition": "An ancient symbol pecked into sun-darkened canyon rock.",
+    "reviewed": false,
+    "spellingDifficultyScore": 37
+  },
+  {
+    "id": "en-pumice",
+    "word": "pumice",
+    "tier": 3,
+    "definition": "Light frothy volcanic stone porous enough to float on water.",
+    "reviewed": false,
+    "spellingDifficultyScore": 5
+  },
+  {
+    "id": "en-quicksilver",
+    "word": "quicksilver",
+    "tier": 3,
+    "definition": "A liquid silvery metal shimmering like moonlight on stone.",
+    "reviewed": false,
+    "spellingDifficultyScore": 59
+  },
+  {
+    "id": "en-solstice",
+    "word": "solstice",
+    "tier": 3,
+    "definition": "Either annual day when the sun reaches its highest or lowest arc.",
+    "reviewed": false,
+    "spellingDifficultyScore": 14
+  },
+  {
+    "id": "en-stratum",
+    "word": "stratum",
+    "tier": 3,
+    "definition": "A distinct horizontal band of rock laid down over ages.",
+    "reviewed": false,
+    "spellingDifficultyScore": 9
+  },
+  {
+    "id": "en-tributary",
+    "word": "tributary",
+    "tier": 3,
+    "definition": "A smaller mountain stream feeding into a main river.",
+    "reviewed": false,
+    "spellingDifficultyScore": 25
+  },
+  {
+    "id": "en-watershed",
+    "word": "watershed",
+    "tier": 3,
+    "definition": "A high ridge dividing rainwater toward separate valleys.",
+    "reviewed": false,
+    "spellingDifficultyScore": 18
+  },
+  {
+    "id": "en-alembic",
+    "word": "alembic",
+    "tier": 4,
+    "definition": "An old glass vessel used to distill essences over fire.",
+    "reviewed": false,
+    "spellingDifficultyScore": 9
+  },
+  {
+    "id": "en-alpenglows",
+    "word": "alpenglows",
+    "tier": 4,
+    "definition": "Rosy sunset bands lingering on distant snowy summits.",
+    "reviewed": false,
+    "spellingDifficultyScore": 23
+  },
+  {
+    "id": "en-amethyst",
+    "word": "amethyst",
+    "tier": 4,
+    "definition": "A translucent violet quartz crystal formed in rock cavities.",
+    "reviewed": false,
+    "spellingDifficultyScore": 21
+  },
+  {
+    "id": "en-anemone",
+    "word": "anemone",
+    "tier": 4,
+    "definition": "A delicate wind-shaken wildflower opening in spring glades.",
+    "reviewed": false,
+    "spellingDifficultyScore": 9
+  },
+  {
+    "id": "en-aphelion",
+    "word": "aphelion",
+    "tier": 4,
+    "definition": "The point in a planet's orbit farthest from the sun.",
+    "reviewed": false,
+    "spellingDifficultyScore": 25
+  },
+  {
+    "id": "en-astrolabe",
+    "word": "astrolabe",
+    "tier": 4,
+    "definition": "A brass star-measuring disc used by ancient navigators.",
+    "reviewed": false,
+    "spellingDifficultyScore": 18
+  },
+  {
+    "id": "en-azure",
+    "word": "azure",
+    "tier": 4,
+    "definition": "The deep cloudless blue of high-altitude mountain air.",
+    "reviewed": false,
+    "spellingDifficultyScore": 7
+  },
+  {
+    "id": "en-cadence",
+    "word": "cadence",
+    "tier": 4,
+    "definition": "A balanced rhythmic rise and fall in wind or melody.",
+    "reviewed": false,
+    "spellingDifficultyScore": 9
+  },
+  {
+    "id": "en-calligraphy",
+    "word": "calligraphy",
+    "tier": 4,
+    "definition": "Flowing decorative brushwork rendered with practiced grace.",
+    "reviewed": false,
+    "spellingDifficultyScore": 47
+  },
+  {
+    "id": "en-carillon",
+    "word": "carillon",
+    "tier": 4,
+    "definition": "A set of tuned tower bells chiming harmonies at dusk.",
+    "reviewed": false,
+    "spellingDifficultyScore": 20
+  },
+  {
+    "id": "en-cerulean",
+    "word": "cerulean",
+    "tier": 4,
+    "definition": "A serene sky-blue pigment brightening twilight horizons.",
+    "reviewed": false,
+    "spellingDifficultyScore": 18
+  },
+  {
+    "id": "en-chrysalis",
+    "word": "chrysalis",
+    "tier": 4,
+    "definition": "A golden-flecked cocoon sheltering a transforming butterfly.",
+    "reviewed": false,
+    "spellingDifficultyScore": 32
+  },
+  {
+    "id": "en-cinnabar",
+    "word": "cinnabar",
+    "tier": 4,
+    "definition": "A vivid brick-red mineral crystal prized by painters.",
+    "reviewed": false,
+    "spellingDifficultyScore": 20
+  },
+  {
+    "id": "en-coruscate",
+    "word": "coruscate",
+    "tier": 4,
+    "definition": "To flash or sparkle in sudden glittering waves of light.",
+    "reviewed": false,
+    "spellingDifficultyScore": 25
+  },
+  {
+    "id": "en-diaphanous",
+    "word": "diaphanous",
+    "tier": 4,
+    "definition": "So sheer and misty that starlight shines faintly through.",
+    "reviewed": false,
+    "spellingDifficultyScore": 38
+  },
+  {
+    "id": "en-effulgence",
+    "word": "effulgence",
+    "tier": 4,
+    "definition": "A brilliant radiant outpouring of golden canyon light.",
+    "reviewed": false,
+    "spellingDifficultyScore": 29
+  },
+  {
+    "id": "en-elysian",
+    "word": "elysian",
+    "tier": 4,
+    "definition": "Blissfully peaceful, like a sunlit meadow out of myth.",
+    "reviewed": false,
+    "spellingDifficultyScore": 20
+  },
+  {
+    "id": "en-evanescent",
+    "word": "evanescent",
+    "tier": 4,
+    "definition": "Quickly fading away like mist at sunrise.",
+    "reviewed": false,
+    "spellingDifficultyScore": 37
+  },
+  {
+    "id": "en-fulcrum",
+    "word": "fulcrum",
+    "tier": 4,
+    "definition": "The steady pivot point supporting a balanced lever.",
+    "reviewed": false,
+    "spellingDifficultyScore": 9
+  },
+  {
+    "id": "en-harmonics",
+    "word": "harmonics",
+    "tier": 4,
+    "definition": "Pure overtone frequencies resonating above a fundamental note.",
+    "reviewed": false,
+    "spellingDifficultyScore": 18
+  },
+  {
+    "id": "en-heliotrope",
+    "word": "heliotrope",
+    "tier": 4,
+    "definition": "A fragrant purple blossom that turns toward the sun.",
+    "reviewed": false,
+    "spellingDifficultyScore": 27
+  },
+  {
+    "id": "en-hyacinth",
+    "word": "hyacinth",
+    "tier": 4,
+    "definition": "A clustering spring flower in shades of indigo and rose.",
+    "reviewed": false,
+    "spellingDifficultyScore": 21
+  },
+  {
+    "id": "en-incantation",
+    "word": "incantation",
+    "tier": 4,
+    "definition": "A rhythmic spoken charm woven into twilight folklore.",
+    "reviewed": false,
+    "spellingDifficultyScore": 31
+  },
+  {
+    "id": "en-lambent",
+    "word": "lambent",
+    "tier": 4,
+    "definition": "Glowing softly and flickering gently without harsh glare.",
+    "reviewed": false,
+    "spellingDifficultyScore": 9
+  },
+  {
+    "id": "en-liminal",
+    "word": "liminal",
+    "tier": 4,
+    "definition": "Poised on the threshold between day and night.",
+    "reviewed": false,
+    "spellingDifficultyScore": 9
+  },
+  {
+    "id": "en-lullaby",
+    "word": "lullaby",
+    "tier": 4,
+    "definition": "A quiet soothing song carried softly into evening sleep.",
+    "reviewed": false,
+    "spellingDifficultyScore": 22
+  },
+  {
+    "id": "en-marigold",
+    "word": "marigold",
+    "tier": 4,
+    "definition": "A warm saffron-orange bloom glowing in late summer sun.",
+    "reviewed": false,
+    "spellingDifficultyScore": 14
+  },
+  {
+    "id": "en-melancholy",
+    "word": "melancholy",
+    "tier": 4,
+    "definition": "A gentle pensive sadness stirred by fading autumn light.",
+    "reviewed": false,
+    "spellingDifficultyScore": 37
+  },
+  {
+    "id": "en-nocturne",
+    "word": "nocturne",
+    "tier": 4,
+    "definition": "A dreamy musical piece inspired by the quiet of night.",
+    "reviewed": false,
+    "spellingDifficultyScore": 14
+  },
+  {
+    "id": "en-opalescent",
+    "word": "opalescent",
+    "tier": 4,
+    "definition": "Showing milky rainbow shimmers as viewing angles shift.",
+    "reviewed": false,
+    "spellingDifficultyScore": 30
+  },
+  {
+    "id": "en-pendulum",
+    "word": "pendulum",
+    "tier": 4,
+    "definition": "A suspended weight swinging steadily back and forth.",
+    "reviewed": false,
+    "spellingDifficultyScore": 14
+  },
+  {
+    "id": "en-perihelion",
+    "word": "perihelion",
+    "tier": 4,
+    "definition": "The point in a planet's orbit nearest to the sun.",
+    "reviewed": false,
+    "spellingDifficultyScore": 27
+  },
+  {
+    "id": "en-phosphor",
+    "word": "phosphor",
+    "tier": 4,
+    "definition": "A glowing substance that emits soft light after excitation.",
+    "reviewed": false,
+    "spellingDifficultyScore": 28
+  },
+  {
+    "id": "en-quiescent",
+    "word": "quiescent",
+    "tier": 4,
+    "definition": "Resting in still, hushed calm before motion resumes.",
+    "reviewed": false,
+    "spellingDifficultyScore": 43
+  },
+  {
+    "id": "en-rhapsody",
+    "word": "rhapsody",
+    "tier": 4,
+    "definition": "An ecstatic free-flowing burst of song or poetry.",
+    "reviewed": false,
+    "spellingDifficultyScore": 28
+  },
+  {
+    "id": "en-scintilla",
+    "word": "scintilla",
+    "tier": 4,
+    "definition": "A tiny fleeting spark or trace of bright luminescence.",
+    "reviewed": false,
+    "spellingDifficultyScore": 31
+  },
+  {
+    "id": "en-somnolent",
+    "word": "somnolent",
+    "tier": 4,
+    "definition": "Drowsy and hushed, like a canyon settling into twilight.",
+    "reviewed": false,
+    "spellingDifficultyScore": 25
+  },
+  {
+    "id": "en-sonorous",
+    "word": "sonorous",
+    "tier": 4,
+    "definition": "Deep, rich, and resonant like a distant canyon bell.",
+    "reviewed": false,
+    "spellingDifficultyScore": 18
+  },
+  {
+    "id": "en-talisman",
+    "word": "talisman",
+    "tier": 4,
+    "definition": "A carved stone charm carried for safe passage on trails.",
+    "reviewed": false,
+    "spellingDifficultyScore": 14
+  },
+  {
+    "id": "en-vignette",
+    "word": "vignette",
+    "tier": 4,
+    "definition": "A brief evocative scene fading softly at its edges.",
+    "reviewed": false,
+    "spellingDifficultyScore": 34
+  },
+  {
+    "id": "en-acquiescence",
+    "word": "acquiescence",
+    "tier": 5,
+    "definition": "Quiet unresisting acceptance without protest or clamor.",
+    "reviewed": false,
+    "spellingDifficultyScore": 57
+  },
+  {
+    "id": "en-anachronism",
+    "word": "anachronism",
+    "tier": 5,
+    "definition": "Something placed outside its proper historical era.",
+    "reviewed": false,
+    "spellingDifficultyScore": 34
+  },
+  {
+    "id": "en-antediluvian",
+    "word": "antediluvian",
+    "tier": 5,
+    "definition": "Immeasurably old, belonging to ages before great floods.",
+    "reviewed": false,
+    "spellingDifficultyScore": 43
+  },
+  {
+    "id": "en-anthropomorphic",
+    "word": "anthropomorphic",
+    "tier": 5,
+    "definition": "Giving human form or feeling to mountains, winds, or stars.",
+    "reviewed": false,
+    "spellingDifficultyScore": 52
+  },
+  {
+    "id": "en-appurtenance",
+    "word": "appurtenance",
+    "tier": 5,
+    "definition": "An accessory item belonging to a larger piece of gear.",
+    "reviewed": false,
+    "spellingDifficultyScore": 38
+  },
+  {
+    "id": "en-bourgeoisie",
+    "word": "bourgeoisie",
+    "tier": 5,
+    "definition": "The propertied middle class of a settled town.",
+    "reviewed": false,
+    "spellingDifficultyScore": 39
+  },
+  {
+    "id": "en-bureaucracy",
+    "word": "bureaucracy",
+    "tier": 5,
+    "definition": "An intricate system of official desks, rules, and forms.",
+    "reviewed": false,
+    "spellingDifficultyScore": 45
+  },
+  {
+    "id": "en-cacophony",
+    "word": "cacophony",
+    "tier": 5,
+    "definition": "A harsh jarring mixture of clashing sounds.",
+    "reviewed": false,
+    "spellingDifficultyScore": 32
+  },
+  {
+    "id": "en-camaraderie",
+    "word": "camaraderie",
+    "tier": 5,
+    "definition": "Warm mutual trust shared among companions on a long trail.",
+    "reviewed": false,
+    "spellingDifficultyScore": 31
+  },
+  {
+    "id": "en-conscientious",
+    "word": "conscientious",
+    "tier": 5,
+    "definition": "Guided by careful scruple and thorough attention to duty.",
+    "reviewed": false,
+    "spellingDifficultyScore": 51
+  },
+  {
+    "id": "en-convalescence",
+    "word": "convalescence",
+    "tier": 5,
+    "definition": "Gradual restoration of strength after a long illness.",
+    "reviewed": false,
+    "spellingDifficultyScore": 50
+  },
+  {
+    "id": "en-correspondence",
+    "word": "correspondence",
+    "tier": 5,
+    "definition": "A close match or steady exchange of written letters.",
+    "reviewed": false,
+    "spellingDifficultyScore": 47
+  },
+  {
+    "id": "en-daguerreotype",
+    "word": "daguerreotype",
+    "tier": 5,
+    "definition": "An early silver-plated photograph fixed with mercury vapor.",
+    "reviewed": false,
+    "spellingDifficultyScore": 57
+  },
+  {
+    "id": "en-discombobulate",
+    "word": "discombobulate",
+    "tier": 5,
+    "definition": "To throw into sudden bewilderment or playful confusion.",
+    "reviewed": false,
+    "spellingDifficultyScore": 48
+  },
+  {
+    "id": "en-ebullience",
+    "word": "ebullience",
+    "tier": 5,
+    "definition": "Overflowing cheerful energy bubbling over like a spring.",
+    "reviewed": false,
+    "spellingDifficultyScore": 33
+  },
+  {
+    "id": "en-entrepreneur",
+    "word": "entrepreneur",
+    "tier": 5,
+    "definition": "One who organizes a new venture and shoulders its risk.",
+    "reviewed": false,
+    "spellingDifficultyScore": 36
+  },
+  {
+    "id": "en-fluorescent",
+    "word": "fluorescent",
+    "tier": 5,
+    "definition": "Glowing vividly while absorbing ultraviolet rays.",
+    "reviewed": false,
+    "spellingDifficultyScore": 38
+  },
+  {
+    "id": "en-grandiloquent",
+    "word": "grandiloquent",
+    "tier": 5,
+    "definition": "Pompous or lofty in speech, aiming to impress.",
+    "reviewed": false,
+    "spellingDifficultyScore": 54
+  },
+  {
+    "id": "en-hemorrhage",
+    "word": "hemorrhage",
+    "tier": 5,
+    "definition": "A heavy sudden outpouring or rapid loss of flow.",
+    "reviewed": false,
+    "spellingDifficultyScore": 29
+  },
+  {
+    "id": "en-hieroglyphic",
+    "word": "hieroglyphic",
+    "tier": 5,
+    "definition": "Written in sacred carved picture-signs of ancient stone.",
+    "reviewed": false,
+    "spellingDifficultyScore": 50
+  },
+  {
+    "id": "en-hypothetical",
+    "word": "hypothetical",
+    "tier": 5,
+    "definition": "Proposed as a working idea rather than proven fact.",
+    "reviewed": false,
+    "spellingDifficultyScore": 39
+  },
+  {
+    "id": "en-imperviousness",
+    "word": "imperviousness",
+    "tier": 5,
+    "definition": "The quality of letting neither rain nor doubt pass through.",
+    "reviewed": false,
+    "spellingDifficultyScore": 58
+  },
+  {
+    "id": "en-incongruous",
+    "word": "incongruous",
+    "tier": 5,
+    "definition": "Out of place or clashing oddly with its surroundings.",
+    "reviewed": false,
+    "spellingDifficultyScore": 31
+  },
+  {
+    "id": "en-indefatigable",
+    "word": "indefatigable",
+    "tier": 5,
+    "definition": "Tirelessly persisting without yielding to weariness.",
+    "reviewed": false,
+    "spellingDifficultyScore": 36
+  },
+  {
+    "id": "en-ineffable",
+    "word": "ineffable",
+    "tier": 5,
+    "definition": "Too sacred or vast to be captured in ordinary speech.",
+    "reviewed": false,
+    "spellingDifficultyScore": 24
+  },
+  {
+    "id": "en-labyrinthine",
+    "word": "labyrinthine",
+    "tier": 5,
+    "definition": "Winding endlessly through intricate twisting passages.",
+    "reviewed": false,
+    "spellingDifficultyScore": 39
+  },
+  {
+    "id": "en-luminescence",
+    "word": "luminescence",
+    "tier": 5,
+    "definition": "Cool light emitted without heat from mineral or sky.",
+    "reviewed": false,
+    "spellingDifficultyScore": 39
+  },
+  {
+    "id": "en-magniloquent",
+    "word": "magniloquent",
+    "tier": 5,
+    "definition": "Speaking in grand, sweeping, ornate phrases.",
+    "reviewed": false,
+    "spellingDifficultyScore": 57
+  },
+  {
+    "id": "en-metamorphosis",
+    "word": "metamorphosis",
+    "tier": 5,
+    "definition": "A dramatic complete transformation of form or nature.",
+    "reviewed": false,
+    "spellingDifficultyScore": 43
+  },
+  {
+    "id": "en-miscellaneous",
+    "word": "miscellaneous",
+    "tier": 5,
+    "definition": "Composed of varied items gathered from many sources.",
+    "reviewed": false,
+    "spellingDifficultyScore": 53
+  },
+  {
+    "id": "en-nomenclature",
+    "word": "nomenclature",
+    "tier": 5,
+    "definition": "A formal system of names used across a science or craft.",
+    "reviewed": false,
+    "spellingDifficultyScore": 32
+  },
+  {
+    "id": "en-obfuscation",
+    "word": "obfuscation",
+    "tier": 5,
+    "definition": "Deliberate clouding of meaning to make things unclear.",
+    "reviewed": false,
+    "spellingDifficultyScore": 38
+  },
+  {
+    "id": "en-oscillation",
+    "word": "oscillation",
+    "tier": 5,
+    "definition": "Steady rhythmic swinging back and forth between extremes.",
+    "reviewed": false,
+    "spellingDifficultyScore": 44
+  },
+  {
+    "id": "en-paraphernalia",
+    "word": "paraphernalia",
+    "tier": 5,
+    "definition": "Assorted tools and gear required for a specialized craft.",
+    "reviewed": false,
+    "spellingDifficultyScore": 47
+  },
+  {
+    "id": "en-perspicacious",
+    "word": "perspicacious",
+    "tier": 5,
+    "definition": "Having keen clear insight into subtle details.",
+    "reviewed": false,
+    "spellingDifficultyScore": 40
+  },
+  {
+    "id": "en-philanthropist",
+    "word": "philanthropist",
+    "tier": 5,
+    "definition": "One who gives generously to advance public well-being.",
+    "reviewed": false,
+    "spellingDifficultyScore": 48
+  },
+  {
+    "id": "en-pronunciation",
+    "word": "pronunciation",
+    "tier": 5,
+    "definition": "The accepted way a spoken word is voiced aloud.",
+    "reviewed": false,
+    "spellingDifficultyScore": 44
+  },
+  {
+    "id": "en-pseudonym",
+    "word": "pseudonym",
+    "tier": 5,
+    "definition": "A pen name adopted by a writer to conceal identity.",
+    "reviewed": false,
+    "spellingDifficultyScore": 36
+  },
+  {
+    "id": "en-reconnaissance",
+    "word": "reconnaissance",
+    "tier": 5,
+    "definition": "Preliminary scouting of terrain before a journey begins.",
+    "reviewed": false,
+    "spellingDifficultyScore": 57
+  },
+  {
+    "id": "en-sesquipedalian",
+    "word": "sesquipedalian",
+    "tier": 5,
+    "definition": "Given to using remarkably long many-syllabled words.",
+    "reviewed": false,
+    "spellingDifficultyScore": 63
+  }
+]

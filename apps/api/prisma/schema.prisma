@@ -1,0 +1,255 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String                  @id @default(cuid())
+  email        String                  @unique
+  username     String                  @unique
+  passwordHash String
+  createdAt    DateTime                @default(now())
+  updatedAt    DateTime                @updatedAt
+
+  sessions     Session[]
+  profile      PlayerProfile?
+  settings     UserSettings?
+  difficulties PlayerDifficultyStats[]
+  guestImport  GuestImport?
+  gameSessions GameSession[]
+  rewardLedger RewardLedger[]
+  matchResults MatchPlayerResult[]
+  ratingHistory RatingHistory[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model PlayerProfile {
+  userId                String   @id
+  displayName           String
+  avatarId              String   @default("lantern")
+  bio                   String   @default("")
+  xp                    Int      @default(0)
+  level                 Int      @default(1)
+  highScore             Int      @default(0)
+  bestStreak            Int      @default(0)
+  wordsSolved           Int      @default(0)
+  constellationsCleared Int      @default(0)
+  imported              Boolean  @default(false)
+  rating                Int      @default(1000)
+  rankedMatches         Int      @default(0)
+  updatedAt             DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserSettings {
+  userId           String   @id
+  masterVol        Float    @default(0.8)
+  musicVol         Float    @default(0.65)
+  sfxVol           Float    @default(0.85)
+  musicEnabled     Boolean  @default(true)
+  typingSfxEnabled Boolean  @default(true)
+  gameSfxEnabled   Boolean  @default(true)
+  reducedEffects   Boolean  @default(false)
+  updatedAt        DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Word {
+  id         String   @id
+  word       String   @unique
+  tier       Int
+  definition String
+  version    String
+  updatedAt  DateTime @updatedAt
+
+  @@index([tier])
+}
+
+model PlayerDifficultyStats {
+  id          String  @id @default(cuid())
+  userId      String
+  difficulty  String
+  unlocked    Boolean @default(true)
+  completed   Boolean @default(false)
+  highScore   Int     @default(0)
+  bestStreak  Int     @default(0)
+  wordsSolved Int     @default(0)
+  runsCleared Int     @default(0)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, difficulty])
+}
+
+model GuestImport {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  importId  String   @unique
+  xpAdded   Int
+  applied   Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model GameSession {
+  id              String      @id @default(cuid())
+  userId          String
+  clientSessionId String
+  seed            Int
+  difficulty      String
+  style           String
+  wordBankVersion String
+  status          String      @default("active")
+  abandonReason   String?
+  state           Json
+  version         Int         @default(0)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  user   User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  events GameEvent[]
+
+  @@unique([userId, clientSessionId])
+  @@index([userId, status])
+}
+
+model GameEvent {
+  id           String   @id @default(cuid())
+  sessionId    String
+  eventId      String   @unique
+  seq          Int
+  type         String
+  payload      Json
+  accepted     Boolean  @default(true)
+  rejectReason String?
+  createdAt    DateTime @default(now())
+
+  session GameSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, seq])
+}
+
+model RewardLedger {
+  id        String   @id @default(cuid())
+  userId    String
+  ledgerKey String   @unique
+  sessionId String?
+  xpDelta   Int
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model MultiplayerRoom {
+  id         String       @id @default(cuid())
+  code       String       @unique
+  ownerId    String
+  difficulty String       @default("EASY")
+  style      String       @default("STARLIGHT")
+  mode       String       @default("COMPETITION")
+  status     String       @default("waiting")
+  isRanked   Boolean      @default(false)
+  expiresAt  DateTime
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  players RoomPlayer[]
+  matches Match[]
+
+  @@index([status, expiresAt])
+}
+
+model RoomPlayer {
+  id          String   @id @default(cuid())
+  roomId      String
+  userId      String
+  username    String
+  avatarId    String   @default("lantern")
+  isReady     Boolean  @default(false)
+  isConnected Boolean  @default(true)
+  joinedAt    DateTime @default(now())
+
+  room MultiplayerRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  @@unique([roomId, userId])
+}
+
+model Match {
+  id         String    @id @default(cuid())
+  roomId     String
+  seed       Int
+  difficulty String
+  style      String
+  mode       String    @default("COMPETITION")
+  isRanked   Boolean   @default(false)
+  status     String    @default("countdown")
+  startedAt  DateTime?
+  endedAt    DateTime?
+  createdAt  DateTime  @default(now())
+
+  room    MultiplayerRoom     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  results MatchPlayerResult[]
+
+  @@index([roomId])
+  @@index([status])
+}
+
+model MatchPlayerResult {
+  id              String   @id @default(cuid())
+  matchId         String
+  userId          String
+  username        String
+  rank            Int
+  isDraw          Boolean  @default(false)
+  status          String
+  score           Int      @default(0)
+  wordsSolved     Int      @default(0)
+  bestStreak      Int      @default(0)
+  elapsedActiveMs Int      @default(0)
+  xpAwarded       Int      @default(0)
+  suspect         Boolean  @default(false)
+  createdAt       DateTime @default(now())
+
+  match Match @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([matchId, userId])
+  @@index([userId, createdAt])
+}
+
+model RatingHistory {
+  id           String   @id @default(cuid())
+  userId       String
+  matchId      String
+  ratingBefore Int
+  ratingAfter  Int
+  delta        Int
+  kFactor      Int
+  createdAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([matchId, userId])
+  @@index([userId, createdAt])
+}

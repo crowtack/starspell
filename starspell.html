@@ -1,0 +1,3496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Starspell — Wilderness Canyon Spelling Arcade</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['Fraunces', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    :root {
+      --stage-primary: #facc15;
+      --stage-secondary: #fb923c;
+      --stage-glow: rgba(250, 204, 21, 0.55);
+      --stage-ring: #facc15;
+      --glow-radius: 22px;
+      --glass-bg: rgba(20, 12, 22, 0.64);
+      --glass-border: rgba(255, 243, 214, 0.14);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #140812;
+      color: #fff8eb;
+      font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .font-display {
+      font-family: 'Fraunces', Georgia, serif;
+      font-variation-settings: "SOFT" 50, "WONK" 0;
+    }
+
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+
+    #cosmos-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 0;
+    }
+
+    .twilight-glass {
+      background: var(--glass-bg);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 24px 60px rgba(8, 4, 12, 0.48), inset 0 1px 0 rgba(255, 248, 235, 0.08);
+    }
+
+    .twilight-pill {
+      background: var(--glass-bg);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 10px 28px rgba(8, 4, 12, 0.34), inset 0 1px 0 rgba(255, 248, 235, 0.08);
+    }
+
+    .lobby-scrim {
+      background: radial-gradient(ellipse at center, rgba(18, 9, 18, 0.56) 0%, rgba(18, 9, 18, 0.28) 54%, rgba(18, 9, 18, 0) 78%);
+    }
+
+    /* Eclipse critical vignette */
+    .eclipse-vignette {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 8;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      box-shadow: inset 0 0 120px 34px rgba(244, 63, 94, 0.48), inset 0 0 42px 10px rgba(251, 113, 133, 0.35);
+    }
+    .eclipse-vignette.active {
+      opacity: 1;
+      animation: vignettePulse 1s ease-in-out infinite;
+    }
+    @keyframes vignettePulse {
+      0%, 100% { opacity: 0.65; }
+      50% { opacity: 1; }
+    }
+
+    /* Progress Lantern Pearls */
+    .lantern-pearl {
+      width: 10px;
+      height: 10px;
+      border-radius: 9999px;
+      background: rgba(255, 245, 224, 0.2);
+      border: 1px solid rgba(255, 245, 224, 0.22);
+      transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .lantern-pearl.pearl-done {
+      background: var(--stage-primary);
+      border-color: rgba(255, 255, 255, 0.75);
+      box-shadow: 0 0 10px var(--stage-glow);
+    }
+    .lantern-pearl.pearl-current {
+      width: 13px;
+      height: 13px;
+      background: #fff8eb;
+      border-color: var(--stage-primary);
+      box-shadow: 0 0 14px var(--stage-glow);
+      animation: pearlBreath 1.6s ease-in-out infinite;
+    }
+    @keyframes pearlBreath {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.22); }
+    }
+
+    /* Circular Lantern Letter Medallions */
+    .star-tile {
+      position: relative;
+      width: clamp(2.45rem, 5.6vw, 3.65rem);
+      height: clamp(2.45rem, 5.6vw, 3.65rem);
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Fraunces', Georgia, serif;
+      font-variation-settings: "SOFT" 50, "WONK" 0;
+      font-weight: 700;
+      font-size: clamp(1.18rem, 2.7vw, 1.75rem);
+      text-transform: uppercase;
+      color: #fff8eb;
+      background: rgba(22, 13, 25, 0.56);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1.5px solid rgba(255, 243, 214, 0.24);
+      box-shadow: 0 8px 20px rgba(8, 4, 12, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+      transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.2s ease, background 0.2s ease, box-shadow 0.25s ease, color 0.2s ease;
+      z-index: 2;
+      flex-shrink: 0;
+    }
+
+    .star-tile.tile-active::after {
+      content: '';
+      position: absolute;
+      bottom: 7px;
+      width: 42%;
+      height: 3px;
+      border-radius: 9999px;
+      background: var(--stage-primary);
+      box-shadow: 0 0 10px var(--stage-glow);
+      animation: candlelightBar 1.15s ease-in-out infinite;
+    }
+    @keyframes candlelightBar {
+      0%, 100% { opacity: 0.45; transform: scaleX(0.85); }
+      50% { opacity: 1; transform: scaleX(1.1); }
+    }
+
+    .star-tile.tile-correct {
+      background: radial-gradient(circle at 32% 30%, rgba(255, 248, 220, 0.28), rgba(26, 16, 28, 0.72) 70%);
+      border-color: var(--stage-primary);
+      color: #fffdf5;
+      box-shadow: 0 0 var(--glow-radius) var(--stage-glow), inset 0 0 14px rgba(255, 240, 190, 0.22);
+      animation: starPop 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .star-tile.tile-error {
+      background: radial-gradient(circle at 35% 30%, rgba(251, 113, 133, 0.26), rgba(34, 12, 22, 0.76) 72%);
+      border-color: rgba(251, 113, 133, 0.85);
+      color: #ffe4e6;
+      box-shadow: 0 0 18px rgba(251, 113, 133, 0.45);
+      animation: starShake 0.34s ease;
+    }
+
+    .star-tile.tile-glimpse {
+      background: radial-gradient(circle at 35% 30%, rgba(251, 191, 36, 0.32), rgba(32, 18, 16, 0.68) 72%);
+      border-color: rgba(251, 191, 36, 0.85);
+      color: #fef3c7;
+      box-shadow: 0 0 22px rgba(251, 191, 36, 0.48);
+    }
+
+    .star-tile.tile-verified {
+      background: radial-gradient(circle at 30% 25%, rgba(255, 251, 235, 0.46), var(--stage-secondary) 130%);
+      border-color: #fffbeb;
+      color: #fffef7;
+      box-shadow: 0 0 calc(var(--glow-radius) + 10px) var(--stage-glow), inset 0 0 18px rgba(255, 255, 255, 0.32);
+      animation: constellationSweep 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes starPop {
+      0% { transform: scale(0.84); }
+      60% { transform: scale(1.11); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes starShake {
+      0%, 100% { transform: translateX(0); }
+      22% { transform: translateX(-5px); }
+      45% { transform: translateX(5px); }
+      68% { transform: translateX(-3px); }
+      86% { transform: translateX(3px); }
+    }
+
+    @keyframes constellationSweep {
+      0% { transform: translateY(0) scale(1); }
+      45% { transform: translateY(-9px) scale(1.12); }
+      100% { transform: translateY(0) scale(1.03); }
+    }
+
+    /* Constellation SVG Lines */
+    .constellation-line {
+      stroke: var(--stage-primary);
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      fill: none;
+      opacity: 0.78;
+      filter: drop-shadow(0 0 6px var(--stage-glow));
+      transition: opacity 0.25s ease;
+    }
+
+    /* Listen Equalizer Wave Bars */
+    .wave-bar {
+      width: 2.5px;
+      height: 6px;
+      border-radius: 9999px;
+      background: currentColor;
+      transition: height 0.15s ease;
+    }
+    .is-speaking .wave-bar:nth-child(1) { animation: waveBounce 0.62s ease-in-out infinite 0.00s; }
+    .is-speaking .wave-bar:nth-child(2) { animation: waveBounce 0.62s ease-in-out infinite 0.14s; }
+    .is-speaking .wave-bar:nth-child(3) { animation: waveBounce 0.62s ease-in-out infinite 0.28s; }
+    .is-speaking .wave-bar:nth-child(4) { animation: waveBounce 0.62s ease-in-out infinite 0.18s; }
+    @keyframes waveBounce {
+      0%, 100% { height: 5px; }
+      50% { height: 15px; }
+    }
+
+    /* Bottom Pill Keyboard */
+    .celestial-key {
+      height: clamp(2.4rem, 5.2vh, 3rem);
+      min-width: clamp(1.85rem, 6.8vw, 2.9rem);
+      padding: 0 0.55rem;
+      border-radius: 9999px;
+      background: rgba(24, 14, 28, 0.66);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 243, 214, 0.14);
+      color: #fff7e6;
+      font-weight: 600;
+      font-size: clamp(0.84rem, 1.8vw, 0.98rem);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(6, 3, 10, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      transition: transform 0.09s ease, background 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease;
+      touch-action: manipulation;
+    }
+    .celestial-key:hover {
+      background: rgba(42, 26, 46, 0.78);
+      border-color: rgba(255, 243, 214, 0.28);
+    }
+    .celestial-key.key-pressed,
+    .celestial-key:active {
+      transform: scale(0.92);
+      background: rgba(255, 243, 214, 0.22);
+      border-color: var(--stage-primary);
+      box-shadow: 0 0 14px var(--stage-glow);
+    }
+    .celestial-key.key-wide {
+      min-width: clamp(2.7rem, 9.5vw, 4.1rem);
+      padding: 0 0.9rem;
+    }
+
+    /* Milestone Toast */
+    .milestone-toast {
+      animation: toastFloat 2.1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    @keyframes toastFloat {
+      0% { opacity: 0; transform: translate(-50%, 14px) scale(0.88); }
+      18% { opacity: 1; transform: translate(-50%, 0) scale(1.03); }
+      80% { opacity: 1; transform: translate(-50%, -4px) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -18px) scale(0.95); }
+    }
+
+    /* Range Slider Styling */
+    input[type="range"].celestial-range {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 9999px;
+      background: rgba(255, 243, 214, 0.16);
+      outline: none;
+    }
+    input[type="range"].celestial-range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 9999px;
+      background: var(--stage-primary);
+      border: 2px solid #fffbeb;
+      box-shadow: 0 0 12px var(--stage-glow);
+      cursor: pointer;
+    }
+    input[type="range"].celestial-range::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 9999px;
+      background: var(--stage-primary);
+      border: 2px solid #fffbeb;
+      box-shadow: 0 0 12px var(--stage-glow);
+      cursor: pointer;
+    }
+
+    .reduced-motion * {
+      animation-duration: 0.001ms !important;
+      transition-duration: 0.001ms !important;
+    }
+  </style>
+</head>
+<body class="relative w-full h-full overflow-hidden">
+
+  <!-- Fullscreen Wilderness Canyon Canvas -->
+  <canvas id="cosmos-canvas"></canvas>
+
+  <!-- Critical Time Vignette -->
+  <div id="eclipse-vignette" class="eclipse-vignette"></div>
+
+  <!-- Milestone Floating Banner -->
+  <div id="milestone-layer" class="fixed top-20 left-1/2 z-40 pointer-events-none"></div>
+
+  <!-- ==================== ACTIVE GAMEPLAY HUD ==================== -->
+  <header id="top-hud" class="fixed top-0 left-0 right-0 z-20 px-3 sm:px-6 pt-3 sm:pt-4 flex items-center justify-between gap-2 opacity-0 pointer-events-none transition-opacity duration-500">
+    <!-- Left Cluster -->
+    <div class="flex items-center gap-2 flex-wrap">
+      <button id="btn-hud-home" class="twilight-pill rounded-full px-3.5 py-2 flex items-center gap-2 text-xs sm:text-sm font-semibold text-amber-50 hover:border-amber-200/40 transition cursor-pointer" title="Return to Lobby">
+        <span class="w-4 h-4 rounded-full inline-flex items-center justify-center" style="background: radial-gradient(circle, #fef08a 0%, #fb923c 100%); box-shadow: 0 0 10px rgba(250,204,21,0.6);"></span>
+        <span class="font-display font-bold tracking-tight">Starspell</span>
+      </button>
+      <div id="hud-stage-pill" class="twilight-pill rounded-full px-3 py-1.5 flex items-center gap-2 text-xs font-semibold text-amber-50/90">
+        <span id="hud-stage-dot" class="w-2 h-2 rounded-full bg-yellow-400"></span>
+        <span id="hud-stage-name">Sunset Breeze</span>
+      </div>
+      <div id="hud-chapter-pill" class="twilight-pill rounded-full px-3 py-1.5 text-xs font-semibold text-amber-100/85 tabular-nums">
+        Chapter 1
+      </div>
+    </div>
+
+    <!-- Center Circular Sun-Ring SVG Countdown Timer -->
+    <div class="relative w-[56px] h-[56px] flex items-center justify-center shrink-0">
+      <svg class="w-[56px] h-[56px] -rotate-90 drop-shadow-[0_4px_14px_rgba(0,0,0,0.45)]" viewBox="0 0 56 56">
+        <circle cx="28" cy="28" r="23" fill="rgba(20, 12, 22, 0.58)" stroke="rgba(255, 243, 214, 0.16)" stroke-width="3.5"></circle>
+        <circle id="sun-ring-progress" cx="28" cy="28" r="23" fill="none" stroke="var(--stage-ring)" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="144.51" stroke-dashoffset="0" style="transition: stroke 0.3s ease;"></circle>
+      </svg>
+      <span id="hud-timer-text" class="absolute font-display font-bold text-lg text-amber-50 tabular-nums">45</span>
+    </div>
+
+    <!-- Right Cluster -->
+    <div class="flex items-center gap-2">
+      <div id="hud-streak-pill" class="twilight-pill rounded-full px-3 py-1.5 flex items-center gap-1.5 text-xs sm:text-sm font-bold text-amber-200 tabular-nums">
+        <span>☀</span>
+        <span id="hud-streak-val">0</span>
+      </div>
+      <div id="hud-score-pill" class="twilight-pill rounded-full px-3.5 py-1.5 text-xs sm:text-sm font-semibold text-amber-50 tabular-nums hidden sm:flex items-center gap-1.5">
+        <span id="hud-level-val">Lvl 1</span>
+        <span class="opacity-40">•</span>
+        <span id="hud-score-val">0</span>
+      </div>
+      <button id="btn-hud-mute" class="twilight-pill w-9 h-9 rounded-full flex items-center justify-center text-amber-50 hover:border-amber-200/40 transition cursor-pointer" aria-label="Toggle Sound">
+        <svg id="icon-sound-on" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+        </svg>
+        <svg id="icon-sound-off" class="w-4 h-4 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <line x1="23" y1="9" x2="17" y2="15"></line>
+          <line x1="17" y1="9" x2="23" y2="15"></line>
+        </svg>
+      </button>
+      <button id="btn-hud-settings" class="twilight-pill w-9 h-9 rounded-full flex items-center justify-center text-amber-50 hover:border-amber-200/40 transition cursor-pointer" aria-label="Open Settings">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ==================== ACTIVE GAMEPLAY ARENA ==================== -->
+  <main id="gameplay-arena" class="fixed inset-0 z-10 flex flex-col items-center justify-between pt-20 sm:pt-24 pb-4 sm:pb-6 px-3 opacity-0 pointer-events-none transition-opacity duration-500">
+    <!-- Upper Sky Progress Pearls -->
+    <div id="constellation-nodes" class="twilight-pill rounded-full px-4 py-2 flex items-center gap-2 sm:gap-2.5"></div>
+
+    <!-- Center Clue & Lantern Medallion Stage -->
+    <section id="constellation-stage" class="w-full max-w-4xl flex flex-col items-center justify-center gap-4 sm:gap-5 my-auto px-2">
+      <!-- Action Pills Row -->
+      <div class="flex items-center justify-center gap-2.5 flex-wrap">
+        <button id="btn-pronounce" class="twilight-pill rounded-full px-4 py-2 flex items-center gap-2.5 text-xs sm:text-sm font-semibold text-amber-50 hover:border-amber-200/40 transition cursor-pointer">
+          <svg class="w-4 h-4 opacity-90" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+          <span>Listen</span>
+          <span id="listen-waves" class="flex items-center gap-0.5 h-4 text-amber-200">
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+          </span>
+        </button>
+
+        <div id="glimpse-badge" class="hidden twilight-pill rounded-full px-3.5 py-1.5 text-xs font-semibold text-amber-200 border-amber-300/40">
+          Sunbeam Glimpse
+        </div>
+
+        <button id="btn-skip" class="twilight-pill rounded-full px-4 py-2 flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-amber-100/80 hover:text-amber-50 hover:border-amber-200/35 transition cursor-pointer">
+          <span>Skip</span>
+          <span id="skip-penalty-label" class="opacity-70 text-xs tabular-nums">-3.0s</span>
+        </button>
+      </div>
+
+      <!-- Frameless Storybook Definition -->
+      <p id="clue-definition" class="font-display text-center text-lg sm:text-2xl md:text-[1.7rem] leading-snug text-amber-50 max-w-2xl px-3 drop-shadow-[0_3px_14px_rgba(12,6,14,0.85)]">
+        A deep gorge carved through golden stone by a winding river.
+      </p>
+
+      <!-- Circular Lantern Letter Medallions + Constellation SVG -->
+      <div class="relative w-full flex items-center justify-center py-2">
+        <div id="word-slots-wrapper" class="relative inline-flex items-center justify-center">
+          <svg id="constellation-svg" class="absolute inset-0 w-full h-full pointer-events-none overflow-visible" style="z-index: 1;"></svg>
+          <div id="word-slots" class="relative flex flex-wrap items-center justify-center gap-2 sm:gap-3" style="z-index: 2;"></div>
+        </div>
+      </div>
+
+      <!-- Gentle Typo Hint -->
+      <p id="typo-hint" class="h-5 text-xs sm:text-sm font-medium text-rose-200/95 opacity-0 transition-opacity duration-200 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+        Tap ⌫ to fix a highlighted letter
+      </p>
+    </section>
+
+    <!-- Bottom Floating 3-Row Pill Keyboard -->
+    <nav id="celestial-keyboard" class="w-full max-w-2xl flex flex-col items-center gap-1.5 sm:gap-2 pb-1" aria-label="On-screen Keyboard"></nav>
+  </main>
+
+  <!-- ==================== TWO-STEP RELAXED LOBBY OVERLAY ==================== -->
+  <div id="start-overlay" class="fixed inset-0 z-30 flex flex-col justify-between p-4 sm:p-6 transition-opacity duration-500">
+    <!-- Top Floating Lobby Bar -->
+    <div class="w-full flex items-center justify-between gap-3">
+      <button id="btn-lobby-ambient" class="twilight-pill rounded-full px-4 py-2 flex items-center gap-2.5 text-xs sm:text-sm font-semibold text-amber-50 hover:border-amber-200/40 transition cursor-pointer">
+        <span id="lobby-ambient-dot" class="w-2.5 h-2.5 rounded-full bg-amber-300/60 transition-all"></span>
+        <span id="lobby-ambient-label">Play Sunset Breeze</span>
+      </button>
+
+      <button id="btn-lobby-settings" class="twilight-pill rounded-full px-4 py-2 flex items-center gap-2 text-xs sm:text-sm font-semibold text-amber-50 hover:border-amber-200/40 transition cursor-pointer">
+        <svg class="w-4 h-4 opacity-85" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+        <span>Sound &amp; Scenery</span>
+      </button>
+    </div>
+
+    <!-- Step 1: Open-Air Lobby View -->
+    <div id="lobby-view" class="lobby-scrim my-auto mx-auto w-full max-w-3xl px-4 py-6 sm:py-8 rounded-[2.5rem] flex flex-col items-center text-center gap-4 sm:gap-5 transition-all duration-300">
+      <div id="lobby-stage-pill" class="twilight-pill rounded-full px-4 py-1.5 text-xs sm:text-sm font-semibold text-amber-100/95 tracking-wide">
+        Difficulty: Easy • Sunset Breeze
+      </div>
+
+      <h1 class="font-display font-bold text-5xl sm:text-7xl tracking-tight text-amber-50 drop-shadow-[0_6px_26px_rgba(10,4,12,0.7)]">
+        Star<span id="title-accent" class="bg-gradient-to-r from-yellow-300 via-amber-400 to-rose-400 bg-clip-text text-transparent">spell</span>
+      </h1>
+
+      <p id="lobby-description" class="text-sm sm:text-base text-amber-100/90 max-w-xl leading-relaxed drop-shadow-[0_2px_10px_rgba(10,4,12,0.8)]">
+        Breathe in the warm golden canyon air and weave lantern words across the ridge before dusk settles.
+      </p>
+
+      <!-- 3-Column Difficulty Selector -->
+      <div id="lobby-difficulty-grid" class="w-full grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3.5 mt-1">
+        <button data-diff="EASY" class="diff-card twilight-glass rounded-full sm:rounded-3xl px-4 py-3 sm:py-4 text-left transition cursor-pointer hover:border-amber-200/40">
+          <div class="flex items-center justify-between">
+            <span class="font-display font-bold text-base sm:text-lg text-amber-50">Easy</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-yellow-300 shadow-[0_0_10px_rgba(250,204,21,0.8)]"></span>
+          </div>
+          <p class="text-xs font-semibold text-yellow-200/90 mt-0.5">Sunset Breeze</p>
+          <p class="text-[11px] text-amber-100/70 mt-1 hidden sm:block">Warm golden canyon</p>
+        </button>
+
+        <button data-diff="INTERMEDIATE" class="diff-card twilight-glass rounded-full sm:rounded-3xl px-4 py-3 sm:py-4 text-left transition cursor-pointer hover:border-indigo-300/40">
+          <div class="flex items-center justify-between">
+            <span class="font-display font-bold text-base sm:text-lg text-amber-50">Intermediate</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-indigo-400 shadow-[0_0_10px_rgba(129,140,248,0.8)]"></span>
+          </div>
+          <p class="text-xs font-semibold text-indigo-200/90 mt-0.5">Twilight Journey</p>
+          <p class="text-[11px] text-amber-100/70 mt-1 hidden sm:block">Moonlit indigo canyon</p>
+        </button>
+
+        <button data-diff="HARD" class="diff-card twilight-glass rounded-full sm:rounded-3xl px-4 py-3 sm:py-4 text-left transition cursor-pointer hover:border-rose-300/40">
+          <div class="flex items-center justify-between">
+            <span class="font-display font-bold text-base sm:text-lg text-amber-50">Hard</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-rose-400 shadow-[0_0_10px_rgba(251,113,133,0.8)]"></span>
+          </div>
+          <p class="text-xs font-semibold text-rose-200/90 mt-0.5">Eclipse of the Summit</p>
+          <p class="text-[11px] text-amber-100/70 mt-1 hidden sm:block">Crimson lunar eclipse</p>
+        </button>
+      </div>
+
+      <!-- Primary Gradient Pill CTA -->
+      <button id="btn-to-modes" class="mt-2 rounded-full px-8 py-3.5 font-semibold text-sm sm:text-base text-slate-950 bg-gradient-to-r from-yellow-300 via-amber-400 to-rose-400 shadow-[0_12px_32px_rgba(250,204,21,0.35)] hover:scale-[1.03] active:scale-[0.98] transition cursor-pointer">
+        Start Playing →
+      </button>
+
+      <!-- Compact Profile Pill -->
+      <div id="lobby-profile-pill" class="twilight-pill rounded-full px-4 py-1.5 text-xs font-medium text-amber-100/85 tabular-nums">
+        Level 1 • Sunset Breeze Best 0 • Streak 0
+      </div>
+    </div>
+
+    <!-- Step 2: Wayfaring Mode Selection View -->
+    <div id="mode-select-view" class="hidden my-auto mx-auto w-full max-w-xl twilight-glass rounded-[2rem] p-5 sm:p-7 flex-col gap-5">
+      <div class="flex items-center justify-between gap-2">
+        <button id="btn-back-lobby" class="twilight-pill rounded-full px-4 py-1.5 text-xs sm:text-sm font-semibold text-amber-100 hover:border-amber-200/40 transition cursor-pointer">
+          ← Lobby
+        </button>
+        <div id="mode-stage-badge" class="twilight-pill rounded-full px-3.5 py-1.5 flex items-center gap-2 text-xs font-semibold text-amber-50">
+          <span id="mode-stage-dot" class="w-2 h-2 rounded-full bg-yellow-300"></span>
+          <span id="mode-stage-label">Easy • Sunset Breeze</span>
+        </div>
+      </div>
+
+      <div class="text-center sm:text-left">
+        <h2 class="font-display font-bold text-2xl sm:text-3xl text-amber-50">Choose Your Wayfaring Style</h2>
+        <p id="mode-stage-summary" class="text-xs sm:text-sm text-amber-100/80 mt-1">
+          45.0s clock • Tiers 1–5 vocabulary • Warm golden canyon
+        </p>
+      </div>
+
+      <div id="mode-selector" class="flex flex-col gap-2.5">
+        <button data-mode="STARLIGHT" class="mode-card twilight-pill rounded-3xl p-4 text-left transition cursor-pointer hover:border-amber-200/40">
+          <div class="flex items-center justify-between">
+            <span class="font-display font-bold text-base sm:text-lg text-amber-50">Storybook</span>
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-300/15 text-amber-200">Guided</span>
+          </div>
+          <p class="text-xs text-amber-100/75 mt-1">Displays the storybook clue, spoken pronunciation, and a brief 750ms opening letter lantern glow.</p>
+        </button>
+
+        <button data-mode="ECHO" class="mode-card twilight-pill rounded-3xl p-4 text-left transition cursor-pointer hover:border-amber-200/40">
+          <div class="flex items-center justify-between">
+            <span class="font-display font-bold text-base sm:text-lg text-amber-50">Evening Echo</span>
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-indigo-300/15 text-indigo-200">Listening</span>
+          </div>
+          <p class="text-xs text-amber-100/75 mt-1">Hides the opening letter glow. Trust your ear with spoken voice audio and the canyon definition.</p>
+        </button>
+
+        <button data-mode="FLASH" class="mode-card twilight-pill rounded-3xl p-4 text-left transition cursor-pointer hover:border-amber-200/40">
+          <div class="flex items-center justify-between">
+            <span class="font-display font-bold text-base sm:text-lg text-amber-50">Sunbeam</span>
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-rose-300/15 text-rose-200">Memory</span>
+          </div>
+          <p class="text-xs text-amber-100/75 mt-1">Illuminates the entire word in warm amber for 1100ms before fading into silent lantern medallions.</p>
+        </button>
+      </div>
+
+      <button id="btn-begin-journey" class="w-full rounded-full py-3.5 font-semibold text-sm sm:text-base text-slate-950 bg-gradient-to-r from-yellow-300 via-amber-400 to-rose-400 shadow-[0_12px_30px_rgba(250,204,21,0.3)] hover:scale-[1.01] active:scale-[0.99] transition cursor-pointer">
+        Begin Journey
+      </button>
+    </div>
+
+    <div class="h-4"></div>
+  </div>
+
+  <!-- ==================== SETTINGS MODAL ==================== -->
+  <div id="settings-overlay" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+    <div class="twilight-glass rounded-[2rem] w-full max-w-md p-6 flex flex-col gap-5">
+      <div class="flex items-center justify-between">
+        <h2 class="font-display font-bold text-2xl text-amber-50">Sound &amp; Scenery</h2>
+        <button id="btn-close-settings" class="twilight-pill w-9 h-9 rounded-full flex items-center justify-center text-amber-100 hover:text-white cursor-pointer" aria-label="Close Settings">✕</button>
+      </div>
+
+      <div class="flex flex-col gap-4">
+        <label class="flex flex-col gap-1.5">
+          <div class="flex justify-between text-xs font-semibold text-amber-100/90">
+            <span>Master Volume</span>
+            <span id="val-master-vol" class="tabular-nums">80%</span>
+          </div>
+          <input id="rng-master-vol" type="range" min="0" max="100" value="80" class="celestial-range" />
+        </label>
+
+        <label class="flex flex-col gap-1.5">
+          <div class="flex justify-between text-xs font-semibold text-amber-100/90">
+            <span>Ambient Sunset Music</span>
+            <span id="val-music-vol" class="tabular-nums">65%</span>
+          </div>
+          <input id="rng-music-vol" type="range" min="0" max="100" value="65" class="celestial-range" />
+        </label>
+
+        <label class="flex flex-col gap-1.5">
+          <div class="flex justify-between text-xs font-semibold text-amber-100/90">
+            <span>Chimes &amp; Keystrokes</span>
+            <span id="val-sfx-vol" class="tabular-nums">85%</span>
+          </div>
+          <input id="rng-sfx-vol" type="range" min="0" max="100" value="85" class="celestial-range" />
+        </label>
+      </div>
+
+      <div class="grid grid-cols-1 gap-2.5 pt-1">
+        <label class="twilight-pill rounded-full px-4 py-2.5 flex items-center justify-between cursor-pointer">
+          <span class="text-sm font-medium text-amber-50">Background Music</span>
+          <input id="chk-music-enabled" type="checkbox" class="accent-amber-400 w-4 h-4 cursor-pointer" checked />
+        </label>
+        <label class="twilight-pill rounded-full px-4 py-2.5 flex items-center justify-between cursor-pointer">
+          <span class="text-sm font-medium text-amber-50">Soft Typing Sounds</span>
+          <input id="chk-typing-sfx" type="checkbox" class="accent-amber-400 w-4 h-4 cursor-pointer" checked />
+        </label>
+        <label class="twilight-pill rounded-full px-4 py-2.5 flex items-center justify-between cursor-pointer">
+          <span class="text-sm font-medium text-amber-50">Milestone Chimes</span>
+          <input id="chk-game-sfx" type="checkbox" class="accent-amber-400 w-4 h-4 cursor-pointer" checked />
+        </label>
+        <label class="twilight-pill rounded-full px-4 py-2.5 flex items-center justify-between cursor-pointer">
+          <span class="text-sm font-medium text-amber-50">Reduce Motion</span>
+          <input id="chk-reduce-motion" type="checkbox" class="accent-amber-400 w-4 h-4 cursor-pointer" />
+        </label>
+      </div>
+
+      <button id="btn-save-settings" class="w-full rounded-full py-3 font-semibold text-sm text-slate-950 bg-gradient-to-r from-yellow-300 via-amber-400 to-rose-400 cursor-pointer">
+        Done
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== CHAPTER VICTORY / TIMEOUT SUMMARY MODAL ==================== -->
+  <div id="summary-overlay" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/55 backdrop-blur-sm">
+    <div class="twilight-glass rounded-[2rem] w-full max-w-md p-6 sm:p-7 flex flex-col items-center text-center gap-5">
+      <div id="summary-badge" class="twilight-pill rounded-full px-4 py-1 text-xs font-semibold text-amber-200">
+        Chapter Complete
+      </div>
+      <h2 id="summary-heading" class="font-display font-bold text-3xl sm:text-4xl text-amber-50">
+        Ridge Illuminated
+      </h2>
+
+      <div id="summary-missed-box" class="hidden w-full twilight-pill rounded-3xl px-4 py-3 text-center">
+        <p class="text-[11px] uppercase tracking-wider text-rose-200/80 font-semibold">Final Lantern Word</p>
+        <p id="summary-missed-word" class="font-display font-bold text-2xl text-amber-50 mt-0.5 tracking-wide"></p>
+        <p id="summary-missed-def" class="text-xs text-amber-100/75 mt-1"></p>
+      </div>
+
+      <div class="w-full grid grid-cols-3 gap-2.5">
+        <div class="twilight-pill rounded-3xl p-3">
+          <div class="text-[11px] text-amber-100/70">Score</div>
+          <div id="sum-score" class="font-display font-bold text-xl text-amber-50 tabular-nums mt-0.5">0</div>
+        </div>
+        <div class="twilight-pill rounded-3xl p-3">
+          <div class="text-[11px] text-amber-100/70">Best Streak</div>
+          <div id="sum-streak" class="font-display font-bold text-xl text-amber-50 tabular-nums mt-0.5">0</div>
+        </div>
+        <div class="twilight-pill rounded-3xl p-3">
+          <div class="text-[11px] text-amber-100/70">XP Earned</div>
+          <div id="sum-xp" class="font-display font-bold text-xl text-amber-50 tabular-nums mt-0.5">+0</div>
+        </div>
+      </div>
+
+      <div class="w-full flex flex-col gap-2.5">
+        <button id="btn-next-chapter" class="w-full rounded-full py-3.5 font-semibold text-sm sm:text-base text-slate-950 bg-gradient-to-r from-yellow-300 via-amber-400 to-rose-400 cursor-pointer hover:scale-[1.01] transition">
+          Next Chapter →
+        </button>
+        <div class="grid grid-cols-2 gap-2.5">
+          <button id="btn-replay-stage" class="twilight-pill rounded-full py-3 text-xs sm:text-sm font-semibold text-amber-50 hover:border-amber-200/40 cursor-pointer">
+            Replay Stage
+          </button>
+          <button id="btn-summary-lobby" class="twilight-pill rounded-full py-3 text-xs sm:text-sm font-semibold text-amber-100/85 hover:border-amber-200/40 cursor-pointer">
+            Return to Lobby
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      'use strict';
+
+      /* =========================================================================
+         1. CONSTANTS, DIFFICULTY CONFIGS & 110-WORD 5-TIER WORD BANK
+         ========================================================================= */
+      const STORAGE_KEY = 'starspell_celestial_v1';
+      const WORDS_PER_CHAPTER = 15;
+      const SUN_RING_CIRCUMFERENCE = 144.51;
+
+      const DIFFICULTY_CONFIGS = {
+        EASY: {
+          key: 'EASY',
+          label: 'Easy',
+          name: 'Sunset Breeze',
+          ambientLabel: 'Sunset Breeze',
+          description: 'Breathe in the warm golden canyon air and weave lantern words across the ridge before dusk settles.',
+          summary: '45.0s clock • Gentle alpine vocabulary • Warm golden canyon',
+          envIndex: 0.0,
+          initialClock: 45.0,
+          solveBonus: 3.2,
+          skipPenalty: 3.0,
+          xpMultiplier: 1.0,
+          tierCurve: [1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 5, 5],
+          primary: '#facc15',
+          secondary: '#fb923c',
+          glow: 'rgba(250, 204, 21, 0.55)',
+          ctaClasses: 'from-yellow-300 via-amber-400 to-rose-400',
+          dotClass: 'bg-yellow-300',
+          bpm: 96
+        },
+        INTERMEDIATE: {
+          key: 'INTERMEDIATE',
+          label: 'Intermediate',
+          name: 'Twilight Journey',
+          ambientLabel: 'Twilight Breeze',
+          description: 'Follow glowing fireflies beneath a crescent moon as starlight awakens the high canyon observatory.',
+          summary: '42.0s clock • Richer literary vocabulary • Moonlit indigo canyon',
+          envIndex: 1.0,
+          initialClock: 42.0,
+          solveBonus: 2.8,
+          skipPenalty: 3.5,
+          xpMultiplier: 1.3,
+          tierCurve: [2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5],
+          primary: '#818cf8',
+          secondary: '#c084fc',
+          glow: 'rgba(129, 140, 248, 0.58)',
+          ctaClasses: 'from-sky-300 via-indigo-400 to-purple-500',
+          dotClass: 'bg-indigo-400',
+          bpm: 106
+        },
+        HARD: {
+          key: 'HARD',
+          label: 'Hard',
+          name: 'Eclipse of the Summit',
+          ambientLabel: 'Eclipse Wind',
+          description: 'Stand fast above molten fissures as storm lightning splits the crimson corona over the summit.',
+          summary: '38.0s clock • Master orthographic challenges • Crimson lunar eclipse',
+          envIndex: 2.0,
+          initialClock: 38.0,
+          solveBonus: 2.4,
+          skipPenalty: 4.0,
+          xpMultiplier: 1.65,
+          tierCurve: [3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5],
+          primary: '#fb7185',
+          secondary: '#f97316',
+          glow: 'rgba(251, 113, 133, 0.58)',
+          ctaClasses: 'from-amber-400 via-orange-500 to-rose-500',
+          dotClass: 'bg-rose-400',
+          bpm: 118
+        }
+      };
+
+      const STREAK_MILESTONES = [
+        { streak: 3, label: 'STREAK ×3', glow: '28px', mult: 1.25 },
+        { streak: 5, label: 'COMBO ×5', glow: '34px', mult: 1.5 },
+        { streak: 8, label: 'OVERDRIVE', glow: '40px', mult: 2.0 },
+        { streak: 12, label: 'UNSTOPPABLE', glow: '46px', mult: 2.5 },
+        { streak: 20, label: 'LEGENDARY', glow: '54px', mult: 3.0 }
+      ];
+
+      // 110 curated English words: exactly 22 per tier across Tiers 1-5
+      const WORD_BANK = {
+        1: [
+          { word: 'canyon', def: 'A deep sunlit gorge carved between steep mountain walls.' },
+          { word: 'lantern', def: 'A glowing glass lamp carried to light a twilight trail.' },
+          { word: 'meadow', def: 'An open alpine clearing carpeted in wildflowers and soft grass.' },
+          { word: 'summit', def: 'The highest wind-swept crest of a towering mountain peak.' },
+          { word: 'breeze', def: 'A gentle current of warm mountain air drifting through pines.' },
+          { word: 'stream', def: 'A narrow ribbon of clear snowmelt winding down the valley.' },
+          { word: 'pebble', def: 'A smooth river stone rounded by centuries of rushing water.' },
+          { word: 'ember', def: 'A tiny glowing coal resting quietly inside a fading campfire.' },
+          { word: 'forest', def: 'A vast woodland of evergreens blanketing the canyon slopes.' },
+          { word: 'shadow', def: 'A cool dark shape cast across stone by the setting sun.' },
+          { word: 'timber', def: 'Tall weathered pine trees standing sentry along the ridge.' },
+          { word: 'beacon', def: 'A distant watchtower light guiding wanderers home at dusk.' },
+          { word: 'ridge', def: 'A narrow crest of rock stretching cleanly between two peaks.' },
+          { word: 'trail', def: 'A winding dirt footpath etched into the hillside by hikers.' },
+          { word: 'spark', def: 'A fleeting speck of bright fire rising into the evening air.' },
+          { word: 'valley', def: 'A peaceful low basin cradled between high mountain ranges.' },
+          { word: 'ripple', def: 'A delicate ring moving smoothly across still river water.' },
+          { word: 'sunset', def: 'The daily sinking of the sun in ribbons of gold and apricot.' },
+          { word: 'cloud', def: 'A drifting bank of soft mist illuminated along its sunlit rim.' },
+          { word: 'cliff', def: 'A sheer vertical face of ancient stone overlooking the gorge.' },
+          { word: 'cabin', def: 'A cozy wooden shelter perched high above the treeline.' },
+          { word: 'cedar', def: 'An aromatic evergreen tree thriving along rocky canyon ledges.' }
+        ],
+        2: [
+          { word: 'horizon', def: 'The distant seam where canyon peaks dissolve into the sky.' },
+          { word: 'twilight', def: 'The hushed blue hour suspended between sunset and starlight.' },
+          { word: 'cascade', def: 'White water tumbling gracefully down stepped granite ledges.' },
+          { word: 'compass', def: 'A pocket instrument whose needle always seeks the north.' },
+          { word: 'glacier', def: 'A slow river of ancient blue ice resting in high alpine bowls.' },
+          { word: 'overlook', def: 'A high rocky promontory offering an unbroken view of the valley.' },
+          { word: 'wildflower', def: 'A resilient blossom blooming untamed beside mountain paths.' },
+          { word: 'granite', def: 'Hard speckled stone sculpted into sharp cliffs by wind and frost.' },
+          { word: 'starlight', def: 'Faint silvery radiance arriving from distant suns overhead.' },
+          { word: 'campfire', def: 'A crackling circle of warmth sending gentle smoke into the pines.' },
+          { word: 'backpack', def: 'A canvas pack strapped securely for long ridge-line journeys.' },
+          { word: 'crescent', def: 'A slender silver arc of moon hanging in the evening sky.' },
+          { word: 'firefly', def: 'A summer beetle blinking golden signals above dark meadow grass.' },
+          { word: 'whisper', def: 'A soft rustle of wind passing quietly through pine needles.' },
+          { word: 'foothill', def: 'A lower rounded slope standing before the towering main peaks.' },
+          { word: 'treeline', def: 'The high altitude boundary beyond which tall evergreens cease.' },
+          { word: 'wanderer', def: 'A solitary traveler drawn onward by distant mountain ridges.' },
+          { word: 'duskfall', def: 'The quiet moment when amber daylight surrenders to indigo.' },
+          { word: 'pinecone', def: 'A woody seed vessel resting softly upon the forest floor.' },
+          { word: 'moonbeam', def: 'A pale shaft of nocturnal light grazing the canyon stream.' },
+          { word: 'outcrop', def: 'A jagged shelf of bedrock jutting out from a grassy slope.' },
+          { word: 'skyline', def: 'The chiseled silhouette of peaks etched against the heavens.' }
+        ],
+        3: [
+          { word: 'observatory', def: 'A silver-domed sanctuary built on high ground to study stars.' },
+          { word: 'silhouette', def: 'A crisp dark outline framed against a luminous twilight sky.' },
+          { word: 'constellation', def: 'An ancient pattern of stars linked together by imagination.' },
+          { word: 'wilderness', def: 'Untamed highland country far beyond paved roads and cities.' },
+          { word: 'afterglow', def: 'Warm lingering rose and gold light remaining after sundown.' },
+          { word: 'alpenglow', def: 'Rosy light kissing the highest snowy crests as dusk deepens.' },
+          { word: 'solitude', def: 'A restorative stillness found alone atop a quiet overlook.' },
+          { word: 'luminous', def: 'Radiating a soft steady light through gathering evening mist.' },
+          { word: 'precipice', def: 'A dizzying vertical drop descending straight into the gorge.' },
+          { word: 'elevation', def: 'Vertical height measured upward from sea level to the summit.' },
+          { word: 'panorama', def: 'A sweeping unbroken vista spanning from one ridge to the next.' },
+          { word: 'astronomy', def: 'The patient science of charting moons, comets, and far suns.' },
+          { word: 'evergreen', def: 'A sturdy mountain conifer holding its needles through winter.' },
+          { word: 'sandstone', def: 'Layered golden rock tinted warm ochre by ancient desert winds.' },
+          { word: 'nocturnal', def: 'Awakening softly once shadows lengthen and stars appear.' },
+          { word: 'zenith', def: 'The highest point of the sky directly above a canyon watcher.' },
+          { word: 'equinox', def: 'The seasonal turning point when day and night balance evenly.' },
+          { word: 'resonance', def: 'A rich echoing tone lingering gently between sheer rock walls.' },
+          { word: 'serenade', def: 'A calm evening melody carried upward on warm canyon air.' },
+          { word: 'traverse', def: 'To cross steadily from one mountain shoulder to the next.' },
+          { word: 'headland', def: 'A jutting stone bluff standing bold above the winding valley.' },
+          { word: 'windward', def: 'The exposed side of a mountain ridge facing incoming gusts.' }
+        ],
+        4: [
+          { word: 'ephemeral', def: 'Fleeting and delicate, like cloud rims blushing gold at sunset.' },
+          { word: 'vespers', def: 'Quiet evening songs drifting through the pines at nightfall.' },
+          { word: 'incandescent', def: 'Glowing intensely with white-hot ember and molten brilliance.' },
+          { word: 'penumbra', def: 'The soft partial shadow encircling the dark heart of an eclipse.' },
+          { word: 'halcyon', def: 'Golden, unhurried, and serenely calm beneath open skies.' },
+          { word: 'obsidian', def: 'Glossy volcanic stone as dark and sharp as midnight storm rock.' },
+          { word: 'ethereal', def: 'Light and otherworldly, like silver mist drifting over pines.' },
+          { word: 'celestial', def: 'Belonging to the star-strewn vault arching high above the ridge.' },
+          { word: 'labyrinth', def: 'An intricate network of winding gorges and hidden side trails.' },
+          { word: 'symphony', def: 'Wind, water, and night insects blending in natural harmony.' },
+          { word: 'periwinkle', def: 'A cool twilight blue-violet tinting high evening clouds.' },
+          { word: 'terracotta', def: 'Warm baked-earth clay hues glowing along sunlit rock facets.' },
+          { word: 'gossamer', def: 'Delicately translucent, like wispy cirrus streaks high aloft.' },
+          { word: 'crescendo', def: 'A steady swelling of storm thunder rolling across the peaks.' },
+          { word: 'promontory', def: 'A dramatic high point of land jutting proudly over a valley.' },
+          { word: 'vermilion', def: 'A vivid fiery crimson-orange hue ringing an eclipsed sun.' },
+          { word: 'ambrosial', def: 'Sweetly fragrant, like warm cedar resin after a summer rain.' },
+          { word: 'crystalline', def: 'Clear and sharply faceted like high-altitude night air.' },
+          { word: 'transcend', def: 'To rise gracefully beyond the quiet limits of the valley floor.' },
+          { word: 'monolith', def: 'A single colossal pillar of stone standing timeless in the mist.' },
+          { word: 'serendipity', def: 'Stumbling unexpectedly upon a hidden viewpoint at golden hour.' },
+          { word: 'reverie', def: 'A gentle waking daydream inspired by drifting campfire smoke.' }
+        ],
+        5: [
+          { word: 'bioluminescence', def: 'Living light emitted softly in darkness by fireflies or deep creatures.' },
+          { word: 'quintessential', def: 'Representing the purest, most timeless essence of a mountain dusk.' },
+          { word: 'onomatopoeia', def: 'A word whose spoken sound echoes the rush of wind or crackle of fire.' },
+          { word: 'idiosyncrasy', def: 'A distinctive quirk that gives a hand-built lookout its own soul.' },
+          { word: 'chrysanthemum', def: 'An intricate golden autumn blossom of layered radiating petals.' },
+          { word: 'chiaroscuro', def: 'Bold contrast between sunlit rock planes and deep canyon shadow.' },
+          { word: 'crepuscular', def: 'Slanted beams of golden light radiating softly at twilight.' },
+          { word: 'mellifluous', def: 'Smooth and honey-sweet in tone, like chimes on an evening breeze.' },
+          { word: 'iridescence', def: 'Shifting rainbow sheen rippling softly across dusk clouds.' },
+          { word: 'phosphorescence', def: 'A lingering pale glow persisting long after light has passed.' },
+          { word: 'kaleidoscope', def: 'Ever-changing mosaics of amber, rose, and indigo across the sky.' },
+          { word: 'circumference', def: 'The full circular boundary traced around a glowing sun-ring.' },
+          { word: 'phantasmagoria', def: 'A shifting dreamlike sequence of storm flashes and drifting shadows.' },
+          { word: 'magnanimous', def: 'Generous and noble in spirit, steady as an ancient mountain.' },
+          { word: 'soliloquy', def: 'Quiet thoughts spoken aloud to the open canyon and stars.' },
+          { word: 'effervescent', def: 'Sparkling with rising vitality like embers swirling upward.' },
+          { word: 'equanimity', def: 'Calm composure held steady even as the final seconds slip away.' },
+          { word: 'juxtaposition', def: 'Placing fiery crimson magma beside cool midnight shadow ridges.' },
+          { word: 'susurration', def: 'A hushed whispering murmur of wind threading through tall grass.' },
+          { word: 'perpendicular', def: 'Rising straight upward at a sheer ninety-degree cliff angle.' },
+          { word: 'connoisseur', def: 'A discerning admirer of fine words, harmonies, and twilight hues.' },
+          { word: 'archipelago', def: 'Mountain crests emerging like islands above a sea of valley mist.' }
+        ]
+      };
+
+      /* =========================================================================
+         2. PERSISTENCE (localStorage: starspell_celestial_v1)
+         ========================================================================= */
+      function createDefaultState() {
+        return {
+          profile: {
+            xp: 0,
+            level: 1,
+            highScore: 0,
+            bestStreak: 0,
+            wordsSolved: 0,
+            constellationsCleared: 0
+          },
+          selectedDifficulty: 'EASY',
+          difficulties: {
+            EASY:         { unlocked: true, completed: false, highScore: 0, bestStreak: 0, wordsSolved: 0, runsCleared: 0 },
+            INTERMEDIATE: { unlocked: true, completed: false, highScore: 0, bestStreak: 0, wordsSolved: 0, runsCleared: 0 },
+            HARD:         { unlocked: true, completed: false, highScore: 0, bestStreak: 0, wordsSolved: 0, runsCleared: 0 }
+          },
+          settings: {
+            masterVol: 0.80,
+            musicVol: 0.65,
+            sfxVol: 0.85,
+            musicEnabled: true,
+            typingSfxEnabled: true,
+            gameSfxEnabled: true,
+            reducedEffects: false
+          }
+        };
+      }
+
+      function loadSave() {
+        const def = createDefaultState();
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return def;
+          const parsed = JSON.parse(raw);
+          return {
+            profile: { ...def.profile, ...(parsed.profile || {}) },
+            selectedDifficulty: DIFFICULTY_CONFIGS[parsed.selectedDifficulty] ? parsed.selectedDifficulty : 'EASY',
+            difficulties: {
+              EASY:         { ...def.difficulties.EASY, ...(parsed.difficulties?.EASY || {}), unlocked: true },
+              INTERMEDIATE: { ...def.difficulties.INTERMEDIATE, ...(parsed.difficulties?.INTERMEDIATE || {}), unlocked: true },
+              HARD:         { ...def.difficulties.HARD, ...(parsed.difficulties?.HARD || {}), unlocked: true }
+            },
+            settings: { ...def.settings, ...(parsed.settings || {}) }
+          };
+        } catch {
+          return def;
+        }
+      }
+
+      function persistSave() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(saveData));
+        } catch { /* ignore storage quota errors */ }
+      }
+
+      const saveData = loadSave();
+
+      /* =========================================================================
+         3. FULLSCREEN WILDERNESS CANYON SCENERY ENGINE (SunsetSceneryEngine)
+         ========================================================================= */
+      function lerp(a, b, t) {
+        return a + (b - a) * t;
+      }
+      function clamp(v, min, max) {
+        return v < min ? min : v > max ? max : v;
+      }
+      function lerpRGB(c1, c2, t) {
+        return [
+          Math.round(lerp(c1[0], c2[0], t)),
+          Math.round(lerp(c1[1], c2[1], t)),
+          Math.round(lerp(c1[2], c2[2], t))
+        ];
+      }
+      function mix3Color(c0, c1, c2, env) {
+        if (env <= 1.0) return lerpRGB(c0, c1, clamp(env, 0, 1));
+        return lerpRGB(c1, c2, clamp(env - 1.0, 0, 1));
+      }
+      function rgbStr(c, a = 1) {
+        if (a >= 0.999) return `rgb(${c[0]},${c[1]},${c[2]})`;
+        return `rgba(${c[0]},${c[1]},${c[2]},${a.toFixed(3)})`;
+      }
+
+      class SunsetSceneryEngine {
+        constructor(canvas) {
+          this.canvas = canvas;
+          this.ctx = canvas.getContext('2d', { alpha: false });
+          this.w = 1280;
+          this.h = 720;
+          this.dpr = 1;
+
+          this.envProgress = DIFFICULTY_CONFIGS[saveData.selectedDifficulty].envIndex;
+          this.targetEnvProgress = this.envProgress;
+
+          this.pointerX = 0;
+          this.pointerY = 0;
+          this.smoothX = 0;
+          this.smoothY = 0;
+          this.reducedMotion = saveData.settings.reducedEffects;
+
+          this.time = 0;
+          this.lastFrameTime = performance.now();
+
+          // Lightning state (Hard mode)
+          this.lightningFlash = 0;
+          this.lightningTimer = 4.5;
+          this.lightningSegments = [];
+
+          // Shooting stars (Intermediate)
+          this.shootingStars = [];
+          this.shootTimer = 3.2;
+
+          // Interactive horizon pulse rings
+          this.pulseRings = [];
+
+          // Deterministic 165 stars
+          const starColors = ['#fffbeb', '#e0e7ff', '#fef3c7', '#c7d2fe'];
+          this.stars = Array.from({ length: 165 }, (_, i) => {
+            const s1 = Math.sin(i * 12.9898 + 1.23) * 43758.5453;
+            const s2 = Math.sin(i * 78.233 + 4.56) * 43758.5453;
+            const s3 = Math.sin(i * 45.164 + 7.89) * 43758.5453;
+            const r1 = s1 - Math.floor(s1);
+            const r2 = s2 - Math.floor(s2);
+            const r3 = s3 - Math.floor(s3);
+            return {
+              x: r1,
+              y: r2 * 0.62,
+              size: 0.7 + r3 * 1.45,
+              phase: r1 * Math.PI * 2,
+              speed: 1.1 + r2 * 2.2,
+              color: starColors[i % starColors.length],
+              sparkle: i % 11 === 0
+            };
+          });
+
+          // 5 High-altitude cirrus wisps
+          this.cirrus = Array.from({ length: 5 }, (_, i) => ({
+            x: (i * 0.22 + 0.08) % 1.1,
+            y: 0.09 + (i % 3) * 0.055,
+            w: 0.18 + (i % 2) * 0.09,
+            speed: 0.002 + i * 0.0004
+          }));
+
+          // 6 Multi-puff 3D cloud banks
+          this.cloudBanks = [
+            { x: 0.13, y: 0.19, scale: 1.05, puffs: 7, speed: 0.0024, seed: 1.1 },
+            { x: 0.36, y: 0.13, scale: 0.85, puffs: 6, speed: 0.0018, seed: 2.3 },
+            { x: 0.56, y: 0.16, scale: 0.95, puffs: 8, speed: 0.0021, seed: 3.7 },
+            { x: 0.84, y: 0.20, scale: 1.12, puffs: 9, speed: 0.0026, seed: 4.9 },
+            { x: 0.24, y: 0.28, scale: 0.78, puffs: 6, speed: 0.0015, seed: 5.5 },
+            { x: 0.73, y: 0.27, scale: 0.82, puffs: 7, speed: 0.0019, seed: 6.8 }
+          ];
+
+          // 6 Gliding birds (Easy)
+          this.birds = Array.from({ length: 6 }, (_, i) => ({
+            x: 0.63 + i * 0.032,
+            y: 0.21 + (i % 3) * 0.025,
+            wingPhase: i * 1.15,
+            scale: 0.78 + (i % 3) * 0.16,
+            driftX: 0.004 + (i % 2) * 0.002
+          }));
+
+          // 78 Drifting stage particles (pollen / fireflies / embers)
+          this.particles = Array.from({ length: 78 }, (_, i) => ({
+            x: Math.random(),
+            y: 0.35 + Math.random() * 0.65,
+            vx: (Math.random() - 0.5) * 0.012,
+            vy: -(0.008 + Math.random() * 0.022),
+            size: 1.3 + Math.random() * 2.6,
+            phase: Math.random() * Math.PI * 2
+          }));
+
+          // 28 Volcanic ash flakes (Hard)
+          this.ashFlakes = Array.from({ length: 28 }, () => ({
+            x: Math.random(),
+            y: Math.random(),
+            vx: -0.006 + Math.random() * 0.012,
+            vy: 0.009 + Math.random() * 0.015,
+            size: 1.4 + Math.random() * 2.2,
+            phase: Math.random() * Math.PI * 2
+          }));
+
+          this.resize();
+          window.addEventListener('resize', () => this.resize());
+          window.addEventListener('pointermove', (e) => {
+            if (this.reducedMotion) return;
+            this.pointerX = (e.clientX / Math.max(1, window.innerWidth) - 0.5) * 2;
+            this.pointerY = (e.clientY / Math.max(1, window.innerHeight) - 0.5) * 2;
+          });
+        }
+
+        setTargetEnv(val) {
+          this.targetEnvProgress = val;
+        }
+
+        setReducedMotion(val) {
+          this.reducedMotion = !!val;
+          if (this.reducedMotion) {
+            this.pointerX = 0;
+            this.pointerY = 0;
+            this.lightningFlash = 0;
+          }
+        }
+
+        emitPulseRing() {
+          if (this.reducedMotion) return;
+          this.pulseRings.push({
+            progress: 0,
+            maxRadius: Math.max(this.w, this.h) * 0.55
+          });
+        }
+
+        resize() {
+          this.dpr = Math.min(window.devicePixelRatio || 1, 2);
+          this.w = window.innerWidth;
+          this.h = window.innerHeight;
+          this.canvas.width = Math.round(this.w * this.dpr);
+          this.canvas.height = Math.round(this.h * this.dpr);
+          this.ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+        }
+
+        triggerLightning() {
+          if (this.reducedMotion) return;
+          this.lightningFlash = 1.0;
+          const startX = this.w * (0.76 + Math.random() * 0.16);
+          const startY = this.h * 0.04;
+          const segs = [];
+          let cx = startX;
+          let cy = startY;
+          const steps = 9;
+          for (let i = 0; i < steps; i++) {
+            const nx = cx + (Math.random() - 0.54) * (this.w * 0.045);
+            const ny = cy + (this.h * 0.046) + Math.random() * 14;
+            segs.push({ x1: cx, y1: cy, x2: nx, y2: ny, w: 2.6 - i * 0.18 });
+            if (i === 2 || i === 5) {
+              let fx = nx;
+              let fy = ny;
+              for (let j = 0; j < 3; j++) {
+                const fnx = fx + (Math.random() > 0.45 ? 1 : -1) * (16 + Math.random() * 24);
+                const fny = fy + 18 + Math.random() * 22;
+                segs.push({ x1: fx, y1: fy, x2: fnx, y2: fny, w: 1.2 - j * 0.25 });
+                fx = fnx;
+                fy = fny;
+              }
+            }
+            cx = nx;
+            cy = ny;
+          }
+          this.lightningSegments = segs;
+        }
+
+        update(dt) {
+          const motionScale = this.reducedMotion ? 0.15 : 1.0;
+          this.time += dt * motionScale;
+
+          // Smooth bidirectional envProgress morph
+          const diff = this.targetEnvProgress - this.envProgress;
+          if (Math.abs(diff) > 0.0005) {
+            this.envProgress += diff * Math.min(1, dt * 2.6);
+          } else {
+            this.envProgress = this.targetEnvProgress;
+          }
+
+          // Smooth cursor parallax
+          const pxTarget = this.reducedMotion ? 0 : this.pointerX;
+          const pyTarget = this.reducedMotion ? 0 : this.pointerY;
+          this.smoothX += (pxTarget - this.smoothX) * Math.min(1, dt * 4.5);
+          this.smoothY += (pyTarget - this.smoothY) * Math.min(1, dt * 4.5);
+
+          // Cirrus & clouds drift
+          for (const c of this.cirrus) {
+            c.x = (c.x + c.speed * dt * motionScale) % 1.25;
+          }
+          for (const b of this.cloudBanks) {
+            b.x += b.speed * dt * motionScale;
+            if (b.x > 1.18) b.x = -0.18;
+          }
+
+          // Birds (Easy)
+          for (const bird of this.birds) {
+            bird.x += bird.driftX * dt * motionScale;
+            bird.wingPhase += dt * 4.8 * motionScale;
+            if (bird.x > 1.08) bird.x = -0.08;
+          }
+
+          // Shooting stars (Intermediate)
+          const interWeight = clamp(1 - Math.abs(this.envProgress - 1.0), 0, 1);
+          if (interWeight > 0.3 && !this.reducedMotion) {
+            this.shootTimer -= dt;
+            if (this.shootTimer <= 0) {
+              this.shootTimer = 2.6 + Math.random() * 4.2;
+              this.shootingStars.push({
+                x: 0.15 + Math.random() * 0.55,
+                y: 0.06 + Math.random() * 0.18,
+                vx: 0.24 + Math.random() * 0.15,
+                vy: 0.08 + Math.random() * 0.07,
+                life: 0,
+                maxLife: 0.85
+              });
+            }
+          }
+          for (let i = this.shootingStars.length - 1; i >= 0; i--) {
+            const s = this.shootingStars[i];
+            s.life += dt;
+            s.x += s.vx * dt;
+            s.y += s.vy * dt;
+            if (s.life >= s.maxLife) this.shootingStars.splice(i, 1);
+          }
+
+          // Hard mode lightning
+          const hardWeight = clamp(this.envProgress - 1.0, 0, 1);
+          if (hardWeight > 0.35 && !this.reducedMotion) {
+            this.lightningTimer -= dt;
+            if (this.lightningTimer <= 0) {
+              this.lightningTimer = 3.2 + Math.random() * 5.0;
+              this.triggerLightning();
+            }
+          }
+          if (this.lightningFlash > 0) {
+            this.lightningFlash = Math.max(0, this.lightningFlash - dt * 3.4);
+          }
+
+          // Particles
+          for (const p of this.particles) {
+            p.x += (p.vx + Math.sin(this.time * 1.4 + p.phase) * 0.005) * dt * motionScale;
+            p.y += p.vy * dt * motionScale;
+            if (p.y < 0.22) {
+              p.y = 1.02;
+              p.x = Math.random();
+            }
+            if (p.x < -0.02) p.x = 1.02;
+            if (p.x > 1.02) p.x = -0.02;
+          }
+
+          // Volcanic ash (Hard)
+          for (const a of this.ashFlakes) {
+            a.x += (a.vx + Math.sin(this.time + a.phase) * 0.006) * dt * motionScale;
+            a.y += a.vy * dt * motionScale;
+            if (a.y > 1.04) {
+              a.y = -0.04;
+              a.x = Math.random();
+            }
+          }
+
+          // Interactive pulse rings
+          for (let i = this.pulseRings.length - 1; i >= 0; i--) {
+            this.pulseRings[i].progress += dt * 0.95;
+            if (this.pulseRings[i].progress >= 1) this.pulseRings.splice(i, 1);
+          }
+        }
+
+        render() {
+          const ctx = this.ctx;
+          const w = this.w;
+          const h = this.h;
+          const env = this.envProgress;
+
+          const easyW = clamp(1 - env, 0, 1);
+          const interW = clamp(1 - Math.abs(env - 1.0), 0, 1);
+          const hardW = clamp(env - 1.0, 0, 1);
+          const flash = this.lightningFlash * hardW;
+
+          // Parallax offsets per depth
+          const pxSky = this.smoothX * 6;
+          const pySky = this.smoothY * 4;
+          const pxFar = this.smoothX * 14;
+          const pyFar = this.smoothY * 8;
+          const pxMid = this.smoothX * 26;
+          const pyMid = this.smoothY * 14;
+          const pxNear = this.smoothX * 40;
+          const pyNear = this.smoothY * 20;
+          const pxFg = this.smoothX * 58;
+          const pyFg = this.smoothY * 26;
+
+          /* ---------- LAYER 1: SKY GRADIENT, STARS & CELESTIAL BODIES ---------- */
+          const skyTop = mix3Color([252, 224, 186], [14, 21, 56], [24, 9, 18], env);
+          const skyMid = mix3Color([251, 175, 114], [43, 47, 108], [76, 17, 36], env);
+          const skyLow = mix3Color([251, 146, 60], [107, 79, 145], [164, 42, 46], env);
+          const skyHor = mix3Color([254, 226, 146], [173, 128, 188], [234, 88, 36], env);
+
+          const skyGrad = ctx.createLinearGradient(0, 0, 0, h * 0.75);
+          skyGrad.addColorStop(0.0, rgbStr(skyTop));
+          skyGrad.addColorStop(0.38, rgbStr(skyMid));
+          skyGrad.addColorStop(0.72, rgbStr(skyLow));
+          skyGrad.addColorStop(1.0, rgbStr(skyHor));
+          ctx.fillStyle = skyGrad;
+          ctx.fillRect(0, 0, w, h);
+
+          if (flash > 0.02) {
+            ctx.fillStyle = `rgba(255, 228, 220, ${(flash * 0.16).toFixed(3)})`;
+            ctx.fillRect(0, 0, w, h * 0.7);
+          }
+
+          // 165 Deterministic Stars
+          const starVisibility = easyW * 0.16 + interW * 0.95 + hardW * 0.42;
+          if (starVisibility > 0.02) {
+            for (const st of this.stars) {
+              const sx = st.x * w + pxSky * 0.5;
+              const sy = st.y * h + pySky * 0.5;
+              const twinkle = 0.45 + 0.55 * Math.sin(this.time * st.speed + st.phase);
+              const alpha = clamp(starVisibility * twinkle, 0, 1);
+              ctx.globalAlpha = alpha;
+              ctx.fillStyle = st.color;
+              ctx.beginPath();
+              ctx.arc(sx, sy, st.size, 0, Math.PI * 2);
+              ctx.fill();
+              if (st.sparkle && interW > 0.25) {
+                const sp = st.size * 2.9 * twinkle;
+                ctx.strokeStyle = st.color;
+                ctx.lineWidth = 0.85;
+                ctx.beginPath();
+                ctx.moveTo(sx - sp, sy);
+                ctx.lineTo(sx + sp, sy);
+                ctx.moveTo(sx, sy - sp);
+                ctx.lineTo(sx, sy + sp);
+                ctx.stroke();
+              }
+            }
+            ctx.globalAlpha = 1;
+          }
+
+          // Shooting stars (Intermediate)
+          if (interW > 0.2) {
+            for (const s of this.shootingStars) {
+              const p = s.life / s.maxLife;
+              const alpha = Math.sin(p * Math.PI) * interW;
+              const hx = s.x * w + pxSky;
+              const hy = s.y * h + pySky;
+              const tx = hx - s.vx * w * 0.14;
+              const ty = hy - s.vy * h * 0.14;
+              const g = ctx.createLinearGradient(tx, ty, hx, hy);
+              g.addColorStop(0, 'rgba(224,231,255,0)');
+              g.addColorStop(1, `rgba(255,255,255,${alpha.toFixed(3)})`);
+              ctx.strokeStyle = g;
+              ctx.lineWidth = 2;
+              ctx.beginPath();
+              ctx.moveTo(tx, ty);
+              ctx.lineTo(hx, hy);
+              ctx.stroke();
+            }
+          }
+
+          // Easy Celestial: Low Sun in Central Saddle + Rotating Crepuscular Rays + Tiny Upper-Left Moon + Birds
+          if (easyW > 0.01) {
+            const sunX = w * 0.5 + pxSky;
+            const sunY = h * 0.49 + pySky;
+            const sunR = Math.min(w, h) * 0.082;
+
+            ctx.save();
+            ctx.globalAlpha = easyW;
+
+            // Volumetric rotating crepuscular light shafts
+            ctx.save();
+            ctx.translate(sunX, sunY);
+            ctx.rotate(this.time * 0.04);
+            for (let i = 0; i < 10; i++) {
+              const ang = (i / 10) * Math.PI * 2;
+              ctx.save();
+              ctx.rotate(ang);
+              const rayGrad = ctx.createLinearGradient(0, 0, 0, -Math.max(w, h) * 0.65);
+              rayGrad.addColorStop(0, 'rgba(254, 240, 175, 0.16)');
+              rayGrad.addColorStop(1, 'rgba(254, 240, 175, 0)');
+              ctx.fillStyle = rayGrad;
+              ctx.beginPath();
+              ctx.moveTo(-sunR * 0.35, 0);
+              ctx.lineTo(-sunR * 2.2, -Math.max(w, h) * 0.65);
+              ctx.lineTo(sunR * 2.2, -Math.max(w, h) * 0.65);
+              ctx.lineTo(sunR * 0.35, 0);
+              ctx.closePath();
+              ctx.fill();
+              ctx.restore();
+            }
+            ctx.restore();
+
+            // Multi-ring halo
+            const halo = ctx.createRadialGradient(sunX, sunY, sunR * 0.5, sunX, sunY, sunR * 4.2);
+            halo.addColorStop(0, 'rgba(255, 250, 215, 0.72)');
+            halo.addColorStop(0.35, 'rgba(253, 210, 118, 0.32)');
+            halo.addColorStop(1, 'rgba(251, 146, 60, 0)');
+            ctx.fillStyle = halo;
+            ctx.beginPath();
+            ctx.arc(sunX, sunY, sunR * 4.2, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Sun disc
+            ctx.fillStyle = '#fff9d6';
+            ctx.beginPath();
+            ctx.arc(sunX, sunY, sunR, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Tiny delicate crescent moon in upper-left sky
+            const tmX = w * 0.18 + pxSky;
+            const tmY = h * 0.14 + pySky;
+            ctx.fillStyle = 'rgba(255, 250, 232, 0.65)';
+            ctx.beginPath();
+            ctx.arc(tmX, tmY, 10, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = rgbStr(skyTop);
+            ctx.beginPath();
+            ctx.arc(tmX + 4.5, tmY - 2, 9.2, 0, Math.PI * 2);
+            ctx.fill();
+
+            // 6 Silhouetted Canyon Birds
+            ctx.strokeStyle = 'rgba(78, 34, 34, 0.78)';
+            ctx.lineWidth = 1.8;
+            ctx.lineCap = 'round';
+            for (const b of this.birds) {
+              const bx = b.x * w + pxFar * 0.7;
+              const by = b.y * h + pyFar * 0.7;
+              const flap = Math.sin(b.wingPhase) * 4.5 * b.scale;
+              const span = 9 * b.scale;
+              ctx.beginPath();
+              ctx.moveTo(bx - span, by - flap);
+              ctx.quadraticCurveTo(bx - span * 0.45, by - 4 * b.scale, bx, by);
+              ctx.quadraticCurveTo(bx + span * 0.45, by - 4 * b.scale, bx + span, by - flap);
+              ctx.stroke();
+            }
+            ctx.restore();
+          }
+
+          // Intermediate Celestial: Crisp Silver-White Crescent Moon in Upper-Right Sky
+          if (interW > 0.01) {
+            ctx.save();
+            ctx.globalAlpha = interW;
+            const mx = w * 0.79 + pxSky;
+            const my = h * 0.16 + pySky;
+            const mr = Math.min(w, h) * 0.042;
+            const mGlow = ctx.createRadialGradient(mx, my, mr * 0.4, mx, my, mr * 4.5);
+            mGlow.addColorStop(0, 'rgba(219, 234, 254, 0.5)');
+            mGlow.addColorStop(0.45, 'rgba(165, 180, 252, 0.18)');
+            mGlow.addColorStop(1, 'rgba(129, 140, 248, 0)');
+            ctx.fillStyle = mGlow;
+            ctx.beginPath();
+            ctx.arc(mx, my, mr * 4.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Crescent mask via offscreen or composite trick
+            ctx.fillStyle = '#f8fafc';
+            ctx.beginPath();
+            ctx.arc(mx, my, mr, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = rgbStr(skyTop);
+            ctx.beginPath();
+            ctx.arc(mx - mr * 0.42, my - mr * 0.24, mr * 0.88, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+          }
+
+          // Hard Celestial: Total Eclipse above Valley Saddle + Branched Right Lightning
+          if (hardW > 0.01) {
+            ctx.save();
+            ctx.globalAlpha = hardW;
+            const ex = w * 0.5 + pxSky;
+            const ey = h * 0.34 + pySky;
+            const er = Math.min(w, h) * 0.072;
+
+            // Radiating fiery atmospheric halo
+            const eHalo = ctx.createRadialGradient(ex, ey, er * 0.9, ex, ey, er * 4.4);
+            eHalo.addColorStop(0, 'rgba(255, 148, 56, 0.95)');
+            eHalo.addColorStop(0.18, 'rgba(244, 63, 94, 0.62)');
+            eHalo.addColorStop(0.55, 'rgba(159, 18, 57, 0.18)');
+            eHalo.addColorStop(1, 'rgba(40, 8, 18, 0)');
+            ctx.fillStyle = eHalo;
+            ctx.beginPath();
+            ctx.arc(ex, ey, er * 4.4, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Blazing corona ring
+            ctx.strokeStyle = '#ffedd5';
+            ctx.lineWidth = 3.5;
+            ctx.shadowColor = '#f97316';
+            ctx.shadowBlur = 22;
+            ctx.beginPath();
+            ctx.arc(ex, ey, er * 1.03, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            // Dark crimson-black eclipse disc
+            const discGrad = ctx.createRadialGradient(ex, ey, er * 0.1, ex, ey, er);
+            discGrad.addColorStop(0, '#0c0408');
+            discGrad.addColorStop(0.85, '#19060d');
+            discGrad.addColorStop(1, '#4c0d1b');
+            ctx.fillStyle = discGrad;
+            ctx.beginPath();
+            ctx.arc(ex, ey, er, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Branched Storm Lightning on far-right sky
+            if (flash > 0.03 && this.lightningSegments.length > 0) {
+              ctx.save();
+              ctx.globalAlpha = clamp(flash * 1.2, 0, 1);
+              ctx.strokeStyle = '#ffe4e6';
+              ctx.shadowColor = '#fb7185';
+              ctx.shadowBlur = 18;
+              ctx.lineCap = 'round';
+              for (const seg of this.lightningSegments) {
+                ctx.lineWidth = seg.w;
+                ctx.beginPath();
+                ctx.moveTo(seg.x1 + pxSky, seg.y1 + pySky);
+                ctx.lineTo(seg.x2 + pxSky, seg.y2 + pySky);
+                ctx.stroke();
+              }
+              ctx.restore();
+            }
+            ctx.restore();
+          }
+
+          /* ---------- LAYER 2: SCULPTED PAINTERLY CLOUDS ---------- */
+          this.renderClouds(ctx, w, h, env, pxSky, pySky, flash);
+
+          /* ---------- LAYER 3: FACETED ALPINE MOUNTAIN RANGES ---------- */
+          this.renderMountainRanges(ctx, w, h, env, pxFar, pyFar, pxMid, pyMid, pxNear, pyNear, flash);
+
+          /* ---------- LAYER 4: FORESTED VALLEY, RIVER & CAMPFIRE SMOKE ---------- */
+          this.renderForestedValley(ctx, w, h, env, pxNear, pyNear, pxFg, pyFg);
+
+          /* ---------- LAYER 5: FOREGROUND CANYON OVERLOOK & STORYTELLING ---------- */
+          this.renderForegroundOverlook(ctx, w, h, env, pxFg, pyFg);
+
+          /* ---------- LAYER 6: AMBIENT PARTICLES & INTERACTIVE PULSES ---------- */
+          this.renderParticlesAndPulses(ctx, w, h, env, pxFg, pyFg);
+        }
+
+        renderClouds(ctx, w, h, env, px, py, flash) {
+          // 5 High-altitude wispy cirrus streaks
+          const cirrusCol = mix3Color([255, 237, 213], [165, 180, 252], [190, 88, 102], env);
+          ctx.save();
+          for (const c of this.cirrus) {
+            const cx = ((c.x * w) % (w * 1.2)) - w * 0.1 + px * 0.6;
+            const cy = c.y * h + py * 0.6;
+            const cw = c.w * w;
+            const g = ctx.createLinearGradient(cx - cw * 0.5, cy, cx + cw * 0.5, cy);
+            g.addColorStop(0, rgbStr(cirrusCol, 0));
+            g.addColorStop(0.5, rgbStr(cirrusCol, 0.22));
+            g.addColorStop(1, rgbStr(cirrusCol, 0));
+            ctx.fillStyle = g;
+            ctx.beginPath();
+            ctx.ellipse(cx, cy, cw * 0.5, 5.5, -0.04, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.restore();
+
+          // 6 Sculpted Multi-Puff 3D Cloud Banks
+          const bankTop = mix3Color([255, 241, 214], [118, 114, 186], [78, 30, 48], env);
+          const bankBot = mix3Color([244, 152, 108], [46, 44, 96], [28, 11, 22], env);
+          const rimCol = mix3Color([255, 249, 219], [224, 231, 255], [251, 146, 60], env);
+
+          for (const bank of this.cloudBanks) {
+            const bx = bank.x * w + px;
+            const by = bank.y * h + py;
+            const baseR = 26 * bank.scale * Math.min(1.25, w / 1000 + 0.35);
+
+            ctx.save();
+            // Subtle sheet-lightning belly flash on right-side clouds
+            const rightSideBoost = bank.x > 0.5 ? flash * 0.55 : flash * 0.15;
+
+            for (let i = 0; i < bank.puffs; i++) {
+              const norm = (i / (bank.puffs - 1)) - 0.5;
+              const pxOff = norm * baseR * 4.4;
+              const pyOff = Math.abs(norm) * baseR * 0.72 - Math.sin(i * 1.7 + bank.seed) * baseR * 0.28;
+              const r = baseR * (1.08 - Math.abs(norm) * 0.65);
+
+              // Rim light puff shifted slightly toward celestial center (0.5w)
+              const rimShiftX = bank.x < 0.5 ? 2.5 : -2.5;
+              ctx.fillStyle = rgbStr(rimCol, 0.38 + rightSideBoost);
+              ctx.beginPath();
+              ctx.arc(bx + pxOff + rimShiftX, by + pyOff - 2.2, r * 1.02, 0, Math.PI * 2);
+              ctx.fill();
+
+              const cg = ctx.createLinearGradient(0, by + pyOff - r, 0, by + pyOff + r);
+              cg.addColorStop(0, rgbStr(bankTop, 0.88));
+              cg.addColorStop(1, rgbStr(bankBot, 0.86));
+              ctx.fillStyle = cg;
+              ctx.beginPath();
+              ctx.arc(bx + pxOff, by + pyOff, r, 0, Math.PI * 2);
+              ctx.fill();
+            }
+            ctx.restore();
+          }
+        }
+
+        renderMistRibbon(ctx, w, yBase, height, color, alpha, speedOffset) {
+          const g = ctx.createLinearGradient(0, yBase - height, 0, yBase + height);
+          g.addColorStop(0, rgbStr(color, 0));
+          g.addColorStop(0.5, rgbStr(color, alpha));
+          g.addColorStop(1, rgbStr(color, 0));
+          ctx.fillStyle = g;
+          const shift = Math.sin(this.time * 0.25 + speedOffset) * 28;
+          ctx.beginPath();
+          ctx.moveTo(-40, yBase + height);
+          for (let x = -40; x <= w + 40; x += 80) {
+            const wave = Math.sin(x * 0.005 + this.time * 0.3 + speedOffset) * (height * 0.38);
+            ctx.lineTo(x + shift, yBase - height * 0.35 + wave);
+          }
+          ctx.lineTo(w + 40, yBase + height);
+          ctx.closePath();
+          ctx.fill();
+        }
+
+        renderMountainRanges(ctx, w, h, env, pxFar, pyFar, pxMid, pyMid, pxNear, pyNear, flash) {
+          const mistCol = mix3Color([254, 215, 170], [138, 132, 198], [160, 52, 58], env);
+
+          /* --- 1. FAR MISTY ALPINE RANGE (pxFar) --- */
+          const farLit = mix3Color([232, 152, 108], [72, 74, 134], [92, 28, 42], env);
+          const farShad = mix3Color([194, 114, 92], [52, 54, 106], [56, 16, 28], env);
+          const farYBase = h * 0.63 + pyFar;
+
+          // Far-left shoulder + central saddle peak + far-right ridge
+          const drawPoly = (pts, fill) => {
+            ctx.fillStyle = fill;
+            ctx.beginPath();
+            ctx.moveTo(pts[0][0], pts[0][1]);
+            for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+            ctx.closePath();
+            ctx.fill();
+          };
+
+          // Central distant triangular peak visible in saddle
+          const cPeakX = w * 0.5 + pxFar;
+          const cPeakY = h * 0.43 + pyFar;
+          drawPoly([[cPeakX - w * 0.16, farYBase], [cPeakX, cPeakY], [cPeakX + w * 0.02, farYBase]], rgbStr(farShad, 0.85));
+          drawPoly([[cPeakX, cPeakY], [cPeakX + w * 0.17, farYBase], [cPeakX - w * 0.01, farYBase]], rgbStr(farLit, 0.85));
+
+          // Far-left sunlit peak shoulder
+          drawPoly([[ -40 + pxFar, farYBase ], [ w * 0.06 + pxFar, h * 0.38 + pyFar ], [ w * 0.25 + pxFar, farYBase ]], rgbStr(farLit, 0.88));
+          // Far-right sunlit ridge
+          drawPoly([[ w * 0.72 + pxFar, farYBase ], [ w * 0.92 + pxFar, h * 0.37 + pyFar ], [ w + 40 + pxFar, farYBase ]], rgbStr(farLit, 0.88));
+
+          // Soft mist fade at y = 0.60h
+          this.renderMistRibbon(ctx, w, h * 0.59 + pyFar, h * 0.055, mistCol, 0.36, 0.4);
+
+          /* --- 2. MAIN MID-GROUND MASSIFS (pxMid) --- */
+          const midShad = mix3Color([118, 58, 72], [32, 36, 78], [34, 12, 24], env);
+          const midWarm = mix3Color([178, 92, 80], [58, 62, 118], [82, 24, 38], env);
+          const midSpec = mix3Color([253, 212, 134], [176, 184, 244], [248, 113, 113], env);
+
+          // Left Tall Background Peak (x ≈ 0.165w, y ≈ 0.305h)
+          const lBgX = w * 0.165 + pxMid;
+          const lBgY = h * 0.305 + pyMid;
+          const midBaseY = h * 0.69 + pyMid;
+          drawPoly([[-30 + pxMid, midBaseY], [lBgX, lBgY], [lBgX + w * 0.02, midBaseY]], rgbStr(midShad));
+          drawPoly([[lBgX, lBgY], [lBgX + w * 0.16, midBaseY], [lBgX - w * 0.01, midBaseY]], rgbStr(midWarm));
+          // Sunlit crest wedge
+          drawPoly([[lBgX, lBgY], [lBgX + w * 0.055, lBgY + h * 0.12], [lBgX + w * 0.014, lBgY + h * 0.14]], rgbStr(midSpec, 0.85));
+
+          // Right Towering Main Massif (x ≈ 0.725w, y ≈ 0.265h)
+          const rPeakX = w * 0.725 + pxMid;
+          const rPeakY = h * 0.265 + pyMid;
+          // Broad cool-shadowed inner-left gully
+          drawPoly([[rPeakX - w * 0.24, midBaseY], [rPeakX, rPeakY], [rPeakX - w * 0.02, midBaseY]], rgbStr(midShad));
+          // Mid-warm sculptural rock shoulder
+          drawPoly([[rPeakX, rPeakY], [rPeakX + w * 0.26, midBaseY], [rPeakX - w * 0.02, midBaseY]], rgbStr(midWarm));
+          // Chiseled triangular shadow rib beneath shoulder
+          drawPoly([[rPeakX + w * 0.03, rPeakY + h * 0.13], [rPeakX + w * 0.15, midBaseY], [rPeakX + w * 0.01, midBaseY]], rgbStr(midShad, 0.82));
+          // Razor-sharp sunlit highlight wedge along upper-right crest
+          drawPoly([[rPeakX, rPeakY], [rPeakX + w * 0.085, rPeakY + h * 0.145], [rPeakX + w * 0.025, rPeakY + h * 0.13]], rgbStr(midSpec, 0.92 + flash * 0.08));
+
+          // Specular crest stroke
+          ctx.strokeStyle = rgbStr(midSpec, 0.75 + flash * 0.25);
+          ctx.lineWidth = 2.1;
+          ctx.beginPath();
+          ctx.moveTo(rPeakX, rPeakY);
+          ctx.lineTo(rPeakX + w * 0.085, rPeakY + h * 0.145);
+          ctx.stroke();
+
+          // Evolving Right-Summit Landmark perched on (rPeakX, rPeakY)
+          this.renderSummitLandmark(ctx, rPeakX, rPeakY, w, h, env);
+
+          /* --- 3. CLOSER FACETED LEFT PEAK CLUSTER & FOOTHILLS (pxNear) --- */
+          const nearShad = mix3Color([86, 40, 56], [22, 24, 58], [24, 9, 18], env);
+          const nearLit = mix3Color([208, 108, 76], [74, 82, 146], [122, 34, 46], env);
+          const nearSpec = mix3Color([254, 224, 152], [199, 210, 254], [251, 146, 60], env);
+          const nearBaseY = h * 0.72 + pyNear;
+
+          // Main Closer Left Peak (x ≈ 0.255w, y ≈ 0.33h)
+          const lPeakX = w * 0.255 + pxNear;
+          const lPeakY = h * 0.33 + pyNear;
+          drawPoly([[lPeakX - w * 0.21, nearBaseY], [lPeakX, lPeakY], [lPeakX - w * 0.015, nearBaseY]], rgbStr(nearShad));
+          drawPoly([[lPeakX, lPeakY], [lPeakX + w * 0.18, nearBaseY], [lPeakX - w * 0.02, nearBaseY]], rgbStr(nearLit));
+          // Narrow razor-bright highlight ribbon along right arête
+          drawPoly([[lPeakX, lPeakY], [lPeakX + w * 0.068, lPeakY + h * 0.16], [lPeakX + w * 0.022, lPeakY + h * 0.16]], rgbStr(nearSpec, 0.92));
+          // Small jutting sunlit rock buttress & shadow wedge mid-face
+          drawPoly([[lPeakX - w * 0.04, lPeakY + h * 0.15], [lPeakX + w * 0.018, lPeakY + h * 0.19], [lPeakX - w * 0.02, lPeakY + h * 0.28]], rgbStr(nearLit));
+          drawPoly([[lPeakX - w * 0.04, lPeakY + h * 0.15], [lPeakX - w * 0.075, lPeakY + h * 0.26], [lPeakX - w * 0.02, lPeakY + h * 0.28]], rgbStr(nearShad));
+
+          // Overlapping Left Foothill Ridge (x ≈ 0.198w, y ≈ 0.462h)
+          const lfX = w * 0.198 + pxNear;
+          const lfY = h * 0.462 + pyNear;
+          drawPoly([[lfX - w * 0.22, nearBaseY], [lfX, lfY], [lfX + w * 0.01, nearBaseY]], rgbStr(nearShad));
+          drawPoly([[lfX, lfY], [lfX + w * 0.14, nearBaseY], [lfX, nearBaseY]], rgbStr(nearLit, 0.92));
+
+          // Center-Left Jagged Spur (x ≈ 0.398w, y ≈ 0.465h)
+          const clX = w * 0.398 + pxNear;
+          const clY = h * 0.465 + pyNear;
+          drawPoly([[clX - w * 0.09, nearBaseY], [clX, clY], [clX + w * 0.01, nearBaseY]], rgbStr(nearShad));
+          drawPoly([[clX, clY], [clX + w * 0.1, nearBaseY], [clX, nearBaseY]], rgbStr(nearLit, 0.82));
+
+          /* --- 4. CLOSER DARK-BRONZE / VOLCANIC RIGHT FOREGROUND PEAK (pxNear) --- */
+          const rfX = w * 0.798 + pxNear;
+          const rfY = h * 0.395 + pyNear;
+          const rfShad = mix3Color([68, 34, 44], [20, 22, 52], [20, 8, 16], env);
+          const rfLit = mix3Color([188, 96, 68], [88, 94, 162], [176, 48, 42], env);
+          drawPoly([[rfX - w * 0.19, nearBaseY], [rfX, rfY], [rfX + w * 0.02, nearBaseY]], rgbStr(rfShad));
+          drawPoly([[rfX, rfY], [rfX + w * 0.22, nearBaseY], [rfX, nearBaseY]], rgbStr(rfLit));
+          // Crisp specular shard at crest
+          drawPoly([[rfX, rfY], [rfX + w * 0.052, rfY + h * 0.11], [rfX + w * 0.018, rfY + h * 0.105]], rgbStr(nearSpec, 0.9 + flash * 0.1));
+
+          /* --- 5. PAINTERLY VALLEY MIST DISSOLVE --- */
+          this.renderMistRibbon(ctx, w, h * 0.625 + pyNear, h * 0.05, mistCol, 0.34, 1.8);
+        }
+
+        renderSummitLandmark(ctx, px, py, w, h, env) {
+          const easyW = clamp(1 - env, 0, 1);
+          const interW = clamp(1 - Math.abs(env - 1.0), 0, 1);
+          const hardW = clamp(env - 1.0, 0, 1);
+
+          // Easy: Wooden Fire Lookout Tower + Descending Utility Poles
+          if (easyW > 0.02) {
+            ctx.save();
+            ctx.globalAlpha = easyW;
+            const towerCol = '#3b1e24';
+            ctx.strokeStyle = towerCol;
+            ctx.fillStyle = towerCol;
+            ctx.lineWidth = 1.6;
+
+            // Stilts & cross-bracing
+            const topY = py - 24;
+            ctx.beginPath();
+            ctx.moveTo(px - 8, py + 2);
+            ctx.lineTo(px - 5, topY + 8);
+            ctx.moveTo(px + 8, py + 2);
+            ctx.lineTo(px + 5, topY + 8);
+            ctx.moveTo(px - 7, py - 5);
+            ctx.lineTo(px + 6, topY + 10);
+            ctx.moveTo(px + 7, py - 5);
+            ctx.lineTo(px - 6, topY + 10);
+            ctx.stroke();
+
+            // Wrap-around deck
+            ctx.fillRect(px - 10, topY + 6, 20, 2.5);
+            // Cabin body
+            ctx.fillRect(px - 7, topY - 4, 14, 10);
+            // Warm lantern cabin window
+            ctx.fillStyle = '#fde047';
+            ctx.shadowColor = '#facc15';
+            ctx.shadowBlur = 10;
+            ctx.fillRect(px - 4.5, topY - 2, 9, 4.5);
+            ctx.shadowBlur = 0;
+
+            // Pitched cupola roof & beacon antenna
+            ctx.fillStyle = towerCol;
+            ctx.beginPath();
+            ctx.moveTo(px - 10, topY - 4);
+            ctx.lineTo(px, topY - 12);
+            ctx.lineTo(px + 10, topY - 4);
+            ctx.closePath();
+            ctx.fill();
+            ctx.beginPath();
+            ctx.moveTo(px, topY - 12);
+            ctx.lineTo(px, topY - 20);
+            ctx.stroke();
+            ctx.fillStyle = '#fef08a';
+            ctx.beginPath();
+            ctx.arc(px, topY - 20, 1.6, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Descending utility poles with sagging cables
+            const poles = [
+              [px + 10, py - 12],
+              [px + 36, py + 28],
+              [px + 64, py + 72]
+            ];
+            ctx.strokeStyle = 'rgba(59, 30, 36, 0.72)';
+            ctx.lineWidth = 1.2;
+            for (let i = 1; i < poles.length; i++) {
+              ctx.beginPath();
+              ctx.moveTo(poles[i][0], poles[i][1]);
+              ctx.lineTo(poles[i][0], poles[i][1] - 12);
+              ctx.stroke();
+            }
+            ctx.lineWidth = 0.85;
+            for (let i = 0; i < poles.length - 1; i++) {
+              const p1 = poles[i];
+              const p2 = poles[i + 1];
+              const midX = (p1[0] + p2[0]) * 0.5;
+              const midY = (p1[1] + p2[1]) * 0.5 - 3;
+              ctx.beginPath();
+              ctx.moveTo(p1[0], p1[1] - (i === 0 ? 4 : 11));
+              ctx.quadraticCurveTo(midX, midY, p2[0], p2[1] - 11);
+              ctx.stroke();
+            }
+            ctx.restore();
+          }
+
+          // Intermediate: Silver-Domed Mountain Observatory with Warm Arched Windows
+          if (interW > 0.02) {
+            ctx.save();
+            ctx.globalAlpha = interW;
+            ctx.fillStyle = '#272a52';
+            ctx.fillRect(px - 14, py - 10, 28, 12);
+
+            // Silver dome
+            const domeG = ctx.createLinearGradient(px - 11, py - 24, px + 11, py - 10);
+            domeG.addColorStop(0, '#e2e8f0');
+            domeG.addColorStop(1, '#64748b');
+            ctx.fillStyle = domeG;
+            ctx.beginPath();
+            ctx.arc(px, py - 10, 11.5, Math.PI, 0);
+            ctx.fill();
+
+            // Telescope slit
+            ctx.strokeStyle = '#1e1b4b';
+            ctx.lineWidth = 2.2;
+            ctx.beginPath();
+            ctx.moveTo(px + 2, py - 21);
+            ctx.lineTo(px + 7, py - 13);
+            ctx.stroke();
+
+            // Illuminated arched windows
+            ctx.fillStyle = '#fde68a';
+            ctx.shadowColor = '#fbbf24';
+            ctx.shadowBlur = 8;
+            for (let i = -1; i <= 1; i++) {
+              ctx.beginPath();
+              ctx.roundRect(px + i * 7 - 1.8, py - 7, 3.6, 5.5, [2, 2, 0, 0]);
+              ctx.fill();
+            }
+            ctx.shadowBlur = 0;
+
+            // Glowing ridge lantern trail
+            for (let i = 1; i <= 3; i++) {
+              ctx.fillStyle = 'rgba(253, 224, 71, 0.8)';
+              ctx.beginPath();
+              ctx.arc(px + i * 16, py + i * 24, 1.8, 0, Math.PI * 2);
+              ctx.fill();
+            }
+            ctx.restore();
+          }
+
+          // Hard: Dark Silhouetted Summit Lookout bathed in Fiery Crimson Rim-Light
+          if (hardW > 0.02) {
+            ctx.save();
+            ctx.globalAlpha = hardW;
+            ctx.fillStyle = '#14060b';
+            ctx.strokeStyle = '#fb7185';
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            ctx.moveTo(px - 8, py + 2);
+            ctx.lineTo(px - 5, py - 18);
+            ctx.lineTo(px + 5, py - 18);
+            ctx.lineTo(px + 8, py + 2);
+            ctx.closePath();
+            ctx.fill();
+            ctx.fillRect(px - 9, py - 24, 18, 7);
+            ctx.beginPath();
+            ctx.moveTo(px - 11, py - 24);
+            ctx.lineTo(px, py - 31);
+            ctx.lineTo(px + 11, py - 24);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+            ctx.restore();
+          }
+        }
+
+        renderForestedValley(ctx, w, h, env, pxNear, pyNear, pxFg, pyFg) {
+          const bandColors = [
+            mix3Color([124, 62, 68], [30, 34, 74], [48, 16, 28], env),
+            mix3Color([98, 46, 56], [24, 28, 62], [38, 12, 22], env),
+            mix3Color([74, 34, 46], [19, 22, 52], [30, 9, 18], env),
+            mix3Color([54, 24, 36], [15, 17, 42], [22, 7, 14], env),
+            mix3Color([36, 16, 26], [11, 13, 32], [16, 5, 10], env)
+          ];
+          const mistCol = mix3Color([251, 191, 134], [129, 140, 248], [190, 62, 62], env);
+
+          for (let b = 0; b < 5; b++) {
+            const t = b / 4;
+            const yEdge = h * lerp(0.51, 0.73, t) + lerp(pyNear, pyFg, t);
+            const pxBand = lerp(pxNear, pxFg, t);
+            const dip = h * lerp(0.11, 0.14, t);
+
+            // Draw valley ridge shape
+            ctx.fillStyle = rgbStr(bandColors[b]);
+            ctx.beginPath();
+            ctx.moveTo(-40, h + 20);
+            ctx.lineTo(-40, yEdge);
+            const steps = 48;
+            for (let i = 0; i <= steps; i++) {
+              const u = i / steps;
+              const x = u * (w + 80) - 40 + pxBand * 0.4;
+              // Valley bowl dipping toward center
+              const centerDist = Math.abs(u - 0.5) * 2;
+              const bowlY = yEdge + (1 - centerDist * centerDist) * dip;
+              // Conifer silhouette teeth
+              const sway = Math.sin(this.time * 1.4 + i * 0.6 + b) * (1.2 + t * 1.4);
+              const treeH = (12 + ((i * 37 + b * 13) % 16)) * (0.75 + t * 0.55);
+              ctx.lineTo(x + sway * 0.5, bowlY - treeH);
+              ctx.lineTo(x + (w + 80) / (steps * 2), bowlY - treeH * 0.35);
+            }
+            ctx.lineTo(w + 40, h + 20);
+            ctx.closePath();
+            ctx.fill();
+
+            // S-curving canyon river nestled at pine band index 2
+            if (b === 2) {
+              this.renderValleyRiver(ctx, w, h, env, pxNear * 0.7 + pxFg * 0.3, pyNear * 0.7 + pyFg * 0.3);
+            }
+
+            // Campfire smoke plume rising from left mid-slope pines (band 1)
+            if (b === 1) {
+              this.renderCampfireSmoke(ctx, w * 0.24 + pxNear * 0.8, yEdge + h * 0.04, env);
+            }
+
+            // Inter-ridge mist pockets
+            if (b === 0 || b === 2) {
+              this.renderMistRibbon(ctx, w, yEdge + dip * 0.72, h * 0.028, mistCol, 0.22, b * 2.1);
+            }
+          }
+        }
+
+        renderValleyRiver(ctx, w, h, env, px, py) {
+          const riverStart = { x: w * 0.51 + px * 0.6, y: h * 0.635 + py * 0.6 };
+          const riverEnd = { x: w * 0.44 + px, y: h * 0.94 + py };
+
+          const rivTop = mix3Color([254, 240, 178], [165, 180, 252], [251, 146, 60], env);
+          const rivBot = mix3Color([245, 158, 86], [79, 70, 229], [185, 28, 28], env);
+
+          const rg = ctx.createLinearGradient(0, riverStart.y, 0, riverEnd.y);
+          rg.addColorStop(0, rgbStr(rivTop, 0.92));
+          rg.addColorStop(1, rgbStr(rivBot, 0.86));
+
+          ctx.save();
+          ctx.fillStyle = rg;
+          ctx.beginPath();
+          ctx.moveTo(riverStart.x - 4, riverStart.y);
+          ctx.bezierCurveTo(
+            w * 0.43 + px, h * 0.72 + py,
+            w * 0.59 + px, h * 0.81 + py,
+            riverEnd.x + 28, riverEnd.y
+          );
+          ctx.lineTo(riverEnd.x - 36, riverEnd.y);
+          ctx.bezierCurveTo(
+            w * 0.51 + px, h * 0.81 + py,
+            w * 0.38 + px, h * 0.72 + py,
+            riverStart.x + 4, riverStart.y
+          );
+          ctx.closePath();
+          ctx.fill();
+
+          // Animated horizontal water ripples
+          ctx.strokeStyle = rgbStr(rivTop, 0.65);
+          ctx.lineWidth = 1.4;
+          for (let i = 0; i < 9; i++) {
+            const u = (i + ((this.time * 0.35) % 1)) / 9;
+            const ry = lerp(riverStart.y + 8, riverEnd.y - 12, u);
+            const curveX = lerp(riverStart.x, riverEnd.x, u) + Math.sin(u * Math.PI * 2.1) * (w * 0.036);
+            const halfW = 6 + u * 20;
+            ctx.beginPath();
+            ctx.moveTo(curveX - halfW, ry);
+            ctx.lineTo(curveX + halfW, ry);
+            ctx.stroke();
+          }
+          ctx.restore();
+        }
+
+        renderCampfireSmoke(ctx, sx, sy, env) {
+          const smokeCol = mix3Color([255, 237, 213], [199, 210, 254], [254, 205, 211], env);
+          ctx.save();
+          ctx.strokeStyle = rgbStr(smokeCol, 0.24);
+          ctx.lineWidth = 4.5;
+          ctx.lineCap = 'round';
+          ctx.beginPath();
+          ctx.moveTo(sx, sy);
+          for (let i = 1; i <= 10; i++) {
+            const t = i / 10;
+            const cx = sx + Math.sin(this.time * 1.1 + i * 0.65) * (6 + t * 14) + t * 14;
+            const cy = sy - t * 62;
+            ctx.lineTo(cx, cy);
+          }
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        renderForegroundOverlook(ctx, w, h, env, pxFg, pyFg) {
+          const fgDark = mix3Color([26, 12, 20], [8, 10, 24], [12, 4, 9], env);
+          const fgFacetLit = mix3Color([118, 52, 54], [38, 44, 88], [94, 24, 34], env);
+          const fgRim = mix3Color([251, 191, 114], [165, 180, 252], [249, 115, 22], env);
+
+          // Left Sculpted Rock Strata Cliff
+          const lx = pxFg;
+          const ly = pyFg;
+          ctx.fillStyle = rgbStr(fgDark);
+          ctx.beginPath();
+          ctx.moveTo(-40, h + 30);
+          ctx.lineTo(-40, h * 0.68 + ly);
+          ctx.lineTo(w * 0.09 + lx, h * 0.72 + ly);
+          ctx.lineTo(w * 0.165 + lx, h * 0.745 + ly);
+          ctx.lineTo(w * 0.235 + lx, h * 0.84 + ly);
+          ctx.lineTo(w * 0.34 + lx, h + 30);
+          ctx.closePath();
+          ctx.fill();
+
+          // Left chiseled geometric rock bevels
+          ctx.fillStyle = rgbStr(fgFacetLit, 0.78);
+          ctx.beginPath();
+          ctx.moveTo(w * 0.08 + lx, h * 0.72 + ly);
+          ctx.lineTo(w * 0.165 + lx, h * 0.745 + ly);
+          ctx.lineTo(w * 0.21 + lx, h * 0.86 + ly);
+          ctx.lineTo(w * 0.11 + lx, h * 0.89 + ly);
+          ctx.closePath();
+          ctx.fill();
+
+          ctx.strokeStyle = rgbStr(fgRim, 0.55);
+          ctx.lineWidth = 1.6;
+          ctx.beginPath();
+          ctx.moveTo(-20, h * 0.685 + ly);
+          ctx.lineTo(w * 0.09 + lx, h * 0.72 + ly);
+          ctx.lineTo(w * 0.165 + lx, h * 0.745 + ly);
+          ctx.lineTo(w * 0.235 + lx, h * 0.84 + ly);
+          ctx.stroke();
+
+          // Canyon Hiker Silhouette on Left Rocky Outcrop
+          const hx = w * 0.132 + lx;
+          const hy = h * 0.737 + ly;
+          ctx.save();
+          ctx.fillStyle = rgbStr(fgDark);
+          ctx.strokeStyle = rgbStr(fgDark);
+          ctx.lineCap = 'round';
+          // Legs
+          ctx.lineWidth = 3.2;
+          ctx.beginPath();
+          ctx.moveTo(hx - 2, hy - 14);
+          ctx.lineTo(hx - 5, hy + 1);
+          ctx.moveTo(hx + 2, hy - 14);
+          ctx.lineTo(hx + 5, hy + 1);
+          ctx.stroke();
+          // Torso
+          ctx.beginPath();
+          ctx.roundRect(hx - 4, hy - 28, 8, 15, 3);
+          ctx.fill();
+          // Backpack + rolled bedroll
+          ctx.beginPath();
+          ctx.roundRect(hx - 9.5, hy - 28, 6.5, 13, 2.5);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.ellipse(hx - 6.5, hy - 29.5, 4.2, 2.2, 0, 0, Math.PI * 2);
+          ctx.fill();
+          // Head
+          ctx.beginPath();
+          ctx.arc(hx + 1, hy - 32.5, 4, 0, Math.PI * 2);
+          ctx.fill();
+          // Trekking pole
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(hx + 7, hy - 22);
+          ctx.lineTo(hx + 11, hy + 2);
+          ctx.stroke();
+          ctx.restore();
+
+          // Right Sculpted Rock Strata Cliff
+          ctx.fillStyle = rgbStr(fgDark);
+          ctx.beginPath();
+          ctx.moveTo(w + 40, h + 30);
+          ctx.lineTo(w + 40, h * 0.65 + ly);
+          ctx.lineTo(w * 0.89 + lx, h * 0.70 + ly);
+          ctx.lineTo(w * 0.805 + lx, h * 0.75 + ly);
+          ctx.lineTo(w * 0.73 + lx, h * 0.87 + ly);
+          ctx.lineTo(w * 0.64 + lx, h + 30);
+          ctx.closePath();
+          ctx.fill();
+
+          // Right chiseled bevel
+          ctx.fillStyle = rgbStr(fgFacetLit, 0.75);
+          ctx.beginPath();
+          ctx.moveTo(w * 0.89 + lx, h * 0.70 + ly);
+          ctx.lineTo(w * 0.805 + lx, h * 0.75 + ly);
+          ctx.lineTo(w * 0.78 + lx, h * 0.88 + ly);
+          ctx.lineTo(w * 0.88 + lx, h * 0.85 + ly);
+          ctx.closePath();
+          ctx.fill();
+
+          ctx.strokeStyle = rgbStr(fgRim, 0.55);
+          ctx.lineWidth = 1.6;
+          ctx.beginPath();
+          ctx.moveTo(w + 20, h * 0.655 + ly);
+          ctx.lineTo(w * 0.89 + lx, h * 0.70 + ly);
+          ctx.lineTo(w * 0.805 + lx, h * 0.75 + ly);
+          ctx.stroke();
+
+          // Right Bluff: Wooden Overlook Post + Hanging Lantern (glows amber in Intermediate)
+          const postX = w * 0.845 + lx;
+          const postY = h * 0.728 + ly;
+          const interW = clamp(1 - Math.abs(env - 1.0), 0, 1);
+          ctx.save();
+          ctx.strokeStyle = rgbStr(fgDark);
+          ctx.lineWidth = 4.2;
+          ctx.beginPath();
+          ctx.moveTo(postX, postY + 4);
+          ctx.lineTo(postX, postY - 54);
+          ctx.moveTo(postX, postY - 46);
+          ctx.lineTo(postX - 18, postY - 46);
+          ctx.stroke();
+
+          // Hanging lantern
+          const lanX = postX - 16;
+          const lanY = postY - 36;
+          ctx.lineWidth = 1.4;
+          ctx.beginPath();
+          ctx.moveTo(lanX, postY - 46);
+          ctx.lineTo(lanX, lanY);
+          ctx.stroke();
+
+          if (interW > 0.05) {
+            const lanHalo = ctx.createRadialGradient(lanX, lanY + 4, 2, lanX, lanY + 4, 62 * interW);
+            lanHalo.addColorStop(0, `rgba(253, 224, 71, ${(0.72 * interW).toFixed(3)})`);
+            lanHalo.addColorStop(0.4, `rgba(251, 146, 60, ${(0.28 * interW).toFixed(3)})`);
+            lanHalo.addColorStop(1, 'rgba(251, 146, 60, 0)');
+            ctx.fillStyle = lanHalo;
+            ctx.beginPath();
+            ctx.arc(lanX, lanY + 4, 62 * interW, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          ctx.fillStyle = interW > 0.2 ? '#fef08a' : '#78350f';
+          ctx.beginPath();
+          ctx.roundRect(lanX - 3.5, lanY, 7, 10, 2);
+          ctx.fill();
+          ctx.restore();
+
+          // Hard Mode Molten Rock Cracks
+          const hardW = clamp(env - 1.0, 0, 1);
+          if (hardW > 0.04) {
+            const pulse = 0.65 + 0.35 * Math.sin(this.time * 3.1);
+            ctx.save();
+            ctx.globalAlpha = hardW * pulse;
+            ctx.strokeStyle = '#fb923c';
+            ctx.shadowColor = '#f97316';
+            ctx.shadowBlur = 12;
+            ctx.lineWidth = 2.0;
+            ctx.lineCap = 'round';
+            const cracks = [
+              [[w * 0.06 + lx, h * 0.85 + ly], [w * 0.11 + lx, h * 0.88 + ly], [w * 0.14 + lx, h * 0.94 + ly]],
+              [[w * 0.15 + lx, h * 0.81 + ly], [w * 0.18 + lx, h * 0.86 + ly], [w * 0.22 + lx, h * 0.89 + ly]],
+              [[w * 0.82 + lx, h * 0.82 + ly], [w * 0.79 + lx, h * 0.88 + ly], [w * 0.75 + lx, h * 0.93 + ly]],
+              [[w * 0.88 + lx, h * 0.78 + ly], [w * 0.92 + lx, h * 0.85 + ly], [w * 0.95 + lx, h * 0.91 + ly]]
+            ];
+            for (const c of cracks) {
+              ctx.beginPath();
+              ctx.moveTo(c[0][0], c[0][1]);
+              ctx.lineTo(c[1][0], c[1][1]);
+              ctx.lineTo(c[2][0], c[2][1]);
+              ctx.stroke();
+            }
+            ctx.restore();
+          }
+
+          // Foreground Flora: Swaying Tall Grasses & Ferns on Left and Right Ledges
+          ctx.save();
+          ctx.strokeStyle = rgbStr(fgDark);
+          ctx.lineCap = 'round';
+          for (let i = 0; i < 22; i++) {
+            const isLeft = i < 11;
+            const u = (i % 11) / 10;
+            const gx = isLeft ? lerp(12, w * 0.22, u) + lx : lerp(w * 0.76, w - 12, u) + lx;
+            const gy = isLeft ? lerp(h * 0.70, h * 0.85, u) + ly : lerp(h * 0.82, h * 0.68, u) + ly;
+            const bladeH = 18 + (i % 4) * 9;
+            const sway = Math.sin(this.time * 2.1 + i * 0.7) * 5;
+            ctx.lineWidth = 2.0;
+            ctx.beginPath();
+            ctx.moveTo(gx, gy + 8);
+            ctx.quadraticCurveTo(gx + sway * 0.4, gy - bladeH * 0.5, gx + sway, gy - bladeH);
+            ctx.stroke();
+          }
+          ctx.restore();
+        }
+
+        renderParticlesAndPulses(ctx, w, h, env, pxFg, pyFg) {
+          const easyW = clamp(1 - env, 0, 1);
+          const interW = clamp(1 - Math.abs(env - 1.0), 0, 1);
+          const hardW = clamp(env - 1.0, 0, 1);
+
+          // 78 Drifting Stage Particles
+          for (const p of this.particles) {
+            const x = p.x * w + pxFg * 0.35;
+            const y = p.y * h + pyFg * 0.35;
+            const blink = 0.45 + 0.55 * Math.sin(this.time * 2.8 + p.phase);
+
+            if (easyW > 0.05) {
+              ctx.fillStyle = `rgba(254, 240, 138, ${(0.48 * easyW * blink).toFixed(3)})`;
+              ctx.beginPath();
+              ctx.arc(x, y, p.size * 0.9, 0, Math.PI * 2);
+              ctx.fill();
+            }
+            if (interW > 0.05) {
+              const fy = y + Math.sin(this.time * 2.2 + p.phase) * 7;
+              const fHalo = ctx.createRadialGradient(x, fy, 0.5, x, fy, p.size * 4.2);
+              fHalo.addColorStop(0, `rgba(253, 224, 71, ${(0.9 * interW * blink).toFixed(3)})`);
+              fHalo.addColorStop(1, 'rgba(250, 204, 21, 0)');
+              ctx.fillStyle = fHalo;
+              ctx.beginPath();
+              ctx.arc(x, fy, p.size * 4.2, 0, Math.PI * 2);
+              ctx.fill();
+            }
+            if (hardW > 0.05) {
+              ctx.fillStyle = `rgba(251, 113, 60, ${(0.78 * hardW * blink).toFixed(3)})`;
+              ctx.beginPath();
+              ctx.arc(x, y, p.size * 1.05, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+
+          // 28 Volcanic Ash Flakes (Hard)
+          if (hardW > 0.05) {
+            ctx.fillStyle = `rgba(46, 12, 18, ${(0.65 * hardW).toFixed(3)})`;
+            for (const a of this.ashFlakes) {
+              ctx.beginPath();
+              ctx.ellipse(a.x * w, a.y * h, a.size, a.size * 0.55, a.phase + this.time, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+
+          // Interactive Horizon Pulse Rings
+          if (this.pulseRings.length > 0) {
+            const cx = w * 0.5;
+            const cy = h * 0.52;
+            const ringCol = mix3Color([250, 204, 21], [129, 140, 248], [251, 113, 133], env);
+            for (const ring of this.pulseRings) {
+              const alpha = (1 - ring.progress) * 0.45;
+              const r = ring.progress * ring.maxRadius;
+              ctx.strokeStyle = rgbStr(ringCol, alpha);
+              ctx.lineWidth = 2.5 * (1 - ring.progress) + 0.5;
+              ctx.beginPath();
+              ctx.arc(cx, cy, r, 0, Math.PI * 2);
+              ctx.stroke();
+            }
+          }
+        }
+      }
+
+      /* =========================================================================
+         4. PROCEDURAL WEB AUDIO ENGINE (CelestialAudioEngine)
+         ========================================================================= */
+      class CelestialAudioEngine {
+        constructor() {
+          this.ctx = null;
+          this.masterGain = null;
+          this.compressor = null;
+          this.musicBus = null;
+          this.typingBus = null;
+          this.sfxBus = null;
+          this.stemLobby = null;
+          this.stemBase = null;
+          this.stemStreak = null;
+          this.stemTension = null;
+
+          this.noiseBuffer = null;
+          this.schedulerTimer = null;
+          this.nextNoteTime = 0;
+          this.currentStep = 0;
+
+          this.mode = 'SILENT'; // 'SILENT' | 'LOBBY' | 'GAMEPLAY'
+          this.difficulty = 'EASY';
+          this.streak = 0;
+          this.tensionActive = false;
+          this.muted = false;
+        }
+
+        ensureContext() {
+          if (this.ctx) {
+            if (this.ctx.state === 'suspended') this.ctx.resume();
+            return;
+          }
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (!AudioCtx) return;
+
+          this.ctx = new AudioCtx();
+          this.compressor = this.ctx.createDynamicsCompressor();
+          this.compressor.threshold.value = -14;
+          this.compressor.knee.value = 18;
+          this.compressor.ratio.value = 4;
+          this.compressor.attack.value = 0.004;
+          this.compressor.release.value = 0.22;
+
+          this.masterGain = this.ctx.createGain();
+          this.musicBus = this.ctx.createGain();
+          this.typingBus = this.ctx.createGain();
+          this.sfxBus = this.ctx.createGain();
+
+          this.stemLobby = this.ctx.createGain();
+          this.stemBase = this.ctx.createGain();
+          this.stemStreak = this.ctx.createGain();
+          this.stemTension = this.ctx.createGain();
+
+          this.stemLobby.gain.value = 0;
+          this.stemBase.gain.value = 0;
+          this.stemStreak.gain.value = 0;
+          this.stemTension.gain.value = 0;
+
+          this.stemLobby.connect(this.musicBus);
+          this.stemBase.connect(this.musicBus);
+          this.stemStreak.connect(this.musicBus);
+          this.stemTension.connect(this.musicBus);
+
+          this.musicBus.connect(this.masterGain);
+          this.typingBus.connect(this.masterGain);
+          this.sfxBus.connect(this.masterGain);
+
+          this.masterGain.connect(this.compressor);
+          this.compressor.connect(this.ctx.destination);
+
+          // Create white noise buffer for breeze & percussion
+          const len = this.ctx.sampleRate * 2;
+          this.noiseBuffer = this.ctx.createBuffer(1, len, this.ctx.sampleRate);
+          const data = this.noiseBuffer.getChannelData(0);
+          for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+
+          this.applySettings();
+          this.startScheduler();
+        }
+
+        applySettings() {
+          if (!this.ctx) return;
+          const now = this.ctx.currentTime;
+          const s = saveData.settings;
+          const masterTarget = this.muted ? 0 : s.masterVol;
+          const musicTarget = s.musicEnabled ? s.musicVol : 0;
+
+          this.masterGain.gain.setTargetAtTime(masterTarget, now, 0.05);
+          this.musicBus.gain.setTargetAtTime(musicTarget, now, 0.28);
+          this.typingBus.gain.setTargetAtTime(s.typingSfxEnabled ? s.sfxVol : 0, now, 0.06);
+          this.sfxBus.gain.setTargetAtTime(s.gameSfxEnabled ? s.sfxVol : 0, now, 0.06);
+          this.updateStemTargets();
+        }
+
+        updateStemTargets() {
+          if (!this.ctx) return;
+          const now = this.ctx.currentTime;
+          const lobbyTarget = this.mode === 'LOBBY' ? 1.0 : 0.0;
+          const baseTarget = this.mode === 'GAMEPLAY' ? 1.0 : 0.0;
+          const streakTarget = this.mode === 'GAMEPLAY' && this.streak >= 3 ? 1.0 : 0.0;
+          const tensionTarget = this.mode === 'GAMEPLAY' && this.tensionActive ? 1.0 : 0.0;
+
+          this.stemLobby.gain.setTargetAtTime(lobbyTarget, now, 0.28);
+          this.stemBase.gain.setTargetAtTime(baseTarget, now, 0.28);
+          this.stemStreak.gain.setTargetAtTime(streakTarget, now, 0.28);
+          this.stemTension.gain.setTargetAtTime(tensionTarget, now, 0.28);
+        }
+
+        setMusicMode(mode, difficulty) {
+          this.mode = mode;
+          if (difficulty) this.difficulty = difficulty;
+          if (mode !== 'SILENT') this.ensureContext();
+          this.updateStemTargets();
+        }
+
+        setDifficulty(difficulty) {
+          this.difficulty = difficulty;
+        }
+
+        setStreak(streak) {
+          this.streak = streak;
+          this.updateStemTargets();
+        }
+
+        setTension(active) {
+          if (this.tensionActive !== active) {
+            this.tensionActive = active;
+            this.updateStemTargets();
+          }
+        }
+
+        toggleMute() {
+          this.muted = !this.muted;
+          this.applySettings();
+          return this.muted;
+        }
+
+        startScheduler() {
+          if (this.schedulerTimer) return;
+          this.nextNoteTime = this.ctx.currentTime + 0.05;
+          this.schedulerTimer = setInterval(() => this.schedulerTick(), 25);
+        }
+
+        getBpm() {
+          if (this.mode === 'LOBBY') return 74;
+          return DIFFICULTY_CONFIGS[this.difficulty]?.bpm || 96;
+        }
+
+        schedulerTick() {
+          if (!this.ctx || this.ctx.state !== 'running') return;
+          const lookahead = 0.12;
+          while (this.nextNoteTime < this.ctx.currentTime + lookahead) {
+            if (this.mode !== 'SILENT' && saveData.settings.musicEnabled) {
+              this.scheduleStep(this.currentStep, this.nextNoteTime);
+            }
+            const stepDur = 60 / this.getBpm() / 4; // 16th note
+            this.nextNoteTime += stepDur;
+            this.currentStep = (this.currentStep + 1) % 64;
+          }
+        }
+
+        playOsc(freq, time, dur, type, gainVal, dest, filterFreq = 0) {
+          if (!this.ctx) return;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, time);
+
+          gain.gain.setValueAtTime(0.0001, time);
+          gain.gain.linearRampToValueAtTime(gainVal, time + Math.min(0.03, dur * 0.25));
+          gain.gain.exponentialRampToValueAtTime(0.0001, time + dur);
+
+          if (filterFreq > 0) {
+            const filter = this.ctx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(filterFreq, time);
+            osc.connect(filter);
+            filter.connect(gain);
+          } else {
+            osc.connect(gain);
+          }
+          gain.connect(dest);
+          osc.start(time);
+          osc.stop(time + dur + 0.03);
+        }
+
+        playNoiseBreeze(time, dur, centerFreq, gainVal, dest) {
+          if (!this.ctx || !this.noiseBuffer) return;
+          const src = this.ctx.createBufferSource();
+          src.buffer = this.noiseBuffer;
+          const bp = this.ctx.createBiquadFilter();
+          bp.type = 'bandpass';
+          bp.frequency.setValueAtTime(centerFreq, time);
+          bp.Q.value = 1.4;
+          const g = this.ctx.createGain();
+          g.gain.setValueAtTime(0.0001, time);
+          g.gain.linearRampToValueAtTime(gainVal, time + dur * 0.45);
+          g.gain.exponentialRampToValueAtTime(0.0001, time + dur);
+          src.connect(bp);
+          bp.connect(g);
+          g.connect(dest);
+          src.start(time);
+          src.stop(time + dur + 0.05);
+        }
+
+        playKick(time, gainVal, dest, pitchStart = 115) {
+          if (!this.ctx) return;
+          const osc = this.ctx.createOscillator();
+          const g = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(pitchStart, time);
+          osc.frequency.exponentialRampToValueAtTime(42, time + 0.14);
+          g.gain.setValueAtTime(gainVal, time);
+          g.gain.exponentialRampToValueAtTime(0.0001, time + 0.22);
+          osc.connect(g);
+          g.connect(dest);
+          osc.start(time);
+          osc.stop(time + 0.25);
+        }
+
+        scheduleStep(step, time) {
+          const bar = Math.floor(step / 16); // 0..3
+          const stepInBar = step % 16;
+
+          /* --- LOBBY AMBIENT (Beatless) --- */
+          if (this.mode === 'LOBBY') {
+            const lobbyChords = [
+              [174.61, 220.00, 261.63, 329.63], // Fmaj7
+              [196.00, 246.94, 293.66, 329.63], // G6
+              [220.00, 261.63, 329.63, 392.00], // Am7
+              [130.81, 196.00, 246.94, 329.63]  // Cmaj7
+            ];
+            if (stepInBar === 0) {
+              const chord = lobbyChords[bar];
+              for (const f of chord) {
+                this.playOsc(f, time, 2.9, 'sine', 0.048, this.stemLobby);
+              }
+              if (bar % 2 === 0) {
+                this.playNoiseBreeze(time, 3.2, 460 + bar * 90, 0.032, this.stemLobby);
+              }
+            }
+            if (stepInBar === 6 || stepInBar === 13) {
+              const harpPool = [523.25, 587.33, 659.25, 783.99, 880.00];
+              const note = harpPool[(step + bar) % harpPool.length];
+              this.playOsc(note, time, 1.35, 'triangle', 0.038, this.stemLobby, 1900);
+            }
+            return;
+          }
+
+          /* --- GAMEPLAY SOUNDTRACKS --- */
+          if (this.difficulty === 'EASY') {
+            const chords = [
+              [174.61, 220.00, 261.63, 329.63], // Fmaj7
+              [130.81, 164.81, 196.00, 246.94], // Cmaj7
+              [220.00, 261.63, 329.63, 392.00], // Am7
+              [196.00, 261.63, 293.66, 349.23]  // G7sus
+            ];
+            const chord = chords[bar];
+            if (stepInBar === 0) {
+              for (const f of chord) this.playOsc(f, time, 2.1, 'triangle', 0.036, this.stemBase, 1400);
+              this.playOsc(chord[0] * 0.5, time, 1.4, 'sine', 0.09, this.stemBase);
+            }
+            if (step % 2 === 0) {
+              const arp = chord[(step / 2) % chord.length] * 2;
+              this.playOsc(arp, time, 0.28, 'sine', 0.042, this.stemBase);
+            }
+            if (stepInBar === 0 || stepInBar === 8) {
+              this.playKick(time, 0.14, this.stemBase, 92);
+            }
+          } else if (this.difficulty === 'INTERMEDIATE') {
+            const chords = [
+              [220.00, 261.63, 329.63, 415.30], // Am(maj7)
+              [174.61, 220.00, 261.63, 329.63], // Fmaj7
+              [146.83, 174.61, 220.00, 261.63], // Dm7
+              [164.81, 207.65, 246.94, 293.66]  // E7
+            ];
+            const chord = chords[bar];
+            if (stepInBar === 0) {
+              for (const f of chord) this.playOsc(f, time, 2.0, 'sine', 0.042, this.stemBase);
+              this.playOsc(chord[0] * 0.5, time, 1.2, 'triangle', 0.08, this.stemBase, 320);
+            }
+            if (step % 2 === 0) {
+              const arp = chord[(step / 2) % 4] * (step % 4 === 0 ? 2 : 1);
+              this.playOsc(arp, time, 0.24, 'sine', 0.046, this.stemBase);
+            }
+            if (stepInBar === 0 || stepInBar === 6 || stepInBar === 12) {
+              this.playKick(time, 0.16, this.stemBase, 108);
+            }
+          } else {
+            // HARD: Dark string pads, staccato accents & timpani
+            const chords = [
+              [146.83, 174.61, 220.00, 277.18], // Dm(maj7)
+              [116.54, 146.83, 174.61, 220.00], // Bbmaj7
+              [196.00, 233.08, 293.66, 329.63], // Gm6
+              [220.00, 277.18, 329.63, 392.00]  // A7
+            ];
+            const chord = chords[bar];
+            if (stepInBar === 0) {
+              for (const f of chord) this.playOsc(f, time, 1.8, 'sawtooth', 0.022, this.stemBase, 850);
+              this.playKick(time, 0.24, this.stemBase, 130); // Timpani hit
+            }
+            if (step % 2 === 0) {
+              const stac = chord[(step / 2) % 4] * 2;
+              this.playOsc(stac, time, 0.14, 'triangle', 0.052, this.stemBase, 1800);
+            }
+            if (stepInBar === 4 || stepInBar === 10 || stepInBar === 14) {
+              this.playKick(time, 0.16, this.stemBase, 96);
+            }
+          }
+
+          /* --- ADAPTIVE STREAK STEM --- */
+          if (this.streak >= 3 && (stepInBar === 3 || stepInBar === 11)) {
+            const chimes = [783.99, 880.00, 1046.50, 1174.66];
+            this.playOsc(chimes[(bar + stepInBar) % chimes.length], time, 0.35, 'sine', 0.045, this.stemStreak);
+          }
+          if (this.streak >= 5 && (stepInBar === 4 || stepInBar === 12)) {
+            this.playKick(time, 0.14, this.stemStreak, 105);
+          }
+          if (this.streak >= 8 && (stepInBar === 2 || stepInBar === 8 || stepInBar === 14)) {
+            const lead = [659.25, 783.99, 880.00, 1046.50];
+            this.playOsc(lead[(step + bar) % lead.length], time, 0.26, 'triangle', 0.048, this.stemStreak, 2200);
+          }
+
+          /* --- CRITICAL TENSION STEM (< 5s) --- */
+          if (this.tensionActive && step % 4 === 0) {
+            this.playOsc(587.33, time, 0.18, 'sine', 0.05, this.stemTension);
+            this.playOsc(880.00, time, 0.12, 'triangle', 0.035, this.stemTension, 1600);
+          }
+        }
+
+        /* --- INTERACTIVE SFX --- */
+        playKeyCorrect(indexInWord) {
+          this.ensureContext();
+          if (!this.ctx || !saveData.settings.typingSfxEnabled) return;
+          const pentatonic = [523.25, 587.33, 659.25, 783.99, 880.00, 1046.50, 1174.66, 1318.51];
+          const freq = pentatonic[indexInWord % pentatonic.length];
+          const now = this.ctx.currentTime;
+          this.playOsc(freq, now, 0.22, 'sine', 0.13, this.typingBus);
+          this.playOsc(freq * 2, now, 0.12, 'triangle', 0.04, this.typingBus);
+        }
+
+        playKeyError() {
+          this.ensureContext();
+          if (!this.ctx || !saveData.settings.typingSfxEnabled) return;
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const g = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(145, now);
+          osc.frequency.exponentialRampToValueAtTime(72, now + 0.14);
+          g.gain.setValueAtTime(0.16, now);
+          g.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
+          osc.connect(g);
+          g.connect(this.typingBus);
+          osc.start(now);
+          osc.stop(now + 0.17);
+        }
+
+        playBackspace() {
+          this.ensureContext();
+          if (!this.ctx || !saveData.settings.typingSfxEnabled) return;
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const g = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(340, now);
+          osc.frequency.exponentialRampToValueAtTime(210, now + 0.08);
+          g.gain.setValueAtTime(0.09, now);
+          g.gain.exponentialRampToValueAtTime(0.0001, now + 0.09);
+          osc.connect(g);
+          g.connect(this.typingBus);
+          osc.start(now);
+          osc.stop(now + 0.1);
+        }
+
+        playWordComplete(streak) {
+          this.ensureContext();
+          if (!this.ctx || !saveData.settings.gameSfxEnabled) return;
+          const now = this.ctx.currentTime;
+          const shift = Math.pow(1.02, Math.min(streak, 12));
+          const notes = [523.25, 659.25, 783.99, 1046.50]; // C5-E5-G5-C6
+          notes.forEach((f, idx) => {
+            this.playOsc(f * shift, now + idx * 0.055, 0.34, 'sine', 0.13, this.sfxBus);
+          });
+        }
+
+        playMilestone() {
+          this.ensureContext();
+          if (!this.ctx || !saveData.settings.gameSfxEnabled) return;
+          const now = this.ctx.currentTime;
+          [587.33, 739.99, 880.00, 1174.66].forEach((f, i) => {
+            this.playOsc(f, now + i * 0.06, 0.45, 'triangle', 0.12, this.sfxBus, 2600);
+          });
+        }
+
+        playStreakReset() {
+          this.ensureContext();
+          if (!this.ctx || !saveData.settings.gameSfxEnabled) return;
+          const now = this.ctx.currentTime;
+          this.playOsc(246.94, now, 0.18, 'sine', 0.08, this.sfxBus);
+          this.playOsc(196.00, now + 0.08, 0.24, 'sine', 0.08, this.sfxBus);
+        }
+
+        playCountdownTick() {
+          this.ensureContext();
+          if (!this.ctx || !saveData.settings.gameSfxEnabled) return;
+          this.playOsc(880, this.ctx.currentTime, 0.14, 'sine', 0.09, this.sfxBus);
+        }
+
+        playVictoryFanfare() {
+          this.ensureContext();
+          if (!this.ctx || !saveData.settings.gameSfxEnabled) return;
+          const now = this.ctx.currentTime;
+          [523.25, 659.25, 783.99, 1046.50, 1318.51].forEach((f, i) => {
+            this.playOsc(f, now + i * 0.09, 0.65, 'triangle', 0.14, this.sfxBus, 3000);
+          });
+        }
+
+        playTimeoutResolve() {
+          this.ensureContext();
+          if (!this.ctx || !saveData.settings.gameSfxEnabled) return;
+          const now = this.ctx.currentTime;
+          [392.00, 349.23, 329.63, 261.63].forEach((f, i) => {
+            this.playOsc(f, now + i * 0.14, 0.5, 'sine', 0.11, this.sfxBus);
+          });
+        }
+      }
+
+      /* =========================================================================
+         5. GAMEPLAY & UI CONTROLLER
+         ========================================================================= */
+      const canvas = document.getElementById('cosmos-canvas');
+      const scenery = new SunsetSceneryEngine(canvas);
+      const audio = new CelestialAudioEngine();
+
+      // DOM References
+      const topHud = document.getElementById('top-hud');
+      const gameplayArena = document.getElementById('gameplay-arena');
+      const startOverlay = document.getElementById('start-overlay');
+      const lobbyView = document.getElementById('lobby-view');
+      const modeSelectView = document.getElementById('mode-select-view');
+      const settingsOverlay = document.getElementById('settings-overlay');
+      const summaryOverlay = document.getElementById('summary-overlay');
+      const eclipseVignette = document.getElementById('eclipse-vignette');
+
+      const sunRingProgress = document.getElementById('sun-ring-progress');
+      const hudTimerText = document.getElementById('hud-timer-text');
+      const hudStageDot = document.getElementById('hud-stage-dot');
+      const hudStageName = document.getElementById('hud-stage-name');
+      const hudChapterPill = document.getElementById('hud-chapter-pill');
+      const hudStreakVal = document.getElementById('hud-streak-val');
+      const hudLevelVal = document.getElementById('hud-level-val');
+      const hudScoreVal = document.getElementById('hud-score-val');
+
+      const constellationNodes = document.getElementById('constellation-nodes');
+      const clueDefinition = document.getElementById('clue-definition');
+      const wordSlots = document.getElementById('word-slots');
+      const constellationSvg = document.getElementById('constellation-svg');
+      const typoHint = document.getElementById('typo-hint');
+      const glimpseBadge = document.getElementById('glimpse-badge');
+      const skipPenaltyLabel = document.getElementById('skip-penalty-label');
+      const btnPronounce = document.getElementById('btn-pronounce');
+      const milestoneLayer = document.getElementById('milestone-layer');
+      const keyboardContainer = document.getElementById('celestial-keyboard');
+
+      // Application State
+      let screenState = 'LOBBY'; // 'LOBBY' | 'MODE_SELECT' | 'PLAYING' | 'SUMMARY'
+      let selectedMode = 'STARLIGHT';
+      let lobbyAmbientOn = false;
+      let settingsPausedGameplay = false;
+
+      let chapter = 1;
+      let wordIndex = 0;
+      let chapterWords = [];
+      let usedWords = new Set();
+      let currentWordObj = null;
+      let typedLetters = [];
+      let isVerifying = false;
+
+      let timeLeft = 45.0;
+      let maxClock = 45.0;
+      let lastSecondTick = -1;
+      let score = 0;
+      let streak = 0;
+      let bestChapterStreak = 0;
+      let xpEarnedChapter = 0;
+      let revealTimeout = null;
+
+      /* --- Theme & Lobby Updates --- */
+      function applyStageTheme(diffKey) {
+        const cfg = DIFFICULTY_CONFIGS[diffKey];
+        saveData.selectedDifficulty = diffKey;
+        persistSave();
+
+        document.documentElement.style.setProperty('--stage-primary', cfg.primary);
+        document.documentElement.style.setProperty('--stage-secondary', cfg.secondary);
+        document.documentElement.style.setProperty('--stage-glow', cfg.glow);
+        document.documentElement.style.setProperty('--stage-ring', cfg.primary);
+
+        scenery.setTargetEnv(cfg.envIndex);
+        audio.setDifficulty(diffKey);
+
+        // Update Lobby text & accents
+        document.getElementById('lobby-stage-pill').textContent = `Difficulty: ${cfg.label} • ${cfg.name}`;
+        document.getElementById('lobby-description').textContent = cfg.description;
+        const titleAccent = document.getElementById('title-accent');
+        titleAccent.className = `bg-gradient-to-r ${cfg.ctaClasses} bg-clip-text text-transparent`;
+
+        const ctaClassesBase = 'rounded-full font-semibold text-sm sm:text-base text-slate-950 bg-gradient-to-r cursor-pointer transition';
+        document.getElementById('btn-to-modes').className = `mt-2 px-8 py-3.5 hover:scale-[1.03] active:scale-[0.98] ${ctaClassesBase} ${cfg.ctaClasses}`;
+        document.getElementById('btn-begin-journey').className = `w-full py-3.5 hover:scale-[1.01] active:scale-[0.99] ${ctaClassesBase} ${cfg.ctaClasses}`;
+        document.getElementById('btn-save-settings').className = `w-full py-3 hover:scale-[1.01] active:scale-[0.99] ${ctaClassesBase} ${cfg.ctaClasses}`;
+
+        // Ambient label
+        updateLobbyAmbientButton();
+
+        // Highlight active difficulty card
+        document.querySelectorAll('.diff-card').forEach((card) => {
+          const isSel = card.dataset.diff === diffKey;
+          card.style.borderColor = isSel ? cfg.primary : '';
+          card.style.boxShadow = isSel ? `0 0 26px ${cfg.glow}, inset 0 1px 0 rgba(255,248,235,0.18)` : '';
+        });
+
+        // Update Mode Select Stage Badge & Summary
+        document.getElementById('mode-stage-label').textContent = `${cfg.label} • ${cfg.name}`;
+        document.getElementById('mode-stage-dot').className = `w-2 h-2 rounded-full ${cfg.dotClass}`;
+        document.getElementById('mode-stage-summary').textContent = cfg.summary;
+
+        // Profile Pill
+        const diffStats = saveData.difficulties[diffKey];
+        document.getElementById('lobby-profile-pill').textContent =
+          `Level ${saveData.profile.level} • ${cfg.name} Best ${diffStats.highScore} • Streak ${diffStats.bestStreak}`;
+
+        // Active HUD indicators
+        hudStageName.textContent = cfg.name;
+        hudStageDot.className = `w-2 h-2 rounded-full ${cfg.dotClass}`;
+        skipPenaltyLabel.textContent = `-${cfg.skipPenalty.toFixed(1)}s`;
+      }
+
+      function updateLobbyAmbientButton() {
+        const cfg = DIFFICULTY_CONFIGS[saveData.selectedDifficulty];
+        const labelEl = document.getElementById('lobby-ambient-label');
+        const dotEl = document.getElementById('lobby-ambient-dot');
+        if (lobbyAmbientOn) {
+          labelEl.textContent = `${cfg.ambientLabel} On`;
+          dotEl.className = 'w-2.5 h-2.5 rounded-full bg-emerald-300 shadow-[0_0_10px_rgba(110,231,183,0.9)]';
+        } else {
+          labelEl.textContent = `Play ${cfg.ambientLabel}`;
+          dotEl.className = 'w-2.5 h-2.5 rounded-full bg-amber-300/60';
+        }
+      }
+
+      function selectModeCard(modeKey) {
+        selectedMode = modeKey;
+        const cfg = DIFFICULTY_CONFIGS[saveData.selectedDifficulty];
+        document.querySelectorAll('.mode-card').forEach((card) => {
+          const isSel = card.dataset.mode === modeKey;
+          card.style.borderColor = isSel ? cfg.primary : '';
+          card.style.boxShadow = isSel ? `0 0 22px ${cfg.glow}` : '';
+        });
+      }
+
+      function showLobbyStep1() {
+        screenState = 'LOBBY';
+        clearTimeout(revealTimeout);
+        window.speechSynthesis?.cancel();
+        eclipseVignette.classList.remove('active');
+        audio.setTension(false);
+        audio.setStreak(0);
+        audio.setMusicMode(lobbyAmbientOn ? 'LOBBY' : 'SILENT', saveData.selectedDifficulty);
+
+        topHud.classList.add('opacity-0', 'pointer-events-none');
+        gameplayArena.classList.add('opacity-0', 'pointer-events-none');
+        startOverlay.classList.remove('opacity-0', 'pointer-events-none');
+        lobbyView.classList.remove('hidden');
+        modeSelectView.classList.add('hidden');
+        modeSelectView.classList.remove('flex');
+        summaryOverlay.classList.add('hidden');
+        summaryOverlay.classList.remove('flex');
+
+        applyStageTheme(saveData.selectedDifficulty);
+      }
+
+      function showModeSelectStep2() {
+        screenState = 'MODE_SELECT';
+        lobbyView.classList.add('hidden');
+        modeSelectView.classList.remove('hidden');
+        modeSelectView.classList.add('flex');
+        selectModeCard(selectedMode);
+      }
+
+      /* --- Word Selection & Chapter Setup --- */
+      function pickWordForTier(tier) {
+        const pool = WORD_BANK[tier] || WORD_BANK[1];
+        let available = pool.filter((item) => !usedWords.has(item.word));
+        if (available.length === 0) {
+          for (const item of pool) usedWords.delete(item.word);
+          available = pool;
+        }
+        const chosen = available[Math.floor(Math.random() * available.length)];
+        usedWords.add(chosen.word);
+        return chosen;
+      }
+
+      function buildChapterWords(diffKey, chapNum) {
+        const baseCurve = DIFFICULTY_CONFIGS[diffKey].tierCurve;
+        const boost = Math.min(2, Math.floor((chapNum - 1) / 2));
+        return baseCurve.map((tier) => pickWordForTier(Math.min(5, tier + boost)));
+      }
+
+      function beginChapter(chapNum = 1, keepScore = false) {
+        screenState = 'PLAYING';
+        chapter = chapNum;
+        wordIndex = 0;
+        isVerifying = false;
+
+        const cfg = DIFFICULTY_CONFIGS[saveData.selectedDifficulty];
+        maxClock = cfg.initialClock;
+        timeLeft = cfg.initialClock;
+        lastSecondTick = Math.ceil(timeLeft);
+
+        if (!keepScore) {
+          score = 0;
+          streak = 0;
+        }
+        bestChapterStreak = streak;
+        xpEarnedChapter = 0;
+        chapterWords = buildChapterWords(saveData.selectedDifficulty, chapter);
+
+        // Reveal gameplay HUD & Arena
+        startOverlay.classList.add('opacity-0', 'pointer-events-none');
+        summaryOverlay.classList.add('hidden');
+        summaryOverlay.classList.remove('flex');
+        topHud.classList.remove('opacity-0', 'pointer-events-none');
+        gameplayArena.classList.remove('opacity-0', 'pointer-events-none');
+
+        hudChapterPill.textContent = `Chapter ${chapter}`;
+        updateHudStats();
+        updateTimerVisuals();
+        renderProgressPearls();
+
+        audio.setStreak(streak);
+        audio.setTension(false);
+        audio.setMusicMode('GAMEPLAY', saveData.selectedDifficulty);
+
+        loadWord(0);
+      }
+
+      function renderProgressPearls() {
+        constellationNodes.innerHTML = '';
+        for (let i = 0; i < WORDS_PER_CHAPTER; i++) {
+          const pearl = document.createElement('span');
+          pearl.className = 'lantern-pearl';
+          if (i < wordIndex) pearl.classList.add('pearl-done');
+          else if (i === wordIndex) pearl.classList.add('pearl-current');
+          constellationNodes.appendChild(pearl);
+        }
+      }
+
+      function loadWord(idx) {
+        clearTimeout(revealTimeout);
+        currentWordObj = chapterWords[idx];
+        typedLetters = [];
+        isVerifying = false;
+        typoHint.style.opacity = '0';
+        glimpseBadge.classList.add('hidden');
+
+        clueDefinition.textContent = currentWordObj.def;
+        renderProgressPearls();
+        renderWordSlots();
+
+        // Mode-specific reveal & voice
+        if (selectedMode === 'STARLIGHT') {
+          glimpseBadge.textContent = 'Opening Lantern';
+          glimpseBadge.classList.remove('hidden');
+          const firstTile = wordSlots.children[0];
+          if (firstTile) {
+            firstTile.textContent = currentWordObj.word[0].toUpperCase();
+            firstTile.classList.add('tile-glimpse');
+          }
+          revealTimeout = setTimeout(() => {
+            glimpseBadge.classList.add('hidden');
+            renderWordSlots();
+          }, 750);
+          speakWord(currentWordObj.word);
+        } else if (selectedMode === 'ECHO') {
+          speakWord(currentWordObj.word);
+        } else if (selectedMode === 'FLASH') {
+          glimpseBadge.textContent = 'Sunbeam Glimpse';
+          glimpseBadge.classList.remove('hidden');
+          Array.from(wordSlots.children).forEach((tile, i) => {
+            tile.textContent = currentWordObj.word[i].toUpperCase();
+            tile.classList.add('tile-glimpse');
+          });
+          revealTimeout = setTimeout(() => {
+            glimpseBadge.classList.add('hidden');
+            renderWordSlots();
+          }, 1100);
+        }
+      }
+
+      function renderWordSlots() {
+        const target = currentWordObj.word.toUpperCase();
+        wordSlots.innerHTML = '';
+        for (let i = 0; i < target.length; i++) {
+          const tile = document.createElement('div');
+          tile.className = 'star-tile';
+          const ch = typedLetters[i];
+          if (ch) {
+            tile.textContent = ch;
+            if (ch === target[i]) {
+              tile.classList.add('tile-correct');
+            } else {
+              tile.classList.add('tile-error');
+            }
+          } else if (i === typedLetters.length && !isVerifying) {
+            tile.classList.add('tile-active');
+          }
+          wordSlots.appendChild(tile);
+        }
+
+        // Typo hint only when all slots filled and at least one misplaced letter
+        if (typedLetters.length === target.length && typedLetters.join('') !== target) {
+          typoHint.style.opacity = '1';
+        } else {
+          typoHint.style.opacity = '0';
+        }
+
+        requestAnimationFrame(drawConstellationLines);
+      }
+
+      function drawConstellationLines() {
+        constellationSvg.innerHTML = '';
+        if (!currentWordObj) return;
+        const target = currentWordObj.word.toUpperCase();
+        const tiles = Array.from(wordSlots.children);
+        const wrapperRect = wordSlots.getBoundingClientRect();
+        if (wrapperRect.width === 0) return;
+
+        for (let i = 0; i < tiles.length - 1; i++) {
+          const c1 = typedLetters[i];
+          const c2 = typedLetters[i + 1];
+          if (c1 && c2 && c1 === target[i] && c2 === target[i + 1]) {
+            const r1 = tiles[i].getBoundingClientRect();
+            const r2 = tiles[i + 1].getBoundingClientRect();
+            const x1 = r1.left - wrapperRect.left + r1.width / 2;
+            const y1 = r1.top - wrapperRect.top + r1.height / 2;
+            const x2 = r2.left - wrapperRect.left + r2.width / 2;
+            const y2 = r2.top - wrapperRect.top + r2.height / 2;
+
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', x1.toFixed(1));
+            line.setAttribute('y1', y1.toFixed(1));
+            line.setAttribute('x2', x2.toFixed(1));
+            line.setAttribute('y2', y2.toFixed(1));
+            line.setAttribute('class', 'constellation-line');
+            constellationSvg.appendChild(line);
+          }
+        }
+      }
+
+      function speakWord(word) {
+        if (!('speechSynthesis' in window) || !word) return;
+        try {
+          window.speechSynthesis.cancel();
+          const utter = new SpeechSynthesisUtterance(word);
+          utter.rate = 0.92;
+          utter.pitch = 1.02;
+          utter.onstart = () => btnPronounce.classList.add('is-speaking');
+          utter.onend = () => btnPronounce.classList.remove('is-speaking');
+          utter.onerror = () => btnPronounce.classList.remove('is-speaking');
+          window.speechSynthesis.speak(utter);
+        } catch {
+          btnPronounce.classList.remove('is-speaking');
+        }
+      }
+
+      /* --- Typing & Word Completion --- */
+      function handleLetterInput(letter) {
+        if (screenState !== 'PLAYING' || isVerifying || !currentWordObj) return;
+        // Cancel glimpse if user starts typing immediately
+        if (!glimpseBadge.classList.contains('hidden')) {
+          clearTimeout(revealTimeout);
+          glimpseBadge.classList.add('hidden');
+        }
+
+        const target = currentWordObj.word.toUpperCase();
+        if (typedLetters.length >= target.length) return;
+
+        const upper = letter.toUpperCase();
+        const idx = typedLetters.length;
+        typedLetters.push(upper);
+
+        if (upper === target[idx]) {
+          audio.playKeyCorrect(idx);
+        } else {
+          audio.playKeyError();
+        }
+
+        renderWordSlots();
+
+        if (typedLetters.length === target.length && typedLetters.join('') === target) {
+          completeCurrentWord();
+        }
+      }
+
+      function handleBackspace() {
+        if (screenState !== 'PLAYING' || isVerifying || typedLetters.length === 0) return;
+        typedLetters.pop();
+        audio.playBackspace();
+        renderWordSlots();
+      }
+
+      function handleSkipWord() {
+        if (screenState !== 'PLAYING' || isVerifying || !currentWordObj) return;
+        const cfg = DIFFICULTY_CONFIGS[saveData.selectedDifficulty];
+        timeLeft = Math.max(0, timeLeft - cfg.skipPenalty);
+        if (streak > 0) audio.playStreakReset();
+        streak = 0;
+        applyStreakGlow();
+        audio.setStreak(0);
+        updateHudStats();
+        updateTimerVisuals();
+
+        if (timeLeft <= 0) {
+          finishChapter(false);
+          return;
+        }
+
+        // Replace skipped word with a fresh word at current tier
+        const tier = cfg.tierCurve[wordIndex] || 3;
+        chapterWords[wordIndex] = pickWordForTier(tier);
+        loadWord(wordIndex);
+      }
+
+      function completeCurrentWord() {
+        isVerifying = true;
+        const cfg = DIFFICULTY_CONFIGS[saveData.selectedDifficulty];
+
+        streak += 1;
+        if (streak > bestChapterStreak) bestChapterStreak = streak;
+
+        // Calculate score & XP
+        let mult = 1.0;
+        for (const m of STREAK_MILESTONES) {
+          if (streak >= m.streak) mult = m.mult;
+        }
+        const wordPoints = Math.round(currentWordObj.word.length * 25 * cfg.xpMultiplier * mult);
+        const wordXp = Math.round(wordPoints * 0.4);
+        score += wordPoints;
+        xpEarnedChapter += wordXp;
+
+        // Add time bonus (capped smoothly at maxClock + 15s)
+        timeLeft = Math.min(maxClock + 15, timeLeft + cfg.solveBonus);
+
+        // Update profile stats
+        saveData.profile.wordsSolved += 1;
+        saveData.difficulties[cfg.key].wordsSolved += 1;
+
+        applyStreakGlow();
+        audio.setStreak(streak);
+        audio.playWordComplete(streak);
+        scenery.emitPulseRing();
+
+        // Milestone check
+        const hitMilestone = STREAK_MILESTONES.find((m) => m.streak === streak);
+        if (hitMilestone) {
+          showMilestoneBanner(hitMilestone.label);
+          audio.playMilestone();
+          scenery.emitPulseRing();
+        }
+
+        updateHudStats();
+        updateTimerVisuals();
+
+        // Staggered 26ms-per-letter verification wave
+        const tiles = Array.from(wordSlots.children);
+        tiles.forEach((tile, i) => {
+          setTimeout(() => {
+            tile.classList.remove('tile-correct', 'tile-error', 'tile-active');
+            tile.classList.add('tile-verified');
+          }, i * 26);
+        });
+
+        setTimeout(() => {
+          wordIndex += 1;
+          if (wordIndex >= WORDS_PER_CHAPTER) {
+            finishChapter(true);
+          } else {
+            loadWord(wordIndex);
+          }
+        }, 420);
+      }
+
+      function applyStreakGlow() {
+        let glow = '22px';
+        for (const m of STREAK_MILESTONES) {
+          if (streak >= m.streak) glow = m.glow;
+        }
+        document.documentElement.style.setProperty('--glow-radius', glow);
+      }
+
+      function showMilestoneBanner(text) {
+        const el = document.createElement('div');
+        el.className = 'milestone-toast twilight-pill rounded-full px-5 py-2 font-display font-bold text-sm sm:text-base tracking-wide text-amber-100 border-amber-300/45 shadow-[0_0_24px_var(--stage-glow)] whitespace-nowrap';
+        el.textContent = text;
+        milestoneLayer.appendChild(el);
+        setTimeout(() => el.remove(), 2150);
+      }
+
+      function updateHudStats() {
+        hudStreakVal.textContent = streak;
+        hudLevelVal.textContent = `Lvl ${saveData.profile.level}`;
+        hudScoreVal.textContent = score.toLocaleString();
+      }
+
+      function updateTimerVisuals() {
+        const cfg = DIFFICULTY_CONFIGS[saveData.selectedDifficulty];
+        const ratio = clamp(timeLeft / maxClock, 0, 1);
+        const offset = SUN_RING_CIRCUMFERENCE * (1 - ratio);
+        sunRingProgress.style.strokeDashoffset = offset.toFixed(2);
+        hudTimerText.textContent = Math.max(0, Math.ceil(timeLeft));
+
+        if (timeLeft < 5.0) {
+          sunRingProgress.style.stroke = '#fb7185';
+          eclipseVignette.classList.add('active');
+          audio.setTension(true);
+        } else if (timeLeft < 15.0) {
+          sunRingProgress.style.stroke = '#fbbf24';
+          eclipseVignette.classList.remove('active');
+          audio.setTension(false);
+        } else {
+          sunRingProgress.style.stroke = cfg.primary;
+          eclipseVignette.classList.remove('active');
+          audio.setTension(false);
+        }
+      }
+
+      function finishChapter(victory) {
+        screenState = 'SUMMARY';
+        isVerifying = true;
+        clearTimeout(revealTimeout);
+        eclipseVignette.classList.remove('active');
+        audio.setTension(false);
+
+        const cfg = DIFFICULTY_CONFIGS[saveData.selectedDifficulty];
+        const diffSave = saveData.difficulties[cfg.key];
+
+        if (victory) {
+          const timeBonusXp = Math.round(timeLeft * 12 * cfg.xpMultiplier);
+          xpEarnedChapter += timeBonusXp;
+          saveData.profile.constellationsCleared += 1;
+          diffSave.completed = true;
+          diffSave.runsCleared += 1;
+          audio.playVictoryFanfare();
+        } else {
+          audio.playTimeoutResolve();
+        }
+
+        // Persist XP, Level & High Scores
+        saveData.profile.xp += xpEarnedChapter;
+        saveData.profile.level = Math.max(1, Math.floor(saveData.profile.xp / 600) + 1);
+        if (score > saveData.profile.highScore) saveData.profile.highScore = score;
+        if (bestChapterStreak > saveData.profile.bestStreak) saveData.profile.bestStreak = bestChapterStreak;
+        if (score > diffSave.highScore) diffSave.highScore = score;
+        if (bestChapterStreak > diffSave.bestStreak) diffSave.bestStreak = bestChapterStreak;
+        persistSave();
+
+        // Populate Summary Modal
+        document.getElementById('summary-badge').textContent = victory ? `Chapter ${chapter} Complete` : 'Dusk Settled';
+        document.getElementById('summary-heading').textContent = victory ? 'Ridge Illuminated' : 'Lanterns Dimmed';
+        document.getElementById('sum-score').textContent = score.toLocaleString();
+        document.getElementById('sum-streak').textContent = bestChapterStreak;
+        document.getElementById('sum-xp').textContent = `+${xpEarnedChapter}`;
+
+        const missedBox = document.getElementById('summary-missed-box');
+        if (!victory && currentWordObj) {
+          missedBox.classList.remove('hidden');
+          document.getElementById('summary-missed-word').textContent = currentWordObj.word.toUpperCase();
+          document.getElementById('summary-missed-def').textContent = currentWordObj.def;
+        } else {
+          missedBox.classList.add('hidden');
+        }
+
+        const btnNext = document.getElementById('btn-next-chapter');
+        btnNext.classList.toggle('hidden', !victory);
+        btnNext.className = `w-full rounded-full py-3.5 font-semibold text-sm sm:text-base text-slate-950 bg-gradient-to-r ${cfg.ctaClasses} cursor-pointer hover:scale-[1.01] transition ${victory ? '' : 'hidden'}`;
+
+        summaryOverlay.classList.remove('hidden');
+        summaryOverlay.classList.add('flex');
+      }
+
+      /* --- On-Screen 3-Row Pill Keyboard --- */
+      function buildKeyboard() {
+        const rows = [
+          ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+          ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+          ['ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'BACK']
+        ];
+        keyboardContainer.innerHTML = '';
+        rows.forEach((row) => {
+          const rowEl = document.createElement('div');
+          rowEl.className = 'flex items-center justify-center gap-1 sm:gap-1.5 w-full';
+          row.forEach((key) => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.dataset.key = key;
+            btn.className = 'celestial-key';
+            if (key === 'BACK') {
+              btn.textContent = '⌫';
+              btn.classList.add('key-wide');
+            } else if (key === 'ENTER') {
+              btn.textContent = '↵';
+              btn.classList.add('key-wide');
+            } else {
+              btn.textContent = key;
+            }
+            btn.addEventListener('pointerdown', (e) => {
+              e.preventDefault();
+              flashVirtualKey(key);
+              if (key === 'BACK') handleBackspace();
+              else if (key === 'ENTER') {
+                if (currentWordObj && typedLetters.join('') === currentWordObj.word.toUpperCase() && !isVerifying) {
+                  completeCurrentWord();
+                }
+              } else {
+                handleLetterInput(key);
+              }
+            });
+            rowEl.appendChild(btn);
+          });
+          keyboardContainer.appendChild(rowEl);
+        });
+      }
+
+      function flashVirtualKey(keyName) {
+        const btn = keyboardContainer.querySelector(`[data-key="${keyName}"]`);
+        if (!btn) return;
+        btn.classList.add('key-pressed');
+        setTimeout(() => btn.classList.remove('key-pressed'), 120);
+      }
+
+      /* --- Settings Modal Wiring --- */
+      function openSettings() {
+        settingsPausedGameplay = (screenState === 'PLAYING');
+        const s = saveData.settings;
+        document.getElementById('rng-master-vol').value = Math.round(s.masterVol * 100);
+        document.getElementById('val-master-vol').textContent = `${Math.round(s.masterVol * 100)}%`;
+        document.getElementById('rng-music-vol').value = Math.round(s.musicVol * 100);
+        document.getElementById('val-music-vol').textContent = `${Math.round(s.musicVol * 100)}%`;
+        document.getElementById('rng-sfx-vol').value = Math.round(s.sfxVol * 100);
+        document.getElementById('val-sfx-vol').textContent = `${Math.round(s.sfxVol * 100)}%`;
+        document.getElementById('chk-music-enabled').checked = s.musicEnabled;
+        document.getElementById('chk-typing-sfx').checked = s.typingSfxEnabled;
+        document.getElementById('chk-game-sfx').checked = s.gameSfxEnabled;
+        document.getElementById('chk-reduce-motion').checked = s.reducedEffects;
+
+        settingsOverlay.classList.remove('hidden');
+        settingsOverlay.classList.add('flex');
+      }
+
+      function closeSettings() {
+        settingsPausedGameplay = false;
+        settingsOverlay.classList.add('hidden');
+        settingsOverlay.classList.remove('flex');
+        persistSave();
+      }
+
+      document.getElementById('rng-master-vol').addEventListener('input', (e) => {
+        saveData.settings.masterVol = e.target.value / 100;
+        document.getElementById('val-master-vol').textContent = `${e.target.value}%`;
+        audio.applySettings();
+      });
+      document.getElementById('rng-music-vol').addEventListener('input', (e) => {
+        saveData.settings.musicVol = e.target.value / 100;
+        document.getElementById('val-music-vol').textContent = `${e.target.value}%`;
+        audio.applySettings();
+      });
+      document.getElementById('rng-sfx-vol').addEventListener('input', (e) => {
+        saveData.settings.sfxVol = e.target.value / 100;
+        document.getElementById('val-sfx-vol').textContent = `${e.target.value}%`;
+        audio.applySettings();
+      });
+      document.getElementById('chk-music-enabled').addEventListener('change', (e) => {
+        saveData.settings.musicEnabled = e.target.checked;
+        audio.applySettings();
+      });
+      document.getElementById('chk-typing-sfx').addEventListener('change', (e) => {
+        saveData.settings.typingSfxEnabled = e.target.checked;
+        audio.applySettings();
+      });
+      document.getElementById('chk-game-sfx').addEventListener('change', (e) => {
+        saveData.settings.gameSfxEnabled = e.target.checked;
+        audio.applySettings();
+      });
+      document.getElementById('chk-reduce-motion').addEventListener('change', (e) => {
+        saveData.settings.reducedEffects = e.target.checked;
+        document.body.classList.toggle('reduced-motion', e.target.checked);
+        scenery.setReducedMotion(e.target.checked);
+      });
+
+      /* --- Event Listeners --- */
+      document.querySelectorAll('.diff-card').forEach((card) => {
+        card.addEventListener('click', () => {
+          applyStageTheme(card.dataset.diff);
+        });
+      });
+
+      document.querySelectorAll('.mode-card').forEach((card) => {
+        card.addEventListener('click', () => selectModeCard(card.dataset.mode));
+      });
+
+      document.getElementById('btn-lobby-ambient').addEventListener('click', () => {
+        lobbyAmbientOn = !lobbyAmbientOn;
+        updateLobbyAmbientButton();
+        audio.setMusicMode(lobbyAmbientOn ? 'LOBBY' : 'SILENT', saveData.selectedDifficulty);
+      });
+
+      document.getElementById('btn-to-modes').addEventListener('click', showModeSelectStep2);
+      document.getElementById('btn-back-lobby').addEventListener('click', showLobbyStep1);
+      document.getElementById('btn-begin-journey').addEventListener('click', () => beginChapter(1, false));
+
+      document.getElementById('btn-hud-home').addEventListener('click', showLobbyStep1);
+      document.getElementById('btn-lobby-settings').addEventListener('click', openSettings);
+      document.getElementById('btn-hud-settings').addEventListener('click', openSettings);
+      document.getElementById('btn-close-settings').addEventListener('click', closeSettings);
+      document.getElementById('btn-save-settings').addEventListener('click', closeSettings);
+
+      document.getElementById('btn-hud-mute').addEventListener('click', () => {
+        audio.ensureContext();
+        const isMuted = audio.toggleMute();
+        document.getElementById('icon-sound-on').classList.toggle('hidden', isMuted);
+        document.getElementById('icon-sound-off').classList.toggle('hidden', !isMuted);
+      });
+
+      btnPronounce.addEventListener('click', () => {
+        if (currentWordObj) speakWord(currentWordObj.word);
+      });
+      document.getElementById('btn-skip').addEventListener('click', handleSkipWord);
+
+      document.getElementById('btn-next-chapter').addEventListener('click', () => beginChapter(chapter + 1, true));
+      document.getElementById('btn-replay-stage').addEventListener('click', () => beginChapter(1, false));
+      document.getElementById('btn-summary-lobby').addEventListener('click', showLobbyStep1);
+
+      window.addEventListener('resize', () => {
+        if (screenState === 'PLAYING') requestAnimationFrame(drawConstellationLines);
+      });
+
+      window.addEventListener('keydown', (e) => {
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+        // Settings open: Escape closes
+        if (!settingsOverlay.classList.contains('hidden')) {
+          if (e.key === 'Escape') closeSettings();
+          return;
+        }
+
+        if (screenState === 'LOBBY') {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            showModeSelectStep2();
+          }
+          return;
+        }
+
+        if (screenState === 'MODE_SELECT') {
+          if (e.key === 'Escape') {
+            e.preventDefault();
+            showLobbyStep1();
+          } else if (e.key === 'Enter') {
+            e.preventDefault();
+            beginChapter(1, false);
+          }
+          return;
+        }
+
+        if (screenState === 'PLAYING') {
+          if (e.key === 'Tab') {
+            e.preventDefault();
+            if (currentWordObj) speakWord(currentWordObj.word);
+            return;
+          }
+          if (e.key === 'Escape') {
+            e.preventDefault();
+            handleSkipWord();
+            return;
+          }
+          if (e.key === 'Backspace') {
+            e.preventDefault();
+            flashVirtualKey('BACK');
+            handleBackspace();
+            return;
+          }
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            flashVirtualKey('ENTER');
+            if (currentWordObj && typedLetters.join('') === currentWordObj.word.toUpperCase() && !isVerifying) {
+              completeCurrentWord();
+            }
+            return;
+          }
+          if (/^[a-zA-Z]$/.test(e.key)) {
+            e.preventDefault();
+            const upper = e.key.toUpperCase();
+            flashVirtualKey(upper);
+            handleLetterInput(upper);
+          }
+        }
+      });
+
+      /* --- Main Monotonic Animation & Timer Loop --- */
+      let prevTimestamp = performance.now();
+      function mainLoop(now) {
+        const dt = Math.min(0.1, Math.max(0, (now - prevTimestamp) / 1000));
+        prevTimestamp = now;
+
+        scenery.update(dt);
+        scenery.render();
+
+        if (screenState === 'PLAYING' && !settingsPausedGameplay && !isVerifying) {
+          timeLeft = Math.max(0, timeLeft - dt);
+          const ceilSec = Math.ceil(timeLeft);
+          if (timeLeft > 0 && timeLeft < 5.0 && ceilSec < lastSecondTick) {
+            lastSecondTick = ceilSec;
+            if (ceilSec >= 1 && ceilSec <= 4) {
+              audio.playCountdownTick();
+            }
+          } else if (timeLeft >= 5.0) {
+            lastSecondTick = ceilSec;
+          }
+          updateTimerVisuals();
+          if (timeLeft <= 0) {
+            finishChapter(false);
+          }
+        }
+
+        requestAnimationFrame(mainLoop);
+      }
+
+      /* --- Boot --- */
+      if (saveData.settings.reducedEffects) {
+        document.body.classList.add('reduced-motion');
+      }
+      buildKeyboard();
+      applyStageTheme(saveData.selectedDifficulty);
+      showLobbyStep1();
+      requestAnimationFrame(mainLoop);
+    })();
+  </script>
+</body>
+</html>

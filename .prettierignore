@@ -1,0 +1,12 @@
+node_modules
+dist
+coverage
+reference
+starspell-agent-pack
+starspell.html
+*.tsbuildinfo
+*.md
+pnpm-lock.yaml
+packages/shared/src/data/original-words.json
+test-results
+playwright-report

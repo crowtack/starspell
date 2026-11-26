@@ -1,0 +1,662 @@
+[
+  {
+    "id": "en-canyon",
+    "word": "canyon",
+    "tier": 1,
+    "definition": "A deep sunlit gorge carved between steep mountain walls."
+  },
+  {
+    "id": "en-lantern",
+    "word": "lantern",
+    "tier": 1,
+    "definition": "A glowing glass lamp carried to light a twilight trail."
+  },
+  {
+    "id": "en-meadow",
+    "word": "meadow",
+    "tier": 1,
+    "definition": "An open alpine clearing carpeted in wildflowers and soft grass."
+  },
+  {
+    "id": "en-summit",
+    "word": "summit",
+    "tier": 1,
+    "definition": "The highest wind-swept crest of a towering mountain peak."
+  },
+  {
+    "id": "en-breeze",
+    "word": "breeze",
+    "tier": 1,
+    "definition": "A gentle current of warm mountain air drifting through pines."
+  },
+  {
+    "id": "en-stream",
+    "word": "stream",
+    "tier": 1,
+    "definition": "A narrow ribbon of clear snowmelt winding down the valley."
+  },
+  {
+    "id": "en-pebble",
+    "word": "pebble",
+    "tier": 1,
+    "definition": "A smooth river stone rounded by centuries of rushing water."
+  },
+  {
+    "id": "en-ember",
+    "word": "ember",
+    "tier": 1,
+    "definition": "A tiny glowing coal resting quietly inside a fading campfire."
+  },
+  {
+    "id": "en-forest",
+    "word": "forest",
+    "tier": 1,
+    "definition": "A vast woodland of evergreens blanketing the canyon slopes."
+  },
+  {
+    "id": "en-shadow",
+    "word": "shadow",
+    "tier": 1,
+    "definition": "A cool dark shape cast across stone by the setting sun."
+  },
+  {
+    "id": "en-timber",
+    "word": "timber",
+    "tier": 1,
+    "definition": "Tall weathered pine trees standing sentry along the ridge."
+  },
+  {
+    "id": "en-beacon",
+    "word": "beacon",
+    "tier": 1,
+    "definition": "A distant watchtower light guiding wanderers home at dusk."
+  },
+  {
+    "id": "en-ridge",
+    "word": "ridge",
+    "tier": 1,
+    "definition": "A narrow crest of rock stretching cleanly between two peaks."
+  },
+  {
+    "id": "en-trail",
+    "word": "trail",
+    "tier": 1,
+    "definition": "A winding dirt footpath etched into the hillside by hikers."
+  },
+  {
+    "id": "en-spark",
+    "word": "spark",
+    "tier": 1,
+    "definition": "A fleeting speck of bright fire rising into the evening air."
+  },
+  {
+    "id": "en-valley",
+    "word": "valley",
+    "tier": 1,
+    "definition": "A peaceful low basin cradled between high mountain ranges."
+  },
+  {
+    "id": "en-ripple",
+    "word": "ripple",
+    "tier": 1,
+    "definition": "A delicate ring moving smoothly across still river water."
+  },
+  {
+    "id": "en-sunset",
+    "word": "sunset",
+    "tier": 1,
+    "definition": "The daily sinking of the sun in ribbons of gold and apricot."
+  },
+  {
+    "id": "en-cloud",
+    "word": "cloud",
+    "tier": 1,
+    "definition": "A drifting bank of soft mist illuminated along its sunlit rim."
+  },
+  {
+    "id": "en-cliff",
+    "word": "cliff",
+    "tier": 1,
+    "definition": "A sheer vertical face of ancient stone overlooking the gorge."
+  },
+  {
+    "id": "en-cabin",
+    "word": "cabin",
+    "tier": 1,
+    "definition": "A cozy wooden shelter perched high above the treeline."
+  },
+  {
+    "id": "en-cedar",
+    "word": "cedar",
+    "tier": 1,
+    "definition": "An aromatic evergreen tree thriving along rocky canyon ledges."
+  },
+  {
+    "id": "en-horizon",
+    "word": "horizon",
+    "tier": 2,
+    "definition": "The distant seam where canyon peaks dissolve into the sky."
+  },
+  {
+    "id": "en-twilight",
+    "word": "twilight",
+    "tier": 2,
+    "definition": "The hushed blue hour suspended between sunset and starlight."
+  },
+  {
+    "id": "en-cascade",
+    "word": "cascade",
+    "tier": 2,
+    "definition": "White water tumbling gracefully down stepped granite ledges."
+  },
+  {
+    "id": "en-compass",
+    "word": "compass",
+    "tier": 2,
+    "definition": "A pocket instrument whose needle always seeks the north."
+  },
+  {
+    "id": "en-glacier",
+    "word": "glacier",
+    "tier": 2,
+    "definition": "A slow river of ancient blue ice resting in high alpine bowls."
+  },
+  {
+    "id": "en-overlook",
+    "word": "overlook",
+    "tier": 2,
+    "definition": "A high rocky promontory offering an unbroken view of the valley."
+  },
+  {
+    "id": "en-wildflower",
+    "word": "wildflower",
+    "tier": 2,
+    "definition": "A resilient blossom blooming untamed beside mountain paths."
+  },
+  {
+    "id": "en-granite",
+    "word": "granite",
+    "tier": 2,
+    "definition": "Hard speckled stone sculpted into sharp cliffs by wind and frost."
+  },
+  {
+    "id": "en-starlight",
+    "word": "starlight",
+    "tier": 2,
+    "definition": "Faint silvery radiance arriving from distant suns overhead."
+  },
+  {
+    "id": "en-campfire",
+    "word": "campfire",
+    "tier": 2,
+    "definition": "A crackling circle of warmth sending gentle smoke into the pines."
+  },
+  {
+    "id": "en-backpack",
+    "word": "backpack",
+    "tier": 2,
+    "definition": "A canvas pack strapped securely for long ridge-line journeys."
+  },
+  {
+    "id": "en-crescent",
+    "word": "crescent",
+    "tier": 2,
+    "definition": "A slender silver arc of moon hanging in the evening sky."
+  },
+  {
+    "id": "en-firefly",
+    "word": "firefly",
+    "tier": 2,
+    "definition": "A summer beetle blinking golden signals above dark meadow grass."
+  },
+  {
+    "id": "en-whisper",
+    "word": "whisper",
+    "tier": 2,
+    "definition": "A soft rustle of wind passing quietly through pine needles."
+  },
+  {
+    "id": "en-foothill",
+    "word": "foothill",
+    "tier": 2,
+    "definition": "A lower rounded slope standing before the towering main peaks."
+  },
+  {
+    "id": "en-treeline",
+    "word": "treeline",
+    "tier": 2,
+    "definition": "The high altitude boundary beyond which tall evergreens cease."
+  },
+  {
+    "id": "en-wanderer",
+    "word": "wanderer",
+    "tier": 2,
+    "definition": "A solitary traveler drawn onward by distant mountain ridges."
+  },
+  {
+    "id": "en-duskfall",
+    "word": "duskfall",
+    "tier": 2,
+    "definition": "The quiet moment when amber daylight surrenders to indigo."
+  },
+  {
+    "id": "en-pinecone",
+    "word": "pinecone",
+    "tier": 2,
+    "definition": "A woody seed vessel resting softly upon the forest floor."
+  },
+  {
+    "id": "en-moonbeam",
+    "word": "moonbeam",
+    "tier": 2,
+    "definition": "A pale shaft of nocturnal light grazing the canyon stream."
+  },
+  {
+    "id": "en-outcrop",
+    "word": "outcrop",
+    "tier": 2,
+    "definition": "A jagged shelf of bedrock jutting out from a grassy slope."
+  },
+  {
+    "id": "en-skyline",
+    "word": "skyline",
+    "tier": 2,
+    "definition": "The chiseled silhouette of peaks etched against the heavens."
+  },
+  {
+    "id": "en-observatory",
+    "word": "observatory",
+    "tier": 3,
+    "definition": "A silver-domed sanctuary built on high ground to study stars."
+  },
+  {
+    "id": "en-silhouette",
+    "word": "silhouette",
+    "tier": 3,
+    "definition": "A crisp dark outline framed against a luminous twilight sky."
+  },
+  {
+    "id": "en-constellation",
+    "word": "constellation",
+    "tier": 3,
+    "definition": "An ancient pattern of stars linked together by imagination."
+  },
+  {
+    "id": "en-wilderness",
+    "word": "wilderness",
+    "tier": 3,
+    "definition": "Untamed highland country far beyond paved roads and cities."
+  },
+  {
+    "id": "en-afterglow",
+    "word": "afterglow",
+    "tier": 3,
+    "definition": "Warm lingering rose and gold light remaining after sundown."
+  },
+  {
+    "id": "en-alpenglow",
+    "word": "alpenglow",
+    "tier": 3,
+    "definition": "Rosy light kissing the highest snowy crests as dusk deepens."
+  },
+  {
+    "id": "en-solitude",
+    "word": "solitude",
+    "tier": 3,
+    "definition": "A restorative stillness found alone atop a quiet overlook."
+  },
+  {
+    "id": "en-luminous",
+    "word": "luminous",
+    "tier": 3,
+    "definition": "Radiating a soft steady light through gathering evening mist."
+  },
+  {
+    "id": "en-precipice",
+    "word": "precipice",
+    "tier": 3,
+    "definition": "A dizzying vertical drop descending straight into the gorge."
+  },
+  {
+    "id": "en-elevation",
+    "word": "elevation",
+    "tier": 3,
+    "definition": "Vertical height measured upward from sea level to the summit."
+  },
+  {
+    "id": "en-panorama",
+    "word": "panorama",
+    "tier": 3,
+    "definition": "A sweeping unbroken vista spanning from one ridge to the next."
+  },
+  {
+    "id": "en-astronomy",
+    "word": "astronomy",
+    "tier": 3,
+    "definition": "The patient science of charting moons, comets, and far suns."
+  },
+  {
+    "id": "en-evergreen",
+    "word": "evergreen",
+    "tier": 3,
+    "definition": "A sturdy mountain conifer holding its needles through winter."
+  },
+  {
+    "id": "en-sandstone",
+    "word": "sandstone",
+    "tier": 3,
+    "definition": "Layered golden rock tinted warm ochre by ancient desert winds."
+  },
+  {
+    "id": "en-nocturnal",
+    "word": "nocturnal",
+    "tier": 3,
+    "definition": "Awakening softly once shadows lengthen and stars appear."
+  },
+  {
+    "id": "en-zenith",
+    "word": "zenith",
+    "tier": 3,
+    "definition": "The highest point of the sky directly above a canyon watcher."
+  },
+  {
+    "id": "en-equinox",
+    "word": "equinox",
+    "tier": 3,
+    "definition": "The seasonal turning point when day and night balance evenly."
+  },
+  {
+    "id": "en-resonance",
+    "word": "resonance",
+    "tier": 3,
+    "definition": "A rich echoing tone lingering gently between sheer rock walls."
+  },
+  {
+    "id": "en-serenade",
+    "word": "serenade",
+    "tier": 3,
+    "definition": "A calm evening melody carried upward on warm canyon air."
+  },
+  {
+    "id": "en-traverse",
+    "word": "traverse",
+    "tier": 3,
+    "definition": "To cross steadily from one mountain shoulder to the next."
+  },
+  {
+    "id": "en-headland",
+    "word": "headland",
+    "tier": 3,
+    "definition": "A jutting stone bluff standing bold above the winding valley."
+  },
+  {
+    "id": "en-windward",
+    "word": "windward",
+    "tier": 3,
+    "definition": "The exposed side of a mountain ridge facing incoming gusts."
+  },
+  {
+    "id": "en-ephemeral",
+    "word": "ephemeral",
+    "tier": 4,
+    "definition": "Fleeting and delicate, like cloud rims blushing gold at sunset."
+  },
+  {
+    "id": "en-vespers",
+    "word": "vespers",
+    "tier": 4,
+    "definition": "Quiet evening songs drifting through the pines at nightfall."
+  },
+  {
+    "id": "en-incandescent",
+    "word": "incandescent",
+    "tier": 4,
+    "definition": "Glowing intensely with white-hot ember and molten brilliance."
+  },
+  {
+    "id": "en-penumbra",
+    "word": "penumbra",
+    "tier": 4,
+    "definition": "The soft partial shadow encircling the dark heart of an eclipse."
+  },
+  {
+    "id": "en-halcyon",
+    "word": "halcyon",
+    "tier": 4,
+    "definition": "Golden, unhurried, and serenely calm beneath open skies."
+  },
+  {
+    "id": "en-obsidian",
+    "word": "obsidian",
+    "tier": 4,
+    "definition": "Glossy volcanic stone as dark and sharp as midnight storm rock."
+  },
+  {
+    "id": "en-ethereal",
+    "word": "ethereal",
+    "tier": 4,
+    "definition": "Light and otherworldly, like silver mist drifting over pines."
+  },
+  {
+    "id": "en-celestial",
+    "word": "celestial",
+    "tier": 4,
+    "definition": "Belonging to the star-strewn vault arching high above the ridge."
+  },
+  {
+    "id": "en-labyrinth",
+    "word": "labyrinth",
+    "tier": 4,
+    "definition": "An intricate network of winding gorges and hidden side trails."
+  },
+  {
+    "id": "en-symphony",
+    "word": "symphony",
+    "tier": 4,
+    "definition": "Wind, water, and night insects blending in natural harmony."
+  },
+  {
+    "id": "en-periwinkle",
+    "word": "periwinkle",
+    "tier": 4,
+    "definition": "A cool twilight blue-violet tinting high evening clouds."
+  },
+  {
+    "id": "en-terracotta",
+    "word": "terracotta",
+    "tier": 4,
+    "definition": "Warm baked-earth clay hues glowing along sunlit rock facets."
+  },
+  {
+    "id": "en-gossamer",
+    "word": "gossamer",
+    "tier": 4,
+    "definition": "Delicately translucent, like wispy cirrus streaks high aloft."
+  },
+  {
+    "id": "en-crescendo",
+    "word": "crescendo",
+    "tier": 4,
+    "definition": "A steady swelling of storm thunder rolling across the peaks."
+  },
+  {
+    "id": "en-promontory",
+    "word": "promontory",
+    "tier": 4,
+    "definition": "A dramatic high point of land jutting proudly over a valley."
+  },
+  {
+    "id": "en-vermilion",
+    "word": "vermilion",
+    "tier": 4,
+    "definition": "A vivid fiery crimson-orange hue ringing an eclipsed sun."
+  },
+  {
+    "id": "en-ambrosial",
+    "word": "ambrosial",
+    "tier": 4,
+    "definition": "Sweetly fragrant, like warm cedar resin after a summer rain."
+  },
+  {
+    "id": "en-crystalline",
+    "word": "crystalline",
+    "tier": 4,
+    "definition": "Clear and sharply faceted like high-altitude night air."
+  },
+  {
+    "id": "en-transcend",
+    "word": "transcend",
+    "tier": 4,
+    "definition": "To rise gracefully beyond the quiet limits of the valley floor."
+  },
+  {
+    "id": "en-monolith",
+    "word": "monolith",
+    "tier": 4,
+    "definition": "A single colossal pillar of stone standing timeless in the mist."
+  },
+  {
+    "id": "en-serendipity",
+    "word": "serendipity",
+    "tier": 4,
+    "definition": "Stumbling unexpectedly upon a hidden viewpoint at golden hour."
+  },
+  {
+    "id": "en-reverie",
+    "word": "reverie",
+    "tier": 4,
+    "definition": "A gentle waking daydream inspired by drifting campfire smoke."
+  },
+  {
+    "id": "en-bioluminescence",
+    "word": "bioluminescence",
+    "tier": 5,
+    "definition": "Living light emitted softly in darkness by fireflies or deep creatures."
+  },
+  {
+    "id": "en-quintessential",
+    "word": "quintessential",
+    "tier": 5,
+    "definition": "Representing the purest, most timeless essence of a mountain dusk."
+  },
+  {
+    "id": "en-onomatopoeia",
+    "word": "onomatopoeia",
+    "tier": 5,
+    "definition": "A word whose spoken sound echoes the rush of wind or crackle of fire."
+  },
+  {
+    "id": "en-idiosyncrasy",
+    "word": "idiosyncrasy",
+    "tier": 5,
+    "definition": "A distinctive quirk that gives a hand-built lookout its own soul."
+  },
+  {
+    "id": "en-chrysanthemum",
+    "word": "chrysanthemum",
+    "tier": 5,
+    "definition": "An intricate golden autumn blossom of layered radiating petals."
+  },
+  {
+    "id": "en-chiaroscuro",
+    "word": "chiaroscuro",
+    "tier": 5,
+    "definition": "Bold contrast between sunlit rock planes and deep canyon shadow."
+  },
+  {
+    "id": "en-crepuscular",
+    "word": "crepuscular",
+    "tier": 5,
+    "definition": "Slanted beams of golden light radiating softly at twilight."
+  },
+  {
+    "id": "en-mellifluous",
+    "word": "mellifluous",
+    "tier": 5,
+    "definition": "Smooth and honey-sweet in tone, like chimes on an evening breeze."
+  },
+  {
+    "id": "en-iridescence",
+    "word": "iridescence",
+    "tier": 5,
+    "definition": "Shifting rainbow sheen rippling softly across dusk clouds."
+  },
+  {
+    "id": "en-phosphorescence",
+    "word": "phosphorescence",
+    "tier": 5,
+    "definition": "A lingering pale glow persisting long after light has passed."
+  },
+  {
+    "id": "en-kaleidoscope",
+    "word": "kaleidoscope",
+    "tier": 5,
+    "definition": "Ever-changing mosaics of amber, rose, and indigo across the sky."
+  },
+  {
+    "id": "en-circumference",
+    "word": "circumference",
+    "tier": 5,
+    "definition": "The full circular boundary traced around a glowing sun-ring."
+  },
+  {
+    "id": "en-phantasmagoria",
+    "word": "phantasmagoria",
+    "tier": 5,
+    "definition": "A shifting dreamlike sequence of storm flashes and drifting shadows."
+  },
+  {
+    "id": "en-magnanimous",
+    "word": "magnanimous",
+    "tier": 5,
+    "definition": "Generous and noble in spirit, steady as an ancient mountain."
+  },
+  {
+    "id": "en-soliloquy",
+    "word": "soliloquy",
+    "tier": 5,
+    "definition": "Quiet thoughts spoken aloud to the open canyon and stars."
+  },
+  {
+    "id": "en-effervescent",
+    "word": "effervescent",
+    "tier": 5,
+    "definition": "Sparkling with rising vitality like embers swirling upward."
+  },
+  {
+    "id": "en-equanimity",
+    "word": "equanimity",
+    "tier": 5,
+    "definition": "Calm composure held steady even as the final seconds slip away."
+  },
+  {
+    "id": "en-juxtaposition",
+    "word": "juxtaposition",
+    "tier": 5,
+    "definition": "Placing fiery crimson magma beside cool midnight shadow ridges."
+  },
+  {
+    "id": "en-susurration",
+    "word": "susurration",
+    "tier": 5,
+    "definition": "A hushed whispering murmur of wind threading through tall grass."
+  },
+  {
+    "id": "en-perpendicular",
+    "word": "perpendicular",
+    "tier": 5,
+    "definition": "Rising straight upward at a sheer ninety-degree cliff angle."
+  },
+  {
+    "id": "en-connoisseur",
+    "word": "connoisseur",
+    "tier": 5,
+    "definition": "A discerning admirer of fine words, harmonies, and twilight hues."
+  },
+  {
+    "id": "en-archipelago",
+    "word": "archipelago",
+    "tier": 5,
+    "definition": "Mountain crests emerging like islands above a sea of valley mist."
+  }
+]
