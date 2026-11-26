@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import path from 'node:path';
 
 export default defineConfig({
+  base: '/starspell/',
   plugins: [react()],
   resolve: {
     alias: {
